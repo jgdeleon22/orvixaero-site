@@ -175,7 +175,36 @@
     color: var(--ink);
   }
 
+  /* Waitlist */
+  .join { margin-top: 32px; max-width: 560px; }
+  .join label { display: block; font-weight: 600; font-size: 16px; margin-bottom: 8px; }
+  .join-row { display: flex; gap: 8px; }
+  .join input[type=email] {
+    flex: 1; min-width: 0;
+    font: inherit; font-size: 17px; color: var(--ink);
+    padding: 12px 14px;
+    background: var(--sheet);
+    border: 1px solid var(--rule-strong);
+    border-radius: 6px;
+  }
+  .join input[type=email]:focus-visible { outline: 3px solid var(--focus); outline-offset: 1px; border-color: var(--navy); }
+  .join button {
+    font: inherit; font-weight: 600; font-size: 17px;
+    padding: 12px 20px;
+    color: #fff; background: var(--navy);
+    border: 0; border-radius: 6px; cursor: pointer;
+    white-space: nowrap;
+  }
+  .join button:hover { background: #072630; }
+  .join button:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+  .join button[disabled] { opacity: 0.6; cursor: default; }
+  .join .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+  .join-msg { margin: 10px 0 0; font-size: 16px; color: var(--ink-2); min-height: 1.5em; }
+  .join-msg.ok { color: var(--ink); font-weight: 600; }
+  .join-msg.err { color: #A3260F; }
+
   @media (max-width: 760px) {
+    .join-row { flex-direction: column; }
     .wrap { padding: 24px 16px 40px; }
     .hero { margin-top: 40px; }
     .brand img { height: 68px; }
@@ -184,7 +213,6 @@
     .hide-sm { display: none; }
     .sheet-head > div, .entry > div, .ghost > div { padding: 10px 8px; }
     .entry { font-size: 15px; }
-    .entry { font-size: 16px; }
     .how { grid-template-columns: 1fr; }
     .how div, .how div + div { padding: 16px 0; border-left: 0; }
     .how div + div { border-top: 1px solid var(--rule); }
@@ -205,6 +233,15 @@
       <section class="hero">
         <h1>Your logbook, filled in before you've tied down.</h1>
         <p class="lede">Orvix Aero detects each flight, works out the airports, times and tail number, and has the entry waiting for you to confirm. No more catching up on paperwork.</p>
+        <form class="join" id="join" novalidate>
+          <label for="join-email">Get early access when we launch</label>
+          <div class="join-row">
+            <input id="join-email" name="email" type="email" autocomplete="email" placeholder="you@example.com" required>
+            <button type="submit">Join the waitlist</button>
+          </div>
+          <div class="hp" aria-hidden="true"><label for="join-company">Company</label><input id="join-company" name="company" tabindex="-1" autocomplete="off"></div>
+          <p class="join-msg" id="join-msg" role="status" aria-live="polite"></p>
+        </form>
       </section>
 
       <section class="sheet" aria-label="Example logbook entry created automatically">
@@ -258,5 +295,36 @@
       <span>Questions or early access: <a href="mailto:info@orvixaero.com">info@orvixaero.com</a></span>
     </footer>
   </div>
+<script>
+  // Waitlist: saves the email to Supabase (insert-only table, no reads).
+  const SUPABASE_URL = "https://uxnjglagrrprnsliyaed.supabase.co";
+  const SUPABASE_KEY = "sb_publishable_8vrxn8kJD8_lXdJ-a6_eqg_EtHNC4B8";
+  const form = document.getElementById('join');
+  const msg = document.getElementById('join-msg');
+  const show = (text, kind) => { msg.textContent = text; msg.className = 'join-msg' + (kind ? ' ' + kind : ''); };
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email = form.email.value.trim().toLowerCase();
+    if (form.company.value) return show("You're on the list. We'll email you at launch.", 'ok');
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) return show('Enter a valid email address, like you@example.com.', 'err');
+    const btn = form.querySelector('button');
+    btn.disabled = true; show('Adding you…');
+    try {
+      const res = await fetch(SUPABASE_URL + '/rest/v1/waitlist', {
+        method: 'POST',
+        headers: { 'apikey': SUPABASE_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+        body: JSON.stringify({ email, source: 'orvixaero.com' })
+      });
+      if (res.ok || res.status === 409) {
+        form.reset();
+        show(res.status === 409 ? "You're already on the list. We'll email you at launch." : "You're on the list. We'll email you at launch.", 'ok');
+      } else {
+        show("That didn't go through. Try again, or email info@orvixaero.com.", 'err');
+      }
+    } catch (err) {
+      show("Couldn't connect. Check your connection and try again.", 'err');
+    } finally { btn.disabled = false; }
+  });
+</script>
 </body>
 </html>
