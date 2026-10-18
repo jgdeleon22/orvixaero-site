@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="color-scheme" content="light">
+<link rel="icon" href="logo.png">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Orvix Aero — Automatic Pilot Logbook</title>
+<meta name="description" content="Orvix Aero is a pilot logbook that fills itself in. It detects your flight, finds the airports, times and tail number, and asks you to confirm. Coming soon.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0A3341;
+    --orange: #F76E19;
+    --orange-ink: #B4500F;
+    --orange-soft: rgba(247, 110, 25, 0.10);
+    --paper: #F6F7F8;
+    --sheet: #FFFFFF;
+    --rule: #DCE3E7;
+    --rule-strong: #A3B4BD;
+    --ink: #0A3341;
+    --ink-2: #4E6670;
+    --focus: #F76E19;
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Barlow", system-ui, sans-serif;
+    font-size: 18px;
+    line-height: 1.55;
+  }
+  a { color: inherit; }
+  a:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; border-radius: 2px; }
+
+  .wrap {
+    max-width: 1040px;
+    margin: 0 auto;
+    padding: 32px 24px 56px;
+  }
+
+  /* Header */
+  .brand { display: inline-block; }
+  .brand img { display: block; height: 88px; width: auto; }
+
+  /* Hero */
+  .hero { margin-top: 72px; max-width: 760px; }
+  h1 {
+    font-family: "Barlow Condensed", sans-serif;
+    font-weight: 600;
+    font-size: clamp(44px, 7.4vw, 84px);
+    line-height: 0.98;
+    letter-spacing: -0.01em;
+    margin: 0;
+  }
+  .lede {
+    margin: 24px 0 0;
+    font-size: 20px;
+    color: var(--ink-2);
+    max-width: 34em;
+  }
+
+  /* Logbook sheet */
+  .sheet {
+    margin-top: 56px;
+    background: var(--sheet);
+    border: 1px solid var(--rule-strong);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .sheet-head, .entry, .ghost {
+    display: grid;
+    grid-template-columns: 1.05fr 1fr 0.9fr 0.8fr 0.8fr 0.7fr 0.7fr;
+    align-items: center;
+  }
+  .sheet-head > div, .entry > div, .ghost > div {
+    padding: 12px 16px;
+    border-right: 1px solid var(--rule);
+  }
+  .sheet-head > div:last-child, .entry > div:last-child, .ghost > div:last-child { border-right: 0; }
+  .sheet-head {
+    font-family: "Barlow Condensed", sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--ink-2);
+    border-bottom: 2px solid var(--rule-strong);
+  }
+  .entry {
+    font-variant-numeric: tabular-nums;
+    font-weight: 500;
+    font-size: 18px;
+    border-bottom: 1px solid var(--rule);
+    background: var(--orange-soft);
+  }
+  .ghost { border-bottom: 1px solid var(--rule); min-height: 50px; }
+  .ghost:last-of-type { border-bottom: 0; }
+  .ghost > div { min-height: 50px; }
+
+  .val { opacity: 0; display: inline-block; animation: fill 0.35s ease-out forwards; }
+  .v1 { animation-delay: 0.5s; }
+  .v2 { animation-delay: 0.85s; }
+  .v3 { animation-delay: 1.2s; }
+  .v4 { animation-delay: 1.55s; }
+  .v5 { animation-delay: 1.9s; }
+  .v6 { animation-delay: 2.25s; }
+  .v7 { animation-delay: 2.6s; }
+  @keyframes fill {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: none; }
+  }
+
+  .sheet-foot {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    border-top: 2px solid var(--rule-strong);
+    font-size: 16px;
+    color: var(--ink-2);
+  }
+  .confirm {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    color: var(--orange-ink);
+    opacity: 0;
+    animation: fill 0.4s ease-out 3.1s forwards;
+  }
+  .confirm svg { width: 18px; height: 18px; }
+
+  /* How it works */
+  .how {
+    margin-top: 72px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    border-top: 2px solid var(--rule-strong);
+  }
+  .how div {
+    padding: 20px 24px 8px 0;
+  }
+  .how div + div { padding-left: 24px; border-left: 1px solid var(--rule); }
+  .how h2 {
+    font-family: "Barlow Condensed", sans-serif;
+    font-weight: 600;
+    font-size: 24px;
+    margin: 0 0 6px;
+  }
+  .how p { margin: 0; color: var(--ink-2); font-size: 17px; }
+
+  /* Footer */
+  footer {
+    margin-top: 72px;
+    padding-top: 24px;
+    border-top: 1px solid var(--rule);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 16px;
+    font-size: 16px;
+    color: var(--ink-2);
+  }
+  .soon {
+    font-family: "Barlow Condensed", sans-serif;
+    font-weight: 600;
+    font-size: 22px;
+    color: var(--ink);
+  }
+
+  @media (max-width: 760px) {
+    .wrap { padding: 24px 16px 40px; }
+    .hero { margin-top: 40px; }
+    .brand img { height: 68px; }
+    .lede { font-size: 18px; }
+    .sheet-head, .entry, .ghost { grid-template-columns: 1fr 1.1fr 0.9fr 0.9fr 0.7fr; }
+    .hide-sm { display: none; }
+    .sheet-head > div, .entry > div, .ghost > div { padding: 10px 8px; }
+    .entry { font-size: 15px; }
+    .entry { font-size: 16px; }
+    .how { grid-template-columns: 1fr; }
+    .how div, .how div + div { padding: 16px 0; border-left: 0; }
+    .how div + div { border-top: 1px solid var(--rule); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .val, .confirm { animation: none; opacity: 1; }
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <a class="brand" href="/"><img src="logo.png" alt="Orvix Aero" width="107" height="88"></a>
+    </header>
+
+    <main>
+      <section class="hero">
+        <h1>Your logbook, filled in before you've tied down.</h1>
+        <p class="lede">Orvix Aero detects each flight, works out the airports, times and tail number, and has the entry waiting for you to confirm. No more catching up on paperwork.</p>
+      </section>
+
+      <section class="sheet" aria-label="Example logbook entry created automatically">
+        <div class="sheet-head" aria-hidden="true">
+          <div>Date</div>
+          <div>Aircraft</div>
+          <div class="hide-sm">Type</div>
+          <div>From</div>
+          <div>To</div>
+          <div class="hide-sm">Landings</div>
+          <div>Total</div>
+        </div>
+        <div class="entry">
+          <div><span class="val v1">Oct 18</span></div>
+          <div><span class="val v2">N0RVX</span></div>
+          <div class="hide-sm"><span class="val v3">C172</span></div>
+          <div><span class="val v4">KPAO</span></div>
+          <div><span class="val v5">KHAF</span></div>
+          <div class="hide-sm"><span class="val v6">2</span></div>
+          <div><span class="val v7">0.9</span></div>
+        </div>
+        <div class="ghost" aria-hidden="true"><div></div><div></div><div class="hide-sm"></div><div></div><div></div><div class="hide-sm"></div><div></div></div>
+        <div class="ghost" aria-hidden="true"><div></div><div></div><div class="hide-sm"></div><div></div><div></div><div class="hide-sm"></div><div></div></div>
+        <div class="sheet-foot">
+          <span>Logged automatically after landing</span>
+          <span class="confirm">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M6 10.4l2.6 2.6L14 7.6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Ready to confirm
+          </span>
+        </div>
+      </section>
+
+      <section class="how" aria-label="How Orvix Aero works">
+        <div>
+          <h2>It notices you flew</h2>
+          <p>Takeoff and landing are detected on their own. Just fly.</p>
+        </div>
+        <div>
+          <h2>It fills in the details</h2>
+          <p>Airports, block times, landings and the aircraft's tail number.</p>
+        </div>
+        <div>
+          <h2>You confirm it</h2>
+          <p>Nothing is saved until you've checked it. Your logbook stays yours.</p>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <span class="soon">Coming soon</span>
+      <span>Questions or early access: <a href="mailto:hello@orvixaero.com">hello@orvixaero.com</a></span>
+    </footer>
+  </div>
+</body>
+</html>
