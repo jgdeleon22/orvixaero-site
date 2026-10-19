@@ -56,9 +56,11 @@
   .top nav { display: flex; align-items: center; gap: 36px; font-weight: 500; font-size: 17px; }
   .top nav a { text-decoration: none; color: var(--ink-2); transition: color .15s; }
   .top nav a:hover { color: var(--ink); }
+  .top nav .login { color: var(--ink); padding: 11px 18px; border: 1px solid var(--edge-2); border-radius: 12px; font-weight: 600; }
+  .top nav .login:hover { border-color: var(--ink-2); }
   .top nav .cta { color: #fff; background: var(--orange); padding: 12px 22px; border-radius: 12px; font-weight: 600; box-shadow: 0 0 0 1px rgba(255,255,255,.08) inset, 0 8px 28px rgba(247, 110, 25, .28); }
   .top nav .cta:hover { background: var(--orange-2); color: #fff; }
-  @media (max-width: 820px) { .top { height: 76px; } .brand img { height: 52px; } .top nav a:not(.cta) { display: none; } }
+  @media (max-width: 820px) { .top { height: 76px; } .brand img { height: 52px; } .top nav { gap: 10px; } .top nav a:not(.cta):not(.login) { display: none; } .top nav .login, .top nav .cta { padding: 10px 14px; font-size: 15px; } }
 
   /* ---- Hero: full-bleed sky with a HUD horizon and one flight path ---- */
   .hero-band { position: relative; overflow: hidden; margin-top: -96px; padding-top: 96px; min-height: min(100vh, 1000px); display: flex; align-items: center; background: var(--night); }
@@ -210,6 +212,7 @@
       <a href="#pilots">Airline &amp; GA</a>
       <a href="#pricing">Pricing</a>
       <a href="#faq">FAQ</a>
+      <a class="login" href="/app/">Log in</a>
       <a class="cta" href="#join-email">Join the waitlist</a>
     </nav>
   </div>
@@ -446,6 +449,7 @@
       <a class="brand" href="/"><img src="logo-light.png" alt="Orvix Aero" width="53" height="44"></a><span>© 2026 Orvix Aero</span>
       <nav aria-label="Footer">
         <a href="mailto:info@orvixaero.com">info@orvixaero.com</a>
+        <a href="/app/">Log in</a>
         <a href="/privacy.html">Privacy Policy</a>
       </nav>
     </div>
