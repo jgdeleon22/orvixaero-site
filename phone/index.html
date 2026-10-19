@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Orvix Aero · iPhone preview</title>
+<link rel="icon" href="/app/favicon.ico">
+<style>
+  :root { --bg: #050D17; --ink: #F2F6FA; --muted: #9DB2C5; --line: rgba(157,178,197,.18); --accent: #F76E19; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: radial-gradient(1200px 700px at 70% 10%, #0E2338 0%, var(--bg) 60%); color: var(--ink); font: 14px/1.4 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  .page { min-height: 100%; display: flex; flex-direction: column; align-items: center; gap: 18px; padding: 24px 16px 32px; }
+  .bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: center; }
+  .bar b { font-weight: 700; letter-spacing: .3px; margin-right: 8px; }
+  button, a.btn { background: rgba(12,26,42,.8); color: var(--ink); border: 1px solid var(--line); border-radius: 999px; padding: 7px 14px; font: inherit; cursor: pointer; text-decoration: none; }
+  button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #06101C; font-weight: 700; }
+  button:hover, a.btn:hover { border-color: rgba(157,178,197,.45); }
+  .phone { position: relative; padding: 14px; border-radius: 64px; background: linear-gradient(145deg, #2A3441, #11161D 40%, #2A3441); box-shadow: 0 0 0 2px #3A4552, 0 40px 90px rgba(0,0,0,.55); }
+  .screen { position: relative; overflow: hidden; border-radius: 50px; background: #000; }
+  .island { position: absolute; top: 11px; left: 50%; transform: translateX(-50%); width: 124px; height: 36px; border-radius: 20px; background: #000; z-index: 2; pointer-events: none; }
+  .phone.home .island { display: none; }
+  .phone.home .screen { border-radius: 6px; }
+  .phone.home { border-radius: 46px; padding: 60px 14px; }
+  iframe { display: block; border: 0; background: #06101C; }
+  .note { color: var(--muted); max-width: 560px; text-align: center; font-size: 13px; }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="bar" role="toolbar" aria-label="Preview size">
+    <b>iPhone preview</b>
+    <button data-w="402" data-h="874" aria-pressed="true">16 Pro</button>
+    <button data-w="440" data-h="956">16 Pro Max</button>
+    <button data-w="393" data-h="852">15 / 16</button>
+    <button data-w="375" data-h="667" data-home>SE</button>
+    <button id="reload" title="Reload the app">Reload</button>
+    <a class="btn" href="/app/">Open full app</a>
+  </div>
+  <div class="phone" id="phone">
+    <div class="screen">
+      <div class="island"></div>
+      <iframe id="app" title="Orvix Aero app" src="/app/"></iframe>
+    </div>
+  </div>
+  <p class="note">This is the live app at phone width, so it shows the iPhone layout. Phone-only features (flight detection, push alerts, the native map) only work in the iPhone app. Use your mouse wheel to scroll.</p>
+</div>
+<script>
+  var frame = document.getElementById('app');
+  var phone = document.getElementById('phone');
+  var buttons = document.querySelectorAll('button[data-w]');
+  function size(btn) {
+    buttons.forEach(function (b) { b.setAttribute('aria-pressed', String(b === btn)); });
+    var w = +btn.dataset.w, h = +btn.dataset.h;
+    // Shrink the whole phone if the window is too short to show it.
+    var scale = Math.min(1, (window.innerHeight - 150) / (h + 28));
+    frame.style.width = w + 'px';
+    frame.style.height = h + 'px';
+    phone.classList.toggle('home', btn.hasAttribute('data-home'));
+    phone.style.transform = 'scale(' + scale + ')';
+    phone.style.transformOrigin = 'top center';
+    phone.style.marginBottom = ((scale - 1) * (h + 28)) + 'px';
+    try { localStorage.setItem('orvix-preview', btn.textContent); } catch (e) {}
+  }
+  buttons.forEach(function (b) { b.addEventListener('click', function () { size(b); }); });
+  document.getElementById('reload').addEventListener('click', function () { frame.contentWindow.location.reload(); });
+  var saved = null;
+  try { saved = localStorage.getItem('orvix-preview'); } catch (e) {}
+  var start = Array.prototype.find.call(buttons, function (b) { return b.textContent === saved; }) || buttons[0];
+  size(start);
+  window.addEventListener('resize', function () { size(document.querySelector('button[aria-pressed="true"]')); });
+</script>
+</body>
+</html>
