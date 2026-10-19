@@ -23,6 +23,13 @@
   .phone.home .screen { border-radius: 6px; }
   .phone.home { border-radius: 46px; padding: 60px 14px; }
   iframe { display: block; border: 0; background: #06101C; }
+  /* Real iPhones keep the app clear of the island and home bar (safe areas). */
+  .status { height: 54px; background: #06101C; color: var(--ink); display: flex; align-items: flex-end; justify-content: space-between; padding: 0 30px 8px 44px; font: 600 15px system-ui, -apple-system, sans-serif; }
+  .status i { font-style: normal; letter-spacing: 1px; font-size: 12px; }
+  .homebar { height: 34px; background: #0F1D2E; display: flex; align-items: center; justify-content: center; }
+  .homebar span { width: 134px; height: 5px; border-radius: 3px; background: #F2F6FA; }
+  .phone.home .status { height: 20px; padding: 0 12px 2px; font-size: 12px; }
+  .phone.home .homebar { display: none; }
   .note { color: var(--muted); max-width: 560px; text-align: center; font-size: 13px; }
 </style>
 </head>
@@ -40,7 +47,9 @@
   <div class="phone" id="phone">
     <div class="screen">
       <div class="island"></div>
+      <div class="status"><span id="clock">9:41</span><i>▂▄▆ ◔ ▮</i></div>
       <iframe id="app" title="Orvix Aero app" src="/app/"></iframe>
+      <div class="homebar"><span></span></div>
     </div>
   </div>
   <p class="note">This is the live app at phone width, so it shows the iPhone layout. Phone-only features (flight detection, push alerts, the native map) only work in the iPhone app. Use your mouse wheel to scroll.</p>
@@ -55,13 +64,17 @@
     // Shrink the whole phone if the window is too short to show it.
     var scale = Math.min(1, (window.innerHeight - 150) / (h + 28));
     frame.style.width = w + 'px';
-    frame.style.height = h + 'px';
+    var home = btn.hasAttribute('data-home');
+    frame.style.height = (h - (home ? 20 : 54 + 34)) + 'px';
     phone.classList.toggle('home', btn.hasAttribute('data-home'));
     phone.style.transform = 'scale(' + scale + ')';
     phone.style.transformOrigin = 'top center';
     phone.style.marginBottom = ((scale - 1) * (h + 28)) + 'px';
     try { localStorage.setItem('orvix-preview', btn.textContent); } catch (e) {}
   }
+  var clock = document.getElementById('clock');
+  function tick() { var d = new Date(); clock.textContent = d.getHours() % 12 + (d.getHours() % 12 ? 0 : 12) + ':' + String(d.getMinutes()).padStart(2, '0'); }
+  tick(); setInterval(tick, 30000);
   buttons.forEach(function (b) { b.addEventListener('click', function () { size(b); }); });
   document.getElementById('reload').addEventListener('click', function () { frame.contentWindow.location.reload(); });
   var saved = null;
