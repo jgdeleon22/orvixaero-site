@@ -2,500 +2,390 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#06101C">
-<link rel="icon" href="logo.png">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Orvix Aero — Automatic Pilot Logbook</title>
-<meta name="description" content="Orvix Aero is a pilot logbook that fills itself in. It detects your flight, finds the airports, times and tail number, and asks you to confirm. Coming soon to iPhone.">
+<title>Orvix Aero: the pilot app for the whole trip</title>
+<meta name="description" content="Logbook, weather radar, D-ATIS, commuting, flight alerts and food at your gate, in one app for airline and GA pilots. Coming to iPhone.">
+<link rel="icon" href="favicon.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta property="og:title" content="Orvix Aero: the pilot app for the whole trip">
+<meta property="og:description" content="Logbook, radar, D-ATIS, commuting, flight alerts and food at your gate, in one app.">
+<meta property="og:image" content="https://orvixaero.com/icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #06101C;
-    --bg-2: #081525;
-    --surface: #0F1D2E;
-    --raised: #13243A;
-    --border: #1C3048;
-    --border-2: #2A4563;
-    --text: #F2F6FA;
-    --text-2: #9DB2C5;
-    --text-3: #6F879B;
-    --accent: #F76E19;
-    --accent-hover: #FF8A3D;
-    --on-accent: #06101C;
-    --vfr: #1E9E5A;
-    --mvfr: #2F6FE4;
-    --danger: #F2645A;
-    --focus: #F76E19;
+    --night: #06101C;      /* cockpit at night: the page */
+    --panel: #0C1B2C;      /* glareshield */
+    --line: #1D3249;
+    --ink: #F2F6FA;
+    --ink-2: #A3B6C8;
+    --ink-3: #6F879B;
+    --strip-dep: #DDE8F1;  /* departure strip, blue-white */
+    --strip-arr: #F0E3C1;  /* arrival strip, buff */
+    --strip-ink: #0E2233;
+    --strip-rule: rgba(14, 34, 51, .22);
+    --orange: #F76E19;     /* brand: actions only */
+    --orange-2: #FF8A3D;
+    --green: #2DB46E;
+    --amber: #E8A93A;
+    --display: "Barlow Condensed", "Arial Narrow", sans-serif;
+    --text: "Barlow", system-ui, sans-serif;
   }
   * { box-sizing: border-box; }
-  html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
-  body { margin: 0; background: var(--bg); color: var(--text); font-family: "Barlow", system-ui, sans-serif; font-size: 18px; line-height: 1.55; }
-  a { color: var(--accent); }
-  a:hover { color: var(--accent-hover); }
-  :focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; border-radius: 4px; }
-  h1, h2, h3 { font-family: "Barlow Condensed", sans-serif; font-weight: 700; margin: 0; line-height: 1.02; }
-  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
-  .eyebrow { font-weight: 700; font-size: 14px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin: 0 0 12px; }
-  section { padding: 96px 0; }
-  .section-head { max-width: 640px; margin-bottom: 48px; }
-  .section-head h2 { font-size: clamp(36px, 5vw, 52px); }
-  .section-head p { color: var(--text-2); margin: 16px 0 0; font-size: 19px; }
-  .section-head .eyebrow { color: var(--accent); margin: 0 0 12px; font-size: 14px; }
-  html, body { overflow-x: clip; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: var(--night); color: var(--ink); font-family: var(--text); font-size: 18px; line-height: 1.55; -webkit-font-smoothing: antialiased; }
+  img { max-width: 100%; display: block; }
+  a { color: inherit; }
+  :focus-visible { outline: 3px solid var(--orange-2); outline-offset: 3px; border-radius: 4px; }
+  .wrap { width: min(1160px, 100% - 40px); margin-inline: auto; }
+  h1, h2, h3 { font-family: var(--display); font-weight: 700; margin: 0; line-height: 1.0; letter-spacing: -0.005em; }
+  p { margin: 0; }
+  .lede { color: var(--ink-2); font-size: 20px; max-width: 34em; }
 
-  .top { display: flex; align-items: center; justify-content: space-between; padding-top: 24px; padding-bottom: 24px; }
-  .brand img { display: block; height: 64px; width: auto; }
-  .top nav { display: flex; gap: 28px; align-items: center; font-weight: 600; font-size: 16px; }
-  .top nav a { color: var(--text-2); text-decoration: none; }
-  .top nav a:hover { color: var(--text); }
-  .top nav .cta { color: var(--on-accent); background: var(--accent); padding: 10px 16px; border-radius: 10px; }
-  .top nav .cta:hover { background: var(--accent-hover); color: var(--on-accent); }
+  /* ---- Header ---- */
+  .top { display: flex; align-items: center; justify-content: space-between; padding: 18px 0; }
+  .brand img { height: 46px; width: auto; }
+  .top nav { display: flex; align-items: center; gap: 28px; font-weight: 500; font-size: 16px; }
+  .top nav a { text-decoration: none; color: var(--ink-2); }
+  .top nav a:hover { color: var(--ink); }
+  .top nav .cta { color: var(--night); background: var(--orange); padding: 9px 16px; border-radius: 10px; font-weight: 600; }
+  .top nav .cta:hover { background: var(--orange-2); color: var(--night); }
+  @media (max-width: 720px) { .top nav a:not(.cta) { display: none; } }
 
-  .hero { padding: 48px 0 96px; display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr); gap: 56px; align-items: center; }
-  .hero h1 { font-size: clamp(48px, 7.2vw, 88px); letter-spacing: -0.01em; }
-  .hero h1 em { font-style: normal; color: var(--accent); }
-  .lede { margin: 24px 0 0; font-size: 21px; color: var(--text-2); max-width: 32em; }
+  /* ---- Hero: headline left, strip rack right ---- */
+  .hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: 56px; align-items: center; padding: 56px 0 96px; }
+  .hero h1 { font-size: clamp(54px, 7.4vw, 96px); text-wrap: balance; }
+  .hero .lede { margin-top: 22px; }
+  @media (max-width: 960px) { .hero { grid-template-columns: minmax(0, 1fr); gap: 44px; padding-top: 28px; } }
+  @media (max-width: 480px) { .join { flex-direction: column; } .join button { width: 100%; } }
 
-  .join { margin-top: 36px; max-width: 540px; }
-  .join label { display: block; font-weight: 600; font-size: 16px; margin-bottom: 10px; }
-  .join-row { display: flex; gap: 10px; }
-  .join input[type=email] { flex: 1; min-width: 0; font: inherit; font-size: 17px; color: var(--text); padding: 14px 16px; background: var(--surface); border: 1px solid var(--border-2); border-radius: 12px; }
-  .join input[type=email]::placeholder { color: var(--text-3); }
-  .join input[type=email]:focus-visible { outline-offset: 1px; border-color: var(--accent); }
-  .join button { font: inherit; font-weight: 700; font-size: 17px; padding: 14px 22px; color: var(--on-accent); background: var(--accent); border: 0; border-radius: 12px; cursor: pointer; white-space: nowrap; }
-  .join button:hover { background: var(--accent-hover); }
-  .join button[disabled] { opacity: 0.6; cursor: default; }
-  .join .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
-  .join-msg { margin: 12px 0 0; font-size: 16px; color: var(--text-2); min-height: 1.5em; }
-  .join-msg.ok { color: var(--text); font-weight: 600; }
-  .join-msg.err { color: var(--danger); }
-  .trust { display: flex; flex-wrap: wrap; gap: 8px 20px; margin: 4px 0 0; padding: 0; list-style: none; color: var(--text-2); font-size: 15px; }
-  .trust li { display: flex; align-items: center; gap: 8px; }
-  .trust svg { flex: none; }
+  .join { display: flex; gap: 10px; margin-top: 32px; max-width: 470px; }
+  .join input[type=email] { flex: 1; min-width: 0; font: inherit; font-size: 17px; color: var(--ink); background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 13px 15px; }
+  .join input::placeholder { color: var(--ink-3); }
+  .join button, .button { font: inherit; font-weight: 600; font-size: 17px; color: var(--night); background: var(--orange); border: 0; border-radius: 12px; padding: 13px 20px; cursor: pointer; text-decoration: none; display: inline-block; white-space: nowrap; }
+  .join button:hover, .button:hover { background: var(--orange-2); }
+  .join button:disabled { opacity: .6; cursor: default; }
+  .hp { position: absolute; left: -9999px; }
+  .join-msg { min-height: 24px; margin-top: 10px; font-size: 15px; color: var(--ink-2); }
+  .join-msg.ok { color: var(--green); }
+  .join-msg.err { color: #F2817A; }
+  .fine { margin-top: 6px; font-size: 14px; color: var(--ink-3); }
 
-  .phone { width: 300px; max-width: 100%; aspect-ratio: 300 / 620; background: var(--bg); border: 10px solid #1A2636; border-radius: 44px; box-shadow: 0 0 0 1px #2A3A4F, 0 30px 80px rgba(0, 0, 0, 0.55); overflow: hidden; display: flex; flex-direction: column; font-size: 13px; line-height: 1.35; position: relative; }
-  .phone::before { content: ""; position: absolute; top: 8px; left: 50%; transform: translateX(-50%); width: 84px; height: 24px; border-radius: 14px; background: #000; z-index: 2; }
-  .scr { padding: 46px 14px 0; display: flex; flex-direction: column; gap: 10px; flex: 1; min-height: 0; }
-  .scr-head { display: flex; align-items: baseline; justify-content: space-between; }
-  .scr-head h3 { font-size: 26px; }
-  .muted { color: var(--text-2); }
-  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 12px; }
-  .badge { display: inline-block; font-weight: 700; font-size: 11px; padding: 2px 7px; border-radius: 6px; color: #fff; }
-  .vfr { background: var(--vfr); }
-  .mvfr { background: var(--mvfr); }
-  .row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-  .k { font-size: 11px; color: var(--text-2); display: block; }
-  .v { font-weight: 600; font-size: 14px; }
-  .grid3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
-  .grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
-  .big { font-family: "Barlow Condensed", sans-serif; font-weight: 700; font-size: 22px; }
-  .btn-o { display: inline-block; background: var(--accent); color: var(--on-accent); font-weight: 700; font-size: 12px; padding: 7px 10px; border-radius: 9px; }
-  .list { padding: 0; }
-  .list > div { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-bottom: 1px solid var(--border); }
-  .list > div:last-child { border-bottom: 0; }
-  .list b { display: block; font-size: 14px; }
-  .list span { font-size: 11px; color: var(--text-2); }
-  .ico { width: 18px; height: 18px; flex: none; }
-  .tabs { margin: auto -14px 0; display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--border); background: var(--bg-2); padding: 8px 4px 16px; font-size: 10px; text-align: center; color: var(--text-2); }
-  .tabs .on { color: var(--accent); font-weight: 700; }
-  .mono { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 10.5px; background: var(--bg-2); border-radius: 8px; padding: 8px; color: #C9D6E2; }
-  .chips { display: flex; gap: 6px; }
-  .chip { font-size: 11px; padding: 3px 9px; border-radius: 999px; background: var(--raised); color: #C9D6E2; }
-  .field { background: var(--surface); border: 1px solid var(--border-2); border-radius: 10px; padding: 8px 10px; font-weight: 600; font-size: 15px; letter-spacing: 1px; }
-  .flight { padding: 10px 12px; border-bottom: 1px solid var(--border); display: grid; grid-template-columns: 1fr auto; gap: 2px 8px; align-items: center; }
-  .flight:last-child { border-bottom: 0; }
-  .flight b { font-size: 14px; }
-  .flight .t { font-family: "Barlow Condensed", sans-serif; font-weight: 700; font-size: 18px; text-align: right; }
-  .review { border-color: rgba(247, 110, 25, 0.55); background: rgba(247, 110, 25, 0.08); }
-  .pill { font-size: 10px; font-weight: 700; color: var(--accent); border: 1px solid #5A3416; padding: 1px 6px; border-radius: 6px; justify-self: end; }
-  .hero-phone { display: flex; justify-content: center; }
+  /* ---- Flight strips ---- */
+  .rack { position: relative; padding: 14px 14px 14px 30px; border-radius: 14px; background: #0A1726; border: 1px solid var(--line); }
+  /* the rack's metal rail */
+  .rack::before { content: ""; position: absolute; left: 12px; top: 14px; bottom: 14px; width: 6px; border-radius: 3px; background: linear-gradient(#24405D, #16293E); }
+  .strip { position: relative; display: grid; grid-template-columns: 7.2em 1fr 6.2em; color: var(--strip-ink); background: var(--strip-dep); border-radius: 3px; margin-bottom: 8px; box-shadow: 0 1px 0 rgba(0,0,0,.35); }
+  .strip:last-child { margin-bottom: 0; }
+  .strip.arr { background: var(--strip-arr); }
+  .strip > div { padding: 9px 12px; border-left: 1px solid var(--strip-rule); min-width: 0; }
+  .strip > div:first-child { border-left: 0; }
+  .strip .id { font-family: var(--display); font-weight: 700; font-size: 24px; line-height: 1; }
+  .strip .sub { font-size: 13px; color: rgba(14, 34, 51, .7); margin-top: 3px; }
+  .strip .what { font-family: var(--display); font-weight: 600; font-size: 21px; line-height: 1.1; }
+  .strip .when { text-align: right; font-family: var(--display); font-weight: 600; font-size: 20px; }
+  .strip .flag { display: inline-block; font-family: var(--text); font-size: 12px; font-weight: 600; padding: 1px 7px; border-radius: 4px; margin-left: 6px; vertical-align: 3px; }
+  .flag.alert { background: var(--orange); color: var(--night); }
+  .flag.ok { background: #1F7A4B; color: #fff; }
+  @media (max-width: 520px) {
+    .strip { grid-template-columns: 1fr auto; }
+    .strip > div:nth-child(2) { grid-column: 1 / -1; grid-row: 2; border-left: 0; border-top: 1px solid var(--strip-rule); }
+    .strip .what { font-size: 19px; }
+  }
+  /* One orchestrated moment: the strips are racked one by one on load. */
+  @media (prefers-reduced-motion: no-preference) {
+    .rack .strip { animation: rack .55s cubic-bezier(.2, .8, .2, 1) both; }
+    .rack .strip:nth-child(1) { animation-delay: .15s; }
+    .rack .strip:nth-child(2) { animation-delay: .45s; }
+    .rack .strip:nth-child(3) { animation-delay: .75s; }
+    .rack .strip:nth-child(4) { animation-delay: 1.05s; }
+    .rack .strip:nth-child(5) { animation-delay: 1.35s; }
+    @keyframes rack { from { opacity: 0; transform: translateX(36px); } to { opacity: 1; transform: none; } }
+  }
+  .rack-note { margin-top: 12px; font-size: 14px; color: var(--ink-3); text-align: right; }
 
-  .how { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; counter-reset: step; padding: 0; margin: 0; }
-  .how li { list-style: none; background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 28px; }
-  .how li::before { counter-increment: step; content: counter(step); display: inline-flex; width: 36px; height: 36px; align-items: center; justify-content: center; border-radius: 10px; background: rgba(247, 110, 25, 0.14); color: var(--accent); font-weight: 700; margin-bottom: 18px; }
-  .how h3 { font-size: 28px; }
-  .how p { margin: 10px 0 0; color: var(--text-2); }
+  /* ---- Sections ---- */
+  section { padding: 88px 0; border-top: 1px solid var(--line); }
+  .head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 40px; align-items: end; margin-bottom: 48px; }
+  .head h2 { font-size: clamp(40px, 5vw, 64px); text-wrap: balance; }
+  @media (max-width: 860px) { .head { grid-template-columns: 1fr; gap: 16px; } }
 
-  .features { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 20px; overflow: hidden; }
-  .feature { background: var(--bg); padding: 32px 28px; }
-  .feature svg { width: 28px; height: 28px; color: var(--accent); }
-  .feature h3 { font-size: 26px; margin-top: 16px; }
-  .feature p { margin: 8px 0 0; color: var(--text-2); font-size: 17px; }
+  /* The trip, in order: three phases side by side */
+  .phases { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
+  .phase { padding: 28px 28px 32px; border-left: 1px solid var(--line); background: var(--panel); }
+  .phase:first-child { border-left: 0; }
+  .phase .step { font-family: var(--display); font-weight: 600; font-size: 18px; color: var(--orange); }
+  .phase h3 { font-size: 34px; margin: 4px 0 18px; }
+  .phase ul { list-style: none; margin: 0; padding: 0; }
+  .phase li { padding: 14px 0; border-top: 1px solid var(--line); }
+  .phase li:first-child { border-top: 0; padding-top: 0; }
+  .phase li b { display: block; font-weight: 600; font-size: 18px; }
+  .phase li span { display: block; color: var(--ink-2); font-size: 16px; line-height: 1.5; margin-top: 2px; }
+  @media (max-width: 900px) { .phases { grid-template-columns: 1fr; } .phase { border-left: 0; border-top: 1px solid var(--line); } .phase:first-child { border-top: 0; } }
 
-  .screens { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px; justify-items: center; }
-  .screens figure { margin: 0; display: flex; flex-direction: column; align-items: center; gap: 18px; }
-  .screens figcaption { color: var(--text-2); font-size: 16px; text-align: center; max-width: 260px; }
-  .screens figcaption b { color: var(--text); display: block; font-size: 18px; }
+  /* Airline / GA */
+  .two { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 56px; }
+  .two h3 { font-size: 36px; margin-bottom: 14px; }
+  .two p { color: var(--ink-2); }
+  .two ul { margin: 18px 0 0; padding-left: 1.1em; color: var(--ink-2); }
+  .two li { margin: 6px 0; }
+  .two li::marker { color: var(--orange); }
+  @media (max-width: 860px) { .two { grid-template-columns: 1fr; gap: 40px; } }
 
-  .plans { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; max-width: 880px; }
-  .plan { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 32px; display: flex; flex-direction: column; }
-  .plan.pro { border-color: rgba(247, 110, 25, 0.6); }
-  .plan h3 { font-size: 34px; }
-  .plan .price { margin: 6px 0 0; color: var(--text-2); font-size: 17px; }
-  .plan ul { margin: 24px 0 0; padding: 0; list-style: none; display: grid; gap: 12px; }
-  .plan li { display: flex; gap: 10px; align-items: flex-start; }
-  .plan li svg { flex: none; margin-top: 5px; color: var(--accent); }
-  .fine { color: var(--text-3); font-size: 15px; margin: 20px 0 0; }
+  /* Privacy as plain promises */
+  .promises { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 56px; max-width: 980px; }
+  .promises div { border-left: 3px solid var(--orange); padding-left: 18px; }
+  .promises b { display: block; font-size: 20px; font-weight: 600; }
+  .promises span { color: var(--ink-2); }
+  @media (max-width: 760px) { .promises { grid-template-columns: 1fr; } }
 
-  .faq { max-width: 800px; border-top: 1px solid var(--border); }
-  .faq details { border-bottom: 1px solid var(--border); }
-  .faq summary { cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 22px 4px; font-weight: 600; font-size: 19px; }
+  /* Pricing: one plan */
+  .plan { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 48px; align-items: start; background: var(--panel); border: 1px solid var(--line); border-radius: 18px; padding: 40px; }
+  .plan h3 { font-size: 44px; }
+  .plan .price { font-family: var(--display); font-weight: 600; font-size: 24px; color: var(--ink-2); margin-top: 10px; }
+  .plan ul { columns: 2; column-gap: 32px; margin: 0; padding-left: 1.1em; color: var(--ink-2); font-size: 17px; }
+  .plan li { margin: 0 0 8px; break-inside: avoid; }
+  .plan li::marker { color: var(--orange); }
+  @media (max-width: 860px) { .plan { grid-template-columns: 1fr; padding: 28px; } .plan ul { columns: 1; } }
+
+  /* FAQ */
+  .faq { max-width: 820px; }
+  .faq details { border-top: 1px solid var(--line); }
+  .faq details:last-child { border-bottom: 1px solid var(--line); }
+  .faq summary { list-style: none; cursor: pointer; padding: 20px 40px 20px 0; position: relative; font-family: var(--display); font-weight: 600; font-size: 26px; }
   .faq summary::-webkit-details-marker { display: none; }
-  .faq summary::after { content: "+"; font-size: 28px; line-height: 1; color: var(--accent); font-weight: 400; flex: none; }
+  .faq summary::after { content: "+"; position: absolute; right: 4px; top: 16px; font-size: 30px; color: var(--orange); font-family: var(--text); font-weight: 400; }
   .faq details[open] summary::after { content: "–"; }
-  .faq details p { margin: 0 4px 22px; color: var(--text-2); }
+  .faq details p { color: var(--ink-2); padding: 0 0 22px; max-width: 40em; }
 
-  .closing { text-align: center; }
-  .closing .box { background: radial-gradient(120% 140% at 50% 0%, rgba(247, 110, 25, 0.16), transparent 60%), var(--surface); border: 1px solid var(--border); border-radius: 28px; padding: 64px 24px; }
-  .closing h2 { font-size: clamp(36px, 5vw, 56px); }
-  .closing p { color: var(--text-2); margin: 14px auto 28px; max-width: 30em; }
-  .button { display: inline-block; text-decoration: none; font-weight: 700; color: var(--on-accent); background: var(--accent); padding: 14px 24px; border-radius: 12px; }
-  .button:hover { background: var(--accent-hover); color: var(--on-accent); }
+  /* Closing */
+  .closing { text-align: left; }
+  .closing h2 { font-size: clamp(44px, 6vw, 76px); max-width: 12em; }
+  .closing .lede { margin-top: 18px; }
 
-  footer { border-top: 1px solid var(--border); padding: 32px 0 48px; color: var(--text-2); font-size: 16px; }
-  footer .wrap { display: flex; flex-wrap: wrap; gap: 16px 32px; justify-content: space-between; align-items: center; }
-  footer nav { display: flex; gap: 24px; flex-wrap: wrap; }
-  footer a { color: var(--text-2); }
-  footer a:hover { color: var(--text); }
-
-
-  /* Modern touches */
-  body::before { content: ""; position: fixed; inset: 0; pointer-events: none; z-index: -1;
-    background:
-      radial-gradient(60% 50% at 85% 10%, rgba(247, 110, 25, 0.10), transparent 70%),
-      radial-gradient(50% 40% at 0% 40%, rgba(47, 111, 228, 0.08), transparent 70%); }
-  .top-bar { position: sticky; top: 0; z-index: 10; background: rgba(6, 16, 28, 0.72); -webkit-backdrop-filter: saturate(140%) blur(14px); backdrop-filter: saturate(140%) blur(14px); border-bottom: 1px solid transparent; transition: border-color .2s; }
-  .top-bar.scrolled { border-bottom-color: var(--border); }
-  .top { padding-top: 16px; padding-bottom: 16px; }
-  .brand img { height: 52px; }
-  .hero-phone { position: relative; }
-  .hero-phone::before { content: ""; position: absolute; inset: 8% -10%; background: radial-gradient(closest-side, rgba(247, 110, 25, 0.28), transparent); filter: blur(40px); z-index: -1; }
-  .hero-phone .phone { transform: rotate(-3deg); }
-  .grad { background: linear-gradient(90deg, #F76E19, #FFB36B); -webkit-background-clip: text; background-clip: text; color: transparent; }
-  .how li, .plan, .feature { transition: transform .25s ease, border-color .25s ease, background-color .25s ease; }
-  .how li:hover, .plan:hover { transform: translateY(-4px); border-color: var(--border-2); }
-  .feature:hover { background: #0A1828; }
-  .plan.pro { position: relative; border-color: transparent; background: linear-gradient(var(--surface), var(--surface)) padding-box, linear-gradient(135deg, #F76E19, #2A4563 60%) border-box; border: 1px solid transparent; }
-  .badge-soon { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; color: var(--text-2); background: var(--surface); border: 1px solid var(--border); border-radius: 999px; padding: 6px 12px 6px 8px; margin-bottom: 20px; }
-  .badge-soon i { width: 8px; height: 8px; border-radius: 50%; background: var(--vfr); box-shadow: 0 0 0 4px rgba(30, 158, 90, 0.2); }
-  .reveal { opacity: 0; transform: translateY(18px); transition: opacity .6s ease, transform .6s ease; }
-  .reveal.in { opacity: 1; transform: none; }
-  @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } .how li:hover, .plan:hover { transform: none; } }
-
-  @media (max-width: 960px) {
-    .hero { grid-template-columns: 1fr; gap: 48px; }
-    .features { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .screens { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: 300px; overflow-x: auto; justify-content: start; scroll-snap-type: x mandatory; margin: 0 -24px; padding: 0 24px 12px; }
-    .screens figure { scroll-snap-align: center; }
-  }
-  @media (max-width: 720px) {
-    .wrap { padding: 0 16px; }
-    section { padding: 64px 0; }
-    .top nav a:not(.cta) { display: none; }
-    .brand img { height: 52px; }
-    .hero { padding-top: 24px; padding-bottom: 64px; }
-    .lede { font-size: 19px; }
-    .join-row { flex-direction: column; }
-    .how, .features, .plans { grid-template-columns: 1fr; }
-    .screens { margin: 0 -16px; padding: 0 16px 12px; }
-    .closing .box { padding: 48px 20px; }
-  }
-  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  footer { border-top: 1px solid var(--line); padding: 32px 0 48px; color: var(--ink-3); font-size: 15px; }
+  footer .wrap { display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+  footer nav { display: flex; gap: 22px; }
+  footer a { color: var(--ink-2); text-decoration: none; }
+  footer a:hover { color: var(--ink); }
 </style>
 </head>
 <body>
-  <div class="top-bar" id="top-bar">
   <header class="wrap top">
-    <a class="brand" href="/"><img src="logo-light.png" alt="Orvix Aero" width="63" height="52"></a>
+    <a class="brand" href="/"><img src="logo-light.png" alt="Orvix Aero" width="56" height="46"></a>
     <nav aria-label="Main">
-      <a href="#features">Features</a>
+      <a href="#trip">What it does</a>
+      <a href="#pilots">Airline &amp; GA</a>
       <a href="#pricing">Pricing</a>
       <a href="#faq">FAQ</a>
-      <a class="cta" href="#join">Get early access</a>
+      <a class="cta" href="#join-email">Join the waitlist</a>
     </nav>
   </header>
-  </div>
 
   <main>
-    <div class="wrap">
-      <section class="hero" aria-labelledby="hero-title">
-        <div>
-          <span class="badge-soon"><i></i>Automatic pilot logbook · Coming soon to iPhone</span>
-          <h1 id="hero-title">Your logbook, filled in before you’ve <em class="grad">tied down.</em></h1>
-          <p class="lede">Orvix Aero notices when you fly, works out the airports, times and tail number, and has the entry waiting for you to confirm. No more catching up on paperwork.</p>
+    <div class="wrap hero">
+      <div>
+        <h1 id="hero-title">One app for the whole trip, from commute to logbook.</h1>
+        <p class="lede">Orvix Aero plans your commute, watches your flight, shows radar and the ATIS, finds food near your gate, and logs the flight when you land. For airline and GA pilots.</p>
+        <form class="join" id="join" novalidate aria-labelledby="hero-title">
+          <label class="hp" aria-hidden="true">Company <input name="company" tabindex="-1" autocomplete="off"></label>
+          <label for="join-email" class="hp">Email</label>
+          <input id="join-email" name="email" type="email" inputmode="email" autocomplete="email" placeholder="you@example.com" required>
+          <button type="submit">Join the waitlist</button>
+        </form>
+        <p class="join-msg" id="join-msg" role="status" aria-live="polite"></p>
+        <p class="fine">Coming to iPhone first. We’ll only email you about the launch.</p>
+      </div>
 
-          <form class="join" id="join" novalidate>
-            <label for="join-email">Get early access when we launch</label>
-            <div class="join-row">
-              <input id="join-email" name="email" type="email" autocomplete="email" placeholder="you@example.com" required>
-              <button type="submit">Join the waitlist</button>
-            </div>
-            <div class="hp" aria-hidden="true"><label for="join-company">Company</label><input id="join-company" name="company" tabindex="-1" autocomplete="off"></div>
-            <p class="join-msg" id="join-msg" role="status" aria-live="polite"></p>
-          </form>
-
-          <ul class="trust">
-            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F76E19" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>Your flights stay private</li>
-            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F76E19" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>Export to CSV anytime, free</li>
-            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F76E19" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>Nothing saved until you confirm</li>
-          </ul>
-        </div>
-
-        <div class="hero-phone">
-          <div class="phone" role="img" aria-label="Orvix Aero home screen: a flight from KPAO to KHAF is ready to review">
-            <div class="scr">
-              <div class="scr-head"><h3>Home</h3><span class="muted">Sun, Oct 18</span></div>
-              <div class="card review">
-                <div class="row"><span class="pill">Ready to confirm</span><span class="muted">Just now</span></div>
-                <div class="row" style="margin-top:8px">
-                  <div><span class="big">KPAO → KHAF</span><span class="k">N0RVX · C172 · 2 landings</span></div>
-                  <span class="big">0.9</span>
-                </div>
-                <div style="margin-top:10px"><span class="btn-o">Review flight</span></div>
-              </div>
-              <div class="card">
-                <div class="row">
-                  <div><span class="k">Home field</span><span class="big">KPAO · Palo Alto</span></div>
-                  <span class="badge vfr">VFR</span>
-                </div>
-                <div class="grid3" style="margin-top:8px">
-                  <div><span class="k">Wind</span><span class="v">310° 8 kt</span></div>
-                  <div><span class="k">Vis</span><span class="v">10 SM</span></div>
-                  <div><span class="k">Altim</span><span class="v">30.02</span></div>
-                </div>
-              </div>
-              <div class="grid3">
-                <div class="card"><span class="big">142.6</span><span class="k">Total hrs</span></div>
-                <div class="card"><span class="big">6.4</span><span class="k">Last 30 days</span></div>
-                <div class="card"><span class="big">1</span><span class="k">To review</span></div>
-              </div>
-              <div class="card list">
-                <div><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="#F76E19" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5z"/><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5"/></svg><div><b>Logbook</b><span>Last flight KPAO → KHAF, 0.9</span></div></div>
-                <div><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="#F76E19" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 6v16l7-4 8 4 7-4V2l-7 4-8-4-7 4z"/><path d="M8 2v16M16 6v16"/></svg><div><b>Map</b><span>37 airports visited</span></div></div>
-              </div>
-              <div class="tabs"><span class="on">Home</span><span>Logbook</span><span>Map</span><span>Settings</span></div>
-            </div>
+      <div>
+        <div class="rack" role="img" aria-label="Five flight strips showing one trip in Orvix Aero: AA 2894 Orlando to Miami saved with alerts on; a gate change alert from B42 to B44; Miami ATIS information Kilo, runways 9 and 8 Right; food two minutes from gate D29; and the flight logged as 1.2 hours.">
+          <div class="strip">
+            <div><div class="id">AA 2894</div><div class="sub">A319</div></div>
+            <div><div class="what">MCO to MIA, last flight that makes your 0930 report</div></div>
+            <div class="when">0600<div class="sub">Alerts on</div></div>
+          </div>
+          <div class="strip">
+            <div><div class="id">Gate</div><div class="sub">MCO</div></div>
+            <div><div class="what">Gate change: B42 to B44 <span class="flag alert">Alert</span></div></div>
+            <div class="when">0512</div>
+          </div>
+          <div class="strip arr">
+            <div><div class="id">KMIA</div><div class="sub">D-ATIS</div></div>
+            <div><div class="what">Information Kilo, landing 9 and 8R, wind 090 at 12</div></div>
+            <div class="when">0641</div>
+          </div>
+          <div class="strip arr">
+            <div><div class="id">D29</div><div class="sub">Concourse D</div></div>
+            <div><div class="what">La Carreta, 2 minutes from your gate</div></div>
+            <div class="when">0714</div>
+          </div>
+          <div class="strip arr">
+            <div><div class="id">Logged</div><div class="sub">SIC</div></div>
+            <div><div class="what">1.2 hours, 1 landing, ready to confirm <span class="flag ok">Logbook</span></div></div>
+            <div class="when">0718</div>
           </div>
         </div>
-      </section>
+        <p class="rack-note">One morning commute, as Orvix Aero sees it.</p>
+      </div>
     </div>
 
-    <section id="how" aria-labelledby="how-title">
+    <section id="trip" aria-labelledby="trip-title">
       <div class="wrap">
-        <div class="section-head reveal">
-          <p class="eyebrow">How it works</p>
-          <h2 id="how-title">Fly. Land. Tap confirm.</h2>
+        <div class="head">
+          <h2 id="trip-title">Everything you open on a trip, in the order you open it.</h2>
+          <p class="lede">No more jumping between a logbook app, a weather app, a flight tracker and a map to find lunch.</p>
         </div>
-        <ol class="how reveal">
-          <li><h3>It notices you flew</h3><p>Your iPhone’s GPS picks up the takeoff roll, the climb and the landing on its own. Leave it in your pocket and just fly.</p></li>
-          <li><h3>It fills in the details</h3><p>Departure and arrival airports, takeoff and landing times, total time, landings, night and cross-country time, and the tail number you usually fly.</p></li>
-          <li><h3>You confirm it</h3><p>The entry waits for you as a draft. Check it, fix anything, and save. Nothing goes in your logbook until you say so.</p></li>
-        </ol>
-      </div>
-    </section>
-
-    <section id="features" aria-labelledby="features-title">
-      <div class="wrap">
-        <div class="section-head reveal">
-          <p class="eyebrow">Features</p>
-          <h2 id="features-title">Everything a logbook should do on its own.</h2>
-        </div>
-        <div class="features reveal">
-          <div class="feature">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.8 19.2L16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg>
-            <h3>Automatic flight detection</h3>
-            <p>Takeoff and landing are detected from GPS. Cars and trains don’t count, only trips that climb like a flight.</p>
+        <div class="phases">
+          <div class="phase">
+            <div class="step">1</div>
+            <h3>Before you go</h3>
+            <ul>
+              <li><b>Commute planner</b><span>Enter your report time and get the last flight that lands in time, plus a backup.</span></li>
+              <li><b>Flight alerts</b><span>Save a flight and get a notification for delays, cancellations, gates and gate changes.</span></li>
+              <li><b>Live radar</b><span>A moving radar loop you can drag and zoom, worldwide.</span></li>
+              <li><b>Weather and D-ATIS</b><span>METAR, TAF and the current ATIS letter, runways and winds.</span></li>
+              <li><b>FAA delays</b><span>Ground stops and delay programs at both ends of your trip.</span></li>
+            </ul>
           </div>
-          <div class="feature">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 10h4M7 14h10"/></svg>
-            <h3>Tail numbers, filled in</h3>
-            <p>Suggests the aircraft you usually fly and looks up U.S. N-numbers in the FAA registry for type and model.</p>
+          <div class="phase">
+            <div class="step">2</div>
+            <h3>At the airport</h3>
+            <ul>
+              <li><b>Food near your gate</b><span>Parked at D29? See what’s open in your concourse, with terminal and gate next to each place.</span></li>
+              <li><b>Near the FBO</b><span>Flying GA, see the closest places to eat from where you parked.</span></li>
+              <li><b>Near the hotel</b><span>On a layover, find restaurants, bars and things to do around you.</span></li>
+              <li><b>Jumpseat guide</b><span>The basics of riding along, and typical jumpseat counts by type.</span></li>
+            </ul>
           </div>
-          <div class="feature">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 6v16l7-4 8 4 7-4V2l-7 4-8-4-7 4z"/><path d="M8 2v16M16 6v16"/></svg>
-            <h3>Your flying, on a map</h3>
-            <p>See every route you’ve flown and every airport you’ve visited, filtered by date.</p>
-          </div>
-          <div class="feature">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.5 19H9a7 7 0 1 1 6.7-9h1.8a4.5 4.5 0 1 1 0 9z"/></svg>
-            <h3>METAR and TAF</h3>
-            <p>Decoded weather for your home field and any airport, with flight-category badges and the nearest TAF when there isn’t one.</p>
-          </div>
-          <div class="feature">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5M12 15V3"/></svg>
-            <h3>Bring your logbook</h3>
-            <p>Import from ForeFlight or a spreadsheet, with a preview and duplicate skipping. Export to CSV whenever you like, always free.</p>
-          </div>
-          <div class="feature">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
-            <h3>Private by design</h3>
-            <p>Your flights are visible only to you. Sign in with Apple, Google or email. We never sell your data or show aircraft owner details.</p>
+          <div class="phase">
+            <div class="step">3</div>
+            <h3>After you land</h3>
+            <ul>
+              <li><b>A logbook that fills itself in</b><span>It notices the takeoff and landing, finds the airports, times and tail number, and asks you to confirm.</span></li>
+              <li><b>Totals like a paper logbook</b><span>PIC, SIC, night, cross-country, multi-engine, instrument and every category and class.</span></li>
+              <li><b>Currency</b><span>Day and night landings, instrument currency, medical and flight review, flagged before anything lapses.</span></li>
+              <li><b>Your flight map</b><span>Every airport and route you’ve flown.</span></li>
+            </ul>
           </div>
         </div>
       </div>
     </section>
 
-    <section id="screens" aria-labelledby="screens-title">
+    <section id="pilots" aria-labelledby="pilots-title">
       <div class="wrap">
-        <div class="section-head reveal">
-          <p class="eyebrow">A look inside</p>
-          <h2 id="screens-title">Built for the ramp, not the desk.</h2>
-          <p>Big type, dark cockpit colors and the things you need right after you shut down.</p>
+        <div class="head">
+          <h2 id="pilots-title">Made by an airline pilot, for every kind of pilot.</h2>
+          <p class="lede">The details are right because they come from flying the line and flying GA.</p>
         </div>
-        <div class="screens reveal">
-          <figure>
-            <div class="phone" role="img" aria-label="Logbook screen with totals and a list of recent flights">
-              <div class="scr">
-                <div class="scr-head"><h3>Logbook</h3><span class="muted">142.6 hrs</span></div>
-                <div class="card">
-                  <div class="grid3">
-                    <div><span class="k">Total</span><span class="big">142.6</span></div>
-                    <div><span class="k">PIC</span><span class="big">118.3</span></div>
-                    <div><span class="k">Night</span><span class="big">12.1</span></div>
-                  </div>
-                </div>
-                <div class="card review" style="padding:0">
-                  <div class="flight"><b>KPAO → KHAF</b><span class="t">0.9</span><span class="k">Oct 18 · N0RVX · C172</span><span class="pill">Review</span></div>
-                </div>
-                <div class="card" style="padding:0">
-                  <div class="flight"><b>KSQL → KMRY</b><span class="t">1.4</span><span class="k">Oct 12 · N0RVX · C172 · XC</span><span></span></div>
-                  <div class="flight"><b>KMRY → KSQL</b><span class="t">1.3</span><span class="k">Oct 12 · N0RVX · C172 · XC</span><span></span></div>
-                  <div class="flight"><b>KPAO → KPAO</b><span class="t">1.1</span><span class="k">Oct 5 · N52TC · PA28 · 6 landings</span><span></span></div>
-                  <div class="flight"><b>KHAF → KPAO</b><span class="t">0.8</span><span class="k">Sep 28 · N0RVX · C172 · Night</span><span></span></div>
-                </div>
-                <div class="tabs"><span>Home</span><span class="on">Logbook</span><span>Map</span><span>Settings</span></div>
-              </div>
-            </div>
-            <figcaption><b>Logbook</b>Totals at a glance, and new flights waiting for your OK.</figcaption>
-          </figure>
+        <div class="two">
+          <div>
+            <h3>Airline pilots</h3>
+            <p>Bring years of flying in at once and keep commuting simple.</p>
+            <ul>
+              <li>Import your airline crew log, with relief seats (FB, FC, IRO) logged as SIC and no landing</li>
+              <li>Import from Logbook Pro, ForeFlight or a spreadsheet, with duplicates skipped</li>
+              <li>Exact tail number and aircraft type for each leg</li>
+              <li>Commute planner with backups and live delay alerts</li>
+              <li>Food in your terminal, sorted by how close it is to your gate</li>
+            </ul>
+          </div>
+          <div>
+            <h3>GA pilots</h3>
+            <p>Log the flight without stopping to write it down.</p>
+            <ul>
+              <li>Automatic flight detection from your phone, no ADS-B hardware</li>
+              <li>N-number lookup with type and model from the FAA registry</li>
+              <li>Saved aircraft with category and class for your totals</li>
+              <li>Currency, flight review and medical in one place</li>
+              <li>Endorsements, and the nearest food from the FBO</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
 
-          <figure>
-            <div class="phone" role="img" aria-label="Flight review screen showing an automatically detected flight">
-              <div class="scr">
-                <div class="scr-head"><h3>Review flight</h3></div>
-                <div class="card">
-                  <div class="row"><span class="big">KPAO → KHAF</span><span class="big">0.9</span></div>
-                  <span class="k">Detected after landing · Oct 18</span>
-                </div>
-                <div class="card">
-                  <div class="grid2">
-                    <div><span class="k">Takeoff</span><span class="v">16:03Z</span></div>
-                    <div><span class="k">Landing</span><span class="v">16:57Z</span></div>
-                    <div><span class="k">Aircraft</span><span class="v">N0RVX · C172</span></div>
-                    <div><span class="k">Landings</span><span class="v">2 day</span></div>
-                    <div><span class="k">Night</span><span class="v">0.0</span></div>
-                    <div><span class="k">Cross-country</span><span class="v">0.0</span></div>
-                  </div>
-                </div>
-                <div class="card"><span class="k">Tail number</span><span class="v">N0RVX</span><span class="k" style="margin-top:4px">Your usual aircraft · FAA: Cessna 172S</span></div>
-                <div style="display:flex;gap:8px"><span class="btn-o" style="flex:1;text-align:center;padding:10px">Confirm</span><span class="card" style="flex:1;text-align:center;padding:8px;font-weight:700">Discard</span></div>
-                <div class="tabs"><span>Home</span><span class="on">Logbook</span><span>Map</span><span>Settings</span></div>
-              </div>
-            </div>
-            <figcaption><b>Review</b>Everything filled in. Change what you want, then confirm.</figcaption>
-          </figure>
-
-          <figure>
-            <div class="phone" role="img" aria-label="Weather screen with a decoded METAR and TAF for KPAO">
-              <div class="scr">
-                <div class="scr-head"><h3>Weather</h3></div>
-                <div class="field">KPAO</div>
-                <div class="chips"><span class="chip">KSQL</span><span class="chip">KHAF</span><span class="chip">KSFO</span></div>
-                <div class="card">
-                  <div class="row"><span class="big">METAR</span><span class="badge vfr">VFR</span></div>
-                  <div class="grid2" style="margin-top:8px">
-                    <div><span class="k">Wind</span><span class="v">310° at 8 kt</span></div>
-                    <div><span class="k">Visibility</span><span class="v">10 SM</span></div>
-                    <div><span class="k">Ceiling</span><span class="v">None</span></div>
-                    <div><span class="k">Altimeter</span><span class="v">30.02</span></div>
-                  </div>
-                  <div class="mono" style="margin-top:8px">KPAO 182147Z 31008KT 10SM CLR 18/09 A3002</div>
-                </div>
-                <div class="card">
-                  <div class="row"><span class="big">TAF</span><span class="k">Nearest: KSJC</span></div>
-                  <div class="row" style="margin-top:6px;justify-content:flex-start"><span class="k" style="width:64px">Now–06Z</span><span class="badge vfr">VFR</span></div>
-                  <div class="row" style="margin-top:6px;justify-content:flex-start"><span class="k" style="width:64px">06Z–16Z</span><span class="badge mvfr">MVFR</span></div>
-                </div>
-                <div class="tabs"><span class="on">Home</span><span>Logbook</span><span>Map</span><span>Settings</span></div>
-              </div>
-            </div>
-            <figcaption><b>Weather</b>Decoded METAR and TAF from aviationweather.gov.</figcaption>
-          </figure>
+    <section id="privacy" aria-labelledby="privacy-title">
+      <div class="wrap">
+        <div class="head">
+          <h2 id="privacy-title">Your logbook stays yours.</h2>
+          <p class="lede">A pilot’s records are personal. Orvix Aero is built so only you can see them.</p>
+        </div>
+        <div class="promises">
+          <div><b>Only you see your flights</b><span>Your logbook is private to your account. We never sell your data.</span></div>
+          <div><b>Export anytime</b><span>Download your whole logbook as a spreadsheet whenever you want.</span></div>
+          <div><b>Your location stays rounded</b><span>Searching near you sends an approximate area, never your exact position.</span></div>
+          <div><b>No owner details</b><span>Aircraft lookups show the aircraft, never who owns it.</span></div>
         </div>
       </div>
     </section>
 
     <section id="pricing" aria-labelledby="pricing-title">
       <div class="wrap">
-        <div class="section-head reveal">
-          <p class="eyebrow">Pricing preview</p>
-          <h2 id="pricing-title">Start free. Go Pro when it saves you time.</h2>
-          <p>Final prices will be announced at launch. Waitlist members hear first.</p>
-        </div>
-        <div class="plans reveal">
-          <div class="plan">
-            <h3>Free</h3>
-            <p class="price">For logging by hand</p>
-            <ul>
-              <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>Unlimited logbook entries</li>
-              <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>Totals for PIC, night, cross-country and more</li>
-              <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>METAR and TAF weather</li>
-              <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>Import and CSV export</li>
-            </ul>
+        <div class="plan">
+          <div>
+            <h3 id="pricing-title">One plan. Everything included.</h3>
+            <p class="price">Launch pricing goes to the waitlist first.</p>
+            <p class="lede" style="margin-top:14px">No feature tiers to compare. Every pilot gets the full app.</p>
+            <a class="button" href="#join-email" style="margin-top:24px">Join the waitlist</a>
           </div>
-          <div class="plan pro">
-            <h3>Pro</h3>
-            <p class="price">For a logbook that fills itself in</p>
-            <ul>
-              <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>Everything in Free</li>
-              <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>Automatic flight detection</li>
-              <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>Tail number suggestions and FAA lookup</li>
-              <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>Flight map with your GPS tracks</li>
-              <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>Currency tracking (coming soon)</li>
-            </ul>
-          </div>
+          <ul>
+            <li>Automatic logbook</li>
+            <li>Imports and spreadsheet export</li>
+            <li>Totals and currency</li>
+            <li>Flight map</li>
+            <li>Live radar, worldwide</li>
+            <li>Weather and D-ATIS</li>
+            <li>Commute planner</li>
+            <li>Flight and gate alerts</li>
+            <li>FAA delays</li>
+            <li>Food near your gate or FBO</li>
+            <li>Near me for layovers</li>
+            <li>Jumpseat guide</li>
+          </ul>
         </div>
-        <p class="fine">Your data is always yours: CSV export stays free on every plan.</p>
       </div>
     </section>
 
     <section id="faq" aria-labelledby="faq-title">
       <div class="wrap">
-        <div class="section-head reveal">
-          <p class="eyebrow">FAQ</p>
+        <div class="head">
           <h2 id="faq-title">Questions pilots ask.</h2>
         </div>
-        <div class="faq reveal">
+        <div class="faq">
           <details>
             <summary>How does it know I flew?</summary>
-            <p>With your permission, Orvix Aero uses your iPhone’s location in the background. It looks for a takeoff roll followed by a real climb, then a landing. Driving, even on steep roads, doesn’t look like that, so it isn’t logged.</p>
+            <p>With your permission, Orvix Aero uses your iPhone’s location in the background. It looks for a takeoff roll followed by a real climb, then a landing. Driving doesn’t look like that, so it isn’t logged. Nothing is saved until you confirm it.</p>
           </details>
           <details>
             <summary>Will it drain my battery?</summary>
-            <p>Location updates are batched so the phone isn’t woken constantly, and you can turn detection off anytime. You can still log flights by hand.</p>
-          </details>
-          <details>
-            <summary>Does it need cell service or ADS-B?</summary>
-            <p>No. Detection uses your phone’s GPS, and airports are matched on the phone itself. Drafts upload when you’re back online. There’s no ADS-B hardware to buy.</p>
-          </details>
-          <details>
-            <summary>Which aircraft does it work with?</summary>
-            <p>Any aircraft you carry your phone in. For U.S. N-numbers, Orvix Aero looks up the type and model in the FAA aircraft registry. Only the aircraft facts are shown, never owner details.</p>
+            <p>Location updates are batched so the phone isn’t woken constantly, and you can turn detection off anytime. You can always log flights by hand.</p>
           </details>
           <details>
             <summary>Can I bring my existing logbook?</summary>
-            <p>Yes. Import a ForeFlight export or a spreadsheet, preview it, and Orvix Aero skips duplicates. You can export everything back out to CSV at any time, for free.</p>
+            <p>Yes. Import a ForeFlight or Logbook Pro export, an airline crew log, or a spreadsheet. You see a preview first, and duplicates are skipped.</p>
+          </details>
+          <details>
+            <summary>How do flight alerts work?</summary>
+            <p>Tap the bell on any flight in the commute planner. You’ll get a notification when it’s delayed or cancelled, when a gate is posted, and when the gate changes, at both ends.</p>
+          </details>
+          <details>
+            <summary>Does it show seat loads?</summary>
+            <p>No. Loads live in each airline’s own systems, and sharing them can get employees in trouble, so Orvix Aero doesn’t collect or show them. You get schedules, live status, delays and alerts instead.</p>
+          </details>
+          <details>
+            <summary>Where does the radar come from?</summary>
+            <p>In the U.S., National Weather Service NEXRAD radar. Elsewhere, radar mosaics shared by national weather services. It’s for awareness, not flight planning.</p>
           </details>
           <details>
             <summary>Who can see my flights?</summary>
-            <p>Only you. Your logbook is private to your account and we never sell your data. Read the <a href="/privacy.html">privacy policy</a> for the details.</p>
+            <p>Only you. Read the <a href="/privacy.html">privacy policy</a> for the details.</p>
           </details>
           <details>
-            <summary>When does it launch, and what will it cost?</summary>
-            <p>Orvix Aero is coming to iPhone first. Join the waitlist and we’ll email you when it’s ready, along with launch pricing for Pro.</p>
+            <summary>When does it launch?</summary>
+            <p>Orvix Aero is coming to iPhone first. Join the waitlist and we’ll email you when it’s ready, along with launch pricing.</p>
           </details>
         </div>
       </div>
@@ -503,11 +393,9 @@
 
     <section class="closing" aria-labelledby="closing-title">
       <div class="wrap">
-        <div class="box reveal">
-          <h2 id="closing-title">Stop catching up on your logbook.</h2>
-          <p>Be one of the first pilots to try Orvix Aero.</p>
-          <a class="button" href="#join">Join the waitlist</a>
-        </div>
+        <h2 id="closing-title">Close the other five apps.</h2>
+        <p class="lede">Be first to fly with Orvix Aero when it reaches the App Store.</p>
+        <a class="button" href="#join-email" style="margin-top:26px">Join the waitlist</a>
       </div>
     </section>
   </main>
@@ -551,18 +439,8 @@
       show("Couldn't connect. Check your connection and try again.", 'err');
     } finally { btn.disabled = false; }
   });
-</script>
-<script>
-  // Header border on scroll, and fade sections in as they appear.
-  const bar = document.getElementById('top-bar');
-  const onScroll = () => bar.classList.toggle('scrolled', window.scrollY > 8);
-  onScroll(); window.addEventListener('scroll', onScroll, { passive: true });
-  if ('IntersectionObserver' in window) {
-    const io = new IntersectionObserver((entries) => entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { rootMargin: '0px 0px -10% 0px' });
-    document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
-  } else {
-    document.querySelectorAll('.reveal').forEach((el) => el.classList.add('in'));
-  }
+  // Links to the waitlist put the cursor in the email field.
+  document.querySelectorAll('a[href="#join-email"]').forEach((a) => a.addEventListener('click', () => setTimeout(() => document.getElementById('join-email').focus({ preventScroll: true }), 400)));
 </script>
 </body>
 </html>
