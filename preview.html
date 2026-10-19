@@ -77,7 +77,7 @@
   .radar-live { position: absolute; z-index: 2; left: var(--gutter); bottom: 22px; margin: 0; display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 500; color: var(--ink-2); }
   .radar-live .pulse { width: 8px; height: 8px; border-radius: 50%; background: #E5484D; box-shadow: 0 0 0 0 rgba(229, 72, 77, .6); }
   @media (prefers-reduced-motion: no-preference) { .radar-live .pulse { animation: pulse 2s infinite; } @keyframes pulse { 70% { box-shadow: 0 0 0 8px rgba(229, 72, 77, 0); } 100% { box-shadow: 0 0 0 0 rgba(229, 72, 77, 0); } } }
-  .hero { position: relative; z-index: 2; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: clamp(40px, 5vw, 96px); align-items: center; padding-block: 48px 96px; }
+  .hero { position: relative; z-index: 2; display: grid; grid-template-columns: minmax(0, 44%) minmax(0, 1fr); gap: clamp(40px, 5vw, 96px); align-items: center; padding-block: 48px 96px; }
   .hero h1 { font-size: clamp(56px, 6.6vw, 124px); text-wrap: balance; }
   .hero .lede { margin-top: 26px; }
   @media (max-width: 1000px) { .hero { grid-template-columns: minmax(0, 1fr); gap: 44px; padding-top: 24px; } .hero-band { min-height: 0; } }
@@ -118,15 +118,19 @@
     .strip .what { font-size: 20px; }
   }
   @media (prefers-reduced-motion: no-preference) {
-    .rack .strip { animation: rack .6s cubic-bezier(.2, .8, .2, 1) both; }
-    .rack .strip:nth-child(1) { animation-delay: .5s; }
-    .rack .strip:nth-child(2) { animation-delay: .75s; }
-    .rack .strip:nth-child(3) { animation-delay: 1s; }
-    .rack .strip:nth-child(4) { animation-delay: 1.25s; }
-    .rack .strip:nth-child(5) { animation-delay: 1.5s; }
+    .rack .strip { opacity: 0; }
+    .rack.in .strip { animation: rack .6s cubic-bezier(.2, .8, .2, 1) both; }
+    .rack.in .strip:nth-child(1) { animation-delay: .05s; }
+    .rack.in .strip:nth-child(2) { animation-delay: .3s; }
+    .rack.in .strip:nth-child(3) { animation-delay: .55s; }
+    .rack.in .strip:nth-child(4) { animation-delay: .8s; }
+    .rack.in .strip:nth-child(5) { animation-delay: 1.05s; }
     @keyframes rack { from { opacity: 0; transform: translateX(40px); } to { opacity: 1; transform: none; } }
   }
-  .rack-note { margin-top: 14px; font-size: 14px; color: var(--ink-3); text-align: right; }
+  .story { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: clamp(40px, 5vw, 96px); align-items: center; }
+  .story h2 { font-size: clamp(44px, 4.6vw, 84px); text-wrap: balance; }
+  .story .lede { margin-top: 22px; }
+  @media (max-width: 1000px) { .story { grid-template-columns: minmax(0, 1fr); } }
 
   /* ---- Sections: full-width bands ---- */
   section { padding: clamp(80px, 9vw, 140px) 0; position: relative; }
@@ -230,7 +234,15 @@
         <p class="fine">Coming to iPhone first. We’ll only email you about the launch.</p>
       </div>
 
-      <div>
+      </div>
+    </div>
+
+    <section id="morning" aria-labelledby="morning-title">
+      <div class="wrap story">
+        <div>
+          <h2 id="morning-title">One morning commute, as Orvix Aero sees it.</h2>
+          <p class="lede">Save your flight the night before. The app watches it, tells you when the gate moves, shows the ATIS on the way in, points you to food at your arrival gate, and has the flight ready to log when you land.</p>
+        </div>
         <div class="rack" role="img" aria-label="Five flight strips showing one trip in Orvix Aero: AA 2894 Orlando to Miami saved with alerts on; a gate change alert from B42 to B44; Miami ATIS information Kilo, runways 9 and 8 Right; food two minutes from gate D29; and the flight logged as 1.2 hours.">
           <div class="strip">
             <div><div class="id">AA 2894</div><div class="sub">A319</div></div>
@@ -258,10 +270,8 @@
             <div class="when">0718</div>
           </div>
         </div>
-        <p class="rack-note">One morning commute, as Orvix Aero sees it.</p>
       </div>
-      </div>
-    </div>
+    </section>
 
     <section id="trip" class="alt" aria-labelledby="trip-title">
       <div class="wrap">
@@ -486,7 +496,7 @@
       const fit = () => {
         const wide = el.clientWidth > 1000;
         // Lower 48, pushed right on wide screens so the headline sits over the Pacific.
-        map.fitBounds([[23, -126], [50, -66]], wide ? { paddingTopLeft: [el.clientWidth * 0.30, 60], paddingBottomRight: [20, 20] } : { padding: [10, 10] });
+        map.fitBounds([[23, -126], [50, -66]], wide ? { paddingTopLeft: [el.clientWidth * 0.36, 90], paddingBottomRight: [40, 40] } : { padding: [10, 10] });
       };
       fit(); window.addEventListener('resize', fit);
       const esri = 'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas';
@@ -522,6 +532,13 @@
     };
     document.head.appendChild(js);
   })();
+
+  // The strips rack up once, when that section comes into view.
+  const rackEl = document.querySelector('.rack');
+  if (rackEl && 'IntersectionObserver' in window) {
+    const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { rackEl.classList.add('in'); io.disconnect(); } }), { threshold: 0.3 });
+    io.observe(rackEl);
+  } else if (rackEl) rackEl.classList.add('in');
 
   const bar = document.getElementById('top-bar');
   const onScroll = () => bar.classList.toggle('scrolled', window.scrollY > 8);
