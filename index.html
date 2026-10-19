@@ -17,165 +17,190 @@
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --night: #06101C;      /* cockpit at night: the page */
-    --panel: #0C1B2C;      /* glareshield */
-    --line: #1D3249;
+    --night: #050D17;
+    --night-2: #08131F;
+    --glass: rgba(170, 196, 220, .055);
+    --glass-2: rgba(170, 196, 220, .09);
+    --edge: rgba(157, 178, 197, .16);
+    --edge-2: rgba(157, 178, 197, .28);
     --ink: #F2F6FA;
     --ink-2: #A3B6C8;
     --ink-3: #6F879B;
-    --strip-dep: #DDE8F1;  /* departure strip, blue-white */
-    --strip-arr: #F0E3C1;  /* arrival strip, buff */
-    --strip-ink: #0E2233;
-    --strip-rule: rgba(14, 34, 51, .22);
-    --orange: #F76E19;     /* brand: actions only */
+    --dep: #7FB4E6;      /* departure strip edge */
+    --arr: #E8C77A;      /* arrival strip edge */
+    --orange: #F76E19;
     --orange-2: #FF8A3D;
     --green: #2DB46E;
-    --amber: #E8A93A;
     --display: "Barlow Condensed", "Arial Narrow", sans-serif;
     --text: "Barlow", system-ui, sans-serif;
+    --gutter: clamp(20px, 4vw, 64px);
   }
   * { box-sizing: border-box; }
   html { scroll-behavior: smooth; }
-  body { margin: 0; background: var(--night); color: var(--ink); font-family: var(--text); font-size: 18px; line-height: 1.55; -webkit-font-smoothing: antialiased; }
+  body { margin: 0; background: var(--night); color: var(--ink); font-family: var(--text); font-size: 19px; line-height: 1.55; -webkit-font-smoothing: antialiased; }
   img { max-width: 100%; display: block; }
   a { color: inherit; }
-  :focus-visible { outline: 3px solid var(--orange-2); outline-offset: 3px; border-radius: 4px; }
-  .wrap { width: min(1160px, 100% - 40px); margin-inline: auto; }
-  h1, h2, h3 { font-family: var(--display); font-weight: 700; margin: 0; line-height: 1.0; letter-spacing: -0.005em; }
+  :focus-visible { outline: 3px solid var(--orange-2); outline-offset: 3px; border-radius: 6px; }
+  .wrap { width: 100%; max-width: 1680px; margin-inline: auto; padding-inline: var(--gutter); }
+  h1, h2, h3 { font-family: var(--display); font-weight: 700; margin: 0; line-height: .98; letter-spacing: -0.01em; }
   p { margin: 0; }
-  .lede { color: var(--ink-2); font-size: 20px; max-width: 34em; }
+  .lede { color: var(--ink-2); font-size: clamp(19px, 1.35vw, 22px); max-width: 36em; }
 
-  /* ---- Header ---- */
-  .top { display: flex; align-items: center; justify-content: space-between; padding: 18px 0; }
-  .brand img { height: 46px; width: auto; }
-  .top nav { display: flex; align-items: center; gap: 28px; font-weight: 500; font-size: 16px; }
-  .top nav a { text-decoration: none; color: var(--ink-2); }
+  /* ---- Header: full-width, frosted when scrolled ---- */
+  .bar { position: sticky; top: 0; z-index: 10; transition: background .25s, border-color .25s; border-bottom: 1px solid transparent; }
+  .bar.scrolled { background: rgba(5, 13, 23, .72); backdrop-filter: blur(14px) saturate(140%); -webkit-backdrop-filter: blur(14px) saturate(140%); border-bottom-color: var(--edge); }
+  .top { display: flex; align-items: center; justify-content: space-between; height: 96px; }
+  .brand { display: flex; align-items: center; gap: 14px; text-decoration: none; }
+  .brand img { height: 68px; width: auto; }
+  .top nav { display: flex; align-items: center; gap: 36px; font-weight: 500; font-size: 17px; }
+  .top nav a { text-decoration: none; color: var(--ink-2); transition: color .15s; }
   .top nav a:hover { color: var(--ink); }
-  .top nav .cta { color: var(--night); background: var(--orange); padding: 9px 16px; border-radius: 10px; font-weight: 600; }
-  .top nav .cta:hover { background: var(--orange-2); color: var(--night); }
-  @media (max-width: 720px) { .top nav a:not(.cta) { display: none; } }
+  .top nav .cta { color: #fff; background: var(--orange); padding: 12px 22px; border-radius: 12px; font-weight: 600; box-shadow: 0 0 0 1px rgba(255,255,255,.08) inset, 0 8px 28px rgba(247, 110, 25, .28); }
+  .top nav .cta:hover { background: var(--orange-2); color: #fff; }
+  @media (max-width: 820px) { .top { height: 76px; } .brand img { height: 52px; } .top nav a:not(.cta) { display: none; } }
 
-  /* ---- Hero: headline left, strip rack right ---- */
-  .hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: 56px; align-items: center; padding: 56px 0 96px; }
-  .hero h1 { font-size: clamp(54px, 7.4vw, 96px); text-wrap: balance; }
-  .hero .lede { margin-top: 22px; }
-  @media (max-width: 960px) { .hero { grid-template-columns: minmax(0, 1fr); gap: 44px; padding-top: 28px; } }
-  @media (max-width: 480px) { .join { flex-direction: column; } .join button { width: 100%; } }
+  /* ---- Hero: full-bleed sky with a HUD horizon and one flight path ---- */
+  .hero-band { position: relative; overflow: hidden; margin-top: -96px; padding-top: 96px; min-height: min(100vh, 1000px); display: flex; align-items: center;
+    background:
+      radial-gradient(ellipse 70% 55% at 72% 46%, rgba(47, 111, 228, .20), transparent 70%),
+      radial-gradient(ellipse 60% 45% at 20% 100%, rgba(247, 110, 25, .10), transparent 70%),
+      linear-gradient(180deg, #071526 0%, var(--night) 78%); }
+  .sky { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+  .sky .grid line { stroke: rgba(157, 178, 197, .07); stroke-width: 1; }
+  .sky .horizon { stroke: rgba(157, 178, 197, .22); stroke-width: 1.2; }
+  .sky .ladder line { stroke: rgba(157, 178, 197, .14); stroke-width: 1.2; }
+  .sky .path { fill: none; stroke: url(#pathGlow); stroke-width: 2.2; stroke-linecap: round; filter: url(#glow); }
+  .sky .dot { fill: var(--orange); filter: url(#glow); }
+  @media (prefers-reduced-motion: no-preference) {
+    .sky .path { stroke-dasharray: 2600; stroke-dashoffset: 2600; animation: draw 2.4s .2s cubic-bezier(.6, .1, .2, 1) forwards; }
+    .sky .dot { opacity: 0; animation: arrive .4s 2.4s ease-out forwards; }
+    @keyframes draw { to { stroke-dashoffset: 0; } }
+    @keyframes arrive { to { opacity: 1; } }
+  }
+  .hero { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: clamp(40px, 5vw, 96px); align-items: center; padding-block: 48px 96px; }
+  .hero h1 { font-size: clamp(56px, 6.6vw, 124px); text-wrap: balance; }
+  .hero .lede { margin-top: 26px; }
+  @media (max-width: 1000px) { .hero { grid-template-columns: minmax(0, 1fr); gap: 44px; padding-top: 24px; } .hero-band { min-height: 0; } }
 
-  .join { display: flex; gap: 10px; margin-top: 32px; max-width: 470px; }
-  .join input[type=email] { flex: 1; min-width: 0; font: inherit; font-size: 17px; color: var(--ink); background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 13px 15px; }
+  .join { display: flex; gap: 10px; margin-top: 36px; max-width: 540px; }
+  .join input[type=email] { flex: 1; min-width: 0; font: inherit; font-size: 18px; color: var(--ink); background: var(--glass); border: 1px solid var(--edge-2); border-radius: 14px; padding: 15px 18px; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
   .join input::placeholder { color: var(--ink-3); }
-  .join button, .button { font: inherit; font-weight: 600; font-size: 17px; color: var(--night); background: var(--orange); border: 0; border-radius: 12px; padding: 13px 20px; cursor: pointer; text-decoration: none; display: inline-block; white-space: nowrap; }
+  .join button, .button { font: inherit; font-weight: 600; font-size: 18px; color: #fff; background: var(--orange); border: 0; border-radius: 14px; padding: 15px 24px; cursor: pointer; text-decoration: none; display: inline-block; white-space: nowrap; box-shadow: 0 0 0 1px rgba(255,255,255,.08) inset, 0 10px 30px rgba(247, 110, 25, .28); }
   .join button:hover, .button:hover { background: var(--orange-2); }
   .join button:disabled { opacity: .6; cursor: default; }
+  @media (max-width: 480px) { .join { flex-direction: column; } .join button { width: 100%; } }
   .hp { position: absolute; left: -9999px; }
   .join-msg { min-height: 24px; margin-top: 10px; font-size: 15px; color: var(--ink-2); }
   .join-msg.ok { color: var(--green); }
   .join-msg.err { color: #F2817A; }
-  .fine { margin-top: 6px; font-size: 14px; color: var(--ink-3); }
+  .fine { margin-top: 4px; font-size: 15px; color: var(--ink-3); }
 
-  /* ---- Flight strips ---- */
-  .rack { position: relative; padding: 14px 14px 14px 30px; border-radius: 14px; background: #0A1726; border: 1px solid var(--line); }
-  /* the rack's metal rail */
-  .rack::before { content: ""; position: absolute; left: 12px; top: 14px; bottom: 14px; width: 6px; border-radius: 3px; background: linear-gradient(#24405D, #16293E); }
-  .strip { position: relative; display: grid; grid-template-columns: 7.2em 1fr 6.2em; color: var(--strip-ink); background: var(--strip-dep); border-radius: 3px; margin-bottom: 8px; box-shadow: 0 1px 0 rgba(0,0,0,.35); }
-  .strip:last-child { margin-bottom: 0; }
-  .strip.arr { background: var(--strip-arr); }
-  .strip > div { padding: 9px 12px; border-left: 1px solid var(--strip-rule); min-width: 0; }
-  .strip > div:first-child { border-left: 0; }
-  .strip .id { font-family: var(--display); font-weight: 700; font-size: 24px; line-height: 1; }
-  .strip .sub { font-size: 13px; color: rgba(14, 34, 51, .7); margin-top: 3px; }
-  .strip .what { font-family: var(--display); font-weight: 600; font-size: 21px; line-height: 1.1; }
-  .strip .when { text-align: right; font-family: var(--display); font-weight: 600; font-size: 20px; }
-  .strip .flag { display: inline-block; font-family: var(--text); font-size: 12px; font-weight: 600; padding: 1px 7px; border-radius: 4px; margin-left: 6px; vertical-align: 3px; }
-  .flag.alert { background: var(--orange); color: var(--night); }
-  .flag.ok { background: #1F7A4B; color: #fff; }
-  @media (max-width: 520px) {
+  /* ---- Flight strips, as glass ---- */
+  .rack { display: grid; gap: 10px; }
+  .strip { position: relative; display: grid; grid-template-columns: 8.2em 1fr 5.6em; border-radius: 14px; overflow: hidden;
+    background: linear-gradient(180deg, rgba(170, 196, 220, .10), rgba(170, 196, 220, .04)); border: 1px solid var(--edge);
+    backdrop-filter: blur(16px) saturate(130%); -webkit-backdrop-filter: blur(16px) saturate(130%); box-shadow: 0 18px 40px rgba(0, 0, 0, .28); }
+  /* lit edge: blue for departure, amber for arrival, as on real strip boards */
+  .strip::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--dep); box-shadow: 0 0 14px var(--dep); }
+  .strip.arr::before { background: var(--arr); box-shadow: 0 0 14px var(--arr); }
+  .strip > div { padding: 14px 16px; border-left: 1px solid var(--edge); min-width: 0; }
+  .strip > div:first-child { border-left: 0; padding-left: 20px; }
+  .strip .id { font-family: var(--display); font-weight: 700; font-size: 27px; line-height: 1; }
+  .strip .sub { font-size: 13px; color: var(--ink-3); margin-top: 4px; }
+  .strip .what { font-family: var(--display); font-weight: 500; font-size: 23px; line-height: 1.12; color: var(--ink); }
+  .strip .when { text-align: right; font-family: var(--display); font-weight: 600; font-size: 22px; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+  .strip .flag { display: inline-block; font-family: var(--text); font-size: 12px; font-weight: 600; padding: 2px 8px; border-radius: 6px; margin-left: 8px; vertical-align: 4px; }
+  .flag.alert { background: var(--orange); color: #fff; }
+  .flag.ok { background: rgba(45, 180, 110, .2); color: #6BE0A2; border: 1px solid rgba(45, 180, 110, .45); }
+  @media (max-width: 560px) {
     .strip { grid-template-columns: 1fr auto; }
-    .strip > div:nth-child(2) { grid-column: 1 / -1; grid-row: 2; border-left: 0; border-top: 1px solid var(--strip-rule); }
-    .strip .what { font-size: 19px; }
+    .strip > div:nth-child(2) { grid-column: 1 / -1; grid-row: 2; border-left: 0; border-top: 1px solid var(--edge); padding-left: 20px; }
+    .strip .what { font-size: 20px; }
   }
-  /* One orchestrated moment: the strips are racked one by one on load. */
   @media (prefers-reduced-motion: no-preference) {
-    .rack .strip { animation: rack .55s cubic-bezier(.2, .8, .2, 1) both; }
-    .rack .strip:nth-child(1) { animation-delay: .15s; }
-    .rack .strip:nth-child(2) { animation-delay: .45s; }
-    .rack .strip:nth-child(3) { animation-delay: .75s; }
-    .rack .strip:nth-child(4) { animation-delay: 1.05s; }
-    .rack .strip:nth-child(5) { animation-delay: 1.35s; }
-    @keyframes rack { from { opacity: 0; transform: translateX(36px); } to { opacity: 1; transform: none; } }
+    .rack .strip { animation: rack .6s cubic-bezier(.2, .8, .2, 1) both; }
+    .rack .strip:nth-child(1) { animation-delay: .5s; }
+    .rack .strip:nth-child(2) { animation-delay: .75s; }
+    .rack .strip:nth-child(3) { animation-delay: 1s; }
+    .rack .strip:nth-child(4) { animation-delay: 1.25s; }
+    .rack .strip:nth-child(5) { animation-delay: 1.5s; }
+    @keyframes rack { from { opacity: 0; transform: translateX(40px); } to { opacity: 1; transform: none; } }
   }
-  .rack-note { margin-top: 12px; font-size: 14px; color: var(--ink-3); text-align: right; }
+  .rack-note { margin-top: 14px; font-size: 14px; color: var(--ink-3); text-align: right; }
 
-  /* ---- Sections ---- */
-  section { padding: 88px 0; border-top: 1px solid var(--line); }
-  .head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 40px; align-items: end; margin-bottom: 48px; }
-  .head h2 { font-size: clamp(40px, 5vw, 64px); text-wrap: balance; }
-  @media (max-width: 860px) { .head { grid-template-columns: 1fr; gap: 16px; } }
+  /* ---- Sections: full-width bands ---- */
+  section { padding: clamp(80px, 9vw, 140px) 0; position: relative; }
+  section.alt { background: linear-gradient(180deg, var(--night-2), var(--night)); border-block: 1px solid rgba(157, 178, 197, .08); }
+  .head { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 56px; align-items: end; margin-bottom: 56px; }
+  .head h2 { font-size: clamp(44px, 4.6vw, 84px); text-wrap: balance; }
+  @media (max-width: 900px) { .head { grid-template-columns: 1fr; gap: 16px; } }
 
-  /* The trip, in order: three phases side by side */
-  .phases { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
-  .phase { padding: 28px 28px 32px; border-left: 1px solid var(--line); background: var(--panel); }
-  .phase:first-child { border-left: 0; }
-  .phase .step { font-family: var(--display); font-weight: 600; font-size: 18px; color: var(--orange); }
-  .phase h3 { font-size: 34px; margin: 4px 0 18px; }
+  .glass { background: linear-gradient(180deg, rgba(170, 196, 220, .07), rgba(170, 196, 220, .025)); border: 1px solid var(--edge); border-radius: 22px; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+
+  .phases { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+  .phase { padding: 34px 34px 38px; }
+  .phase .step { font-family: var(--display); font-weight: 600; font-size: 20px; color: var(--orange); }
+  .phase h3 { font-size: 40px; margin: 6px 0 22px; }
   .phase ul { list-style: none; margin: 0; padding: 0; }
-  .phase li { padding: 14px 0; border-top: 1px solid var(--line); }
+  .phase li { padding: 16px 0; border-top: 1px solid var(--edge); }
   .phase li:first-child { border-top: 0; padding-top: 0; }
-  .phase li b { display: block; font-weight: 600; font-size: 18px; }
-  .phase li span { display: block; color: var(--ink-2); font-size: 16px; line-height: 1.5; margin-top: 2px; }
-  @media (max-width: 900px) { .phases { grid-template-columns: 1fr; } .phase { border-left: 0; border-top: 1px solid var(--line); } .phase:first-child { border-top: 0; } }
+  .phase li b { display: block; font-weight: 600; font-size: 19px; }
+  .phase li span { display: block; color: var(--ink-2); font-size: 17px; line-height: 1.5; margin-top: 3px; }
+  @media (max-width: 1000px) { .phases { grid-template-columns: 1fr; } }
 
-  /* Airline / GA */
-  .two { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 56px; }
-  .two h3 { font-size: 36px; margin-bottom: 14px; }
+  .two { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 20px; }
+  .two > div { padding: 40px; }
+  .two h3 { font-size: 42px; margin-bottom: 14px; }
   .two p { color: var(--ink-2); }
-  .two ul { margin: 18px 0 0; padding-left: 1.1em; color: var(--ink-2); }
-  .two li { margin: 6px 0; }
+  .two ul { margin: 20px 0 0; padding-left: 1.1em; color: var(--ink-2); }
+  .two li { margin: 8px 0; }
   .two li::marker { color: var(--orange); }
-  @media (max-width: 860px) { .two { grid-template-columns: 1fr; gap: 40px; } }
+  @media (max-width: 900px) { .two { grid-template-columns: 1fr; } .two > div { padding: 28px; } }
 
-  /* Privacy as plain promises */
-  .promises { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 56px; max-width: 980px; }
-  .promises div { border-left: 3px solid var(--orange); padding-left: 18px; }
-  .promises b { display: block; font-size: 20px; font-weight: 600; }
-  .promises span { color: var(--ink-2); }
-  @media (max-width: 760px) { .promises { grid-template-columns: 1fr; } }
+  .promises { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; }
+  .promises div { padding: 28px; }
+  .promises b { display: block; font-size: 21px; font-weight: 600; margin-bottom: 6px; }
+  .promises span { color: var(--ink-2); font-size: 17px; }
+  @media (max-width: 1100px) { .promises { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 640px) { .promises { grid-template-columns: 1fr; } }
 
-  /* Pricing: one plan */
-  .plan { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 48px; align-items: start; background: var(--panel); border: 1px solid var(--line); border-radius: 18px; padding: 40px; }
-  .plan h3 { font-size: 44px; }
-  .plan .price { font-family: var(--display); font-weight: 600; font-size: 24px; color: var(--ink-2); margin-top: 10px; }
-  .plan ul { columns: 2; column-gap: 32px; margin: 0; padding-left: 1.1em; color: var(--ink-2); font-size: 17px; }
-  .plan li { margin: 0 0 8px; break-inside: avoid; }
+  .plan { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 64px; align-items: center; padding: clamp(32px, 4vw, 64px);
+    background: radial-gradient(ellipse 80% 120% at 0% 0%, rgba(247, 110, 25, .12), transparent 60%), linear-gradient(180deg, rgba(170, 196, 220, .07), rgba(170, 196, 220, .025)); }
+  .plan h3 { font-size: clamp(44px, 4vw, 68px); }
+  .plan .price { font-family: var(--display); font-weight: 600; font-size: 26px; color: var(--ink-2); margin-top: 12px; }
+  .plan ul { columns: 3; column-gap: 32px; margin: 0; padding-left: 1.1em; color: var(--ink-2); font-size: 18px; }
+  .plan li { margin: 0 0 12px; break-inside: avoid; }
   .plan li::marker { color: var(--orange); }
-  @media (max-width: 860px) { .plan { grid-template-columns: 1fr; padding: 28px; } .plan ul { columns: 1; } }
+  @media (max-width: 1100px) { .plan ul { columns: 2; } }
+  @media (max-width: 860px) { .plan { grid-template-columns: 1fr; gap: 32px; } .plan ul { columns: 1; } }
 
-  /* FAQ */
-  .faq { max-width: 820px; }
-  .faq details { border-top: 1px solid var(--line); }
-  .faq details:last-child { border-bottom: 1px solid var(--line); }
-  .faq summary { list-style: none; cursor: pointer; padding: 20px 40px 20px 0; position: relative; font-family: var(--display); font-weight: 600; font-size: 26px; }
+  .faq-grid { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: 64px; align-items: start; }
+  .faq-grid h2 { font-size: clamp(44px, 4.6vw, 84px); position: sticky; top: 130px; }
+  @media (max-width: 900px) { .faq-grid { grid-template-columns: 1fr; gap: 24px; } .faq-grid h2 { position: static; } }
+  .faq details { border-top: 1px solid var(--edge); }
+  .faq details:last-child { border-bottom: 1px solid var(--edge); }
+  .faq summary { list-style: none; cursor: pointer; padding: 22px 44px 22px 0; position: relative; font-family: var(--display); font-weight: 600; font-size: 28px; }
   .faq summary::-webkit-details-marker { display: none; }
-  .faq summary::after { content: "+"; position: absolute; right: 4px; top: 16px; font-size: 30px; color: var(--orange); font-family: var(--text); font-weight: 400; }
+  .faq summary::after { content: "+"; position: absolute; right: 6px; top: 18px; font-size: 32px; color: var(--orange); font-family: var(--text); font-weight: 400; }
   .faq details[open] summary::after { content: "–"; }
-  .faq details p { color: var(--ink-2); padding: 0 0 22px; max-width: 40em; }
+  .faq details p { color: var(--ink-2); padding: 0 0 24px; max-width: 42em; }
 
-  /* Closing */
-  .closing { text-align: left; }
-  .closing h2 { font-size: clamp(44px, 6vw, 76px); max-width: 12em; }
-  .closing .lede { margin-top: 18px; }
+  .closing { overflow: hidden; background: radial-gradient(ellipse 60% 80% at 85% 100%, rgba(247, 110, 25, .16), transparent 70%), linear-gradient(180deg, var(--night), #071526); }
+  .closing h2 { font-size: clamp(52px, 6.4vw, 120px); max-width: 11em; }
+  .closing .lede { margin-top: 20px; }
 
-  footer { border-top: 1px solid var(--line); padding: 32px 0 48px; color: var(--ink-3); font-size: 15px; }
-  footer .wrap { display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
-  footer nav { display: flex; gap: 22px; }
+  footer { border-top: 1px solid var(--edge); padding: 36px 0 52px; color: var(--ink-3); font-size: 15px; }
+  footer .wrap { display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap; }
+  footer .brand img { height: 44px; }
+  footer nav { display: flex; gap: 26px; }
   footer a { color: var(--ink-2); text-decoration: none; }
   footer a:hover { color: var(--ink); }
 </style>
 </head>
 <body>
-  <header class="wrap top">
-    <a class="brand" href="/"><img src="logo-light.png" alt="Orvix Aero" width="56" height="46"></a>
+  <header class="bar" id="top-bar">
+  <div class="wrap top">
+    <a class="brand" href="/"><img src="logo-light.png" alt="Orvix Aero" width="83" height="68"></a>
     <nav aria-label="Main">
       <a href="#trip">What it does</a>
       <a href="#pilots">Airline &amp; GA</a>
@@ -183,10 +208,34 @@
       <a href="#faq">FAQ</a>
       <a class="cta" href="#join-email">Join the waitlist</a>
     </nav>
+  </div>
   </header>
 
   <main>
-    <div class="wrap hero">
+    <div class="hero-band">
+      <svg class="sky" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <defs>
+          <linearGradient id="pathGlow" x1="0" x2="1" y1="1" y2="0">
+            <stop offset="0" stop-color="#F76E19" stop-opacity="0"/>
+            <stop offset=".35" stop-color="#F76E19" stop-opacity=".9"/>
+            <stop offset="1" stop-color="#FFB27A"/>
+          </linearGradient>
+          <filter id="glow" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        </defs>
+        <g class="grid">
+          <line x1="0" y1="200" x2="1600" y2="200"/><line x1="0" y1="400" x2="1600" y2="400"/><line x1="0" y1="800" x2="1600" y2="800"/>
+          <line x1="200" y1="0" x2="200" y2="1000"/><line x1="600" y1="0" x2="600" y2="1000"/><line x1="1000" y1="0" x2="1000" y2="1000"/><line x1="1400" y1="0" x2="1400" y2="1000"/>
+        </g>
+        <line class="horizon" x1="0" y1="640" x2="1600" y2="610"/>
+        <g class="ladder">
+          <line x1="1080" y1="540" x2="1180" y2="538"/><line x1="1260" y1="536" x2="1360" y2="534"/>
+          <line x1="1100" y1="450" x2="1180" y2="449"/><line x1="1260" y1="447" x2="1340" y2="446"/>
+          <line x1="1080" y1="730" x2="1180" y2="728"/><line x1="1260" y1="726" x2="1360" y2="724"/>
+        </g>
+        <path class="path" d="M -40 985 C 520 975, 1080 930, 1390 760 S 1590 380, 1640 120"/>
+        <circle class="dot" cx="1612" cy="236" r="5"/>
+      </svg>
+      <div class="wrap hero">
       <div>
         <h1 id="hero-title">One app for the whole trip, from commute to logbook.</h1>
         <p class="lede">Orvix Aero plans your commute, watches your flight, shows radar and the ATIS, finds food near your gate, and logs the flight when you land. For airline and GA pilots.</p>
@@ -230,16 +279,17 @@
         </div>
         <p class="rack-note">One morning commute, as Orvix Aero sees it.</p>
       </div>
+      </div>
     </div>
 
-    <section id="trip" aria-labelledby="trip-title">
+    <section id="trip" class="alt" aria-labelledby="trip-title">
       <div class="wrap">
         <div class="head">
           <h2 id="trip-title">Everything you open on a trip, in the order you open it.</h2>
           <p class="lede">No more jumping between a logbook app, a weather app, a flight tracker and a map to find lunch.</p>
         </div>
         <div class="phases">
-          <div class="phase">
+          <div class="phase glass">
             <div class="step">1</div>
             <h3>Before you go</h3>
             <ul>
@@ -250,7 +300,7 @@
               <li><b>FAA delays</b><span>Ground stops and delay programs at both ends of your trip.</span></li>
             </ul>
           </div>
-          <div class="phase">
+          <div class="phase glass">
             <div class="step">2</div>
             <h3>At the airport</h3>
             <ul>
@@ -260,7 +310,7 @@
               <li><b>Jumpseat guide</b><span>The basics of riding along, and typical jumpseat counts by type.</span></li>
             </ul>
           </div>
-          <div class="phase">
+          <div class="phase glass">
             <div class="step">3</div>
             <h3>After you land</h3>
             <ul>
@@ -281,7 +331,7 @@
           <p class="lede">The details are right because they come from flying the line and flying GA.</p>
         </div>
         <div class="two">
-          <div>
+          <div class="glass">
             <h3>Airline pilots</h3>
             <p>Bring years of flying in at once and keep commuting simple.</p>
             <ul>
@@ -292,7 +342,7 @@
               <li>Food in your terminal, sorted by how close it is to your gate</li>
             </ul>
           </div>
-          <div>
+          <div class="glass">
             <h3>GA pilots</h3>
             <p>Log the flight without stopping to write it down.</p>
             <ul>
@@ -307,24 +357,24 @@
       </div>
     </section>
 
-    <section id="privacy" aria-labelledby="privacy-title">
+    <section id="privacy" class="alt" aria-labelledby="privacy-title">
       <div class="wrap">
         <div class="head">
           <h2 id="privacy-title">Your logbook stays yours.</h2>
           <p class="lede">A pilot’s records are personal. Orvix Aero is built so only you can see them.</p>
         </div>
         <div class="promises">
-          <div><b>Only you see your flights</b><span>Your logbook is private to your account. We never sell your data.</span></div>
-          <div><b>Export anytime</b><span>Download your whole logbook as a spreadsheet whenever you want.</span></div>
-          <div><b>Your location stays rounded</b><span>Searching near you sends an approximate area, never your exact position.</span></div>
-          <div><b>No owner details</b><span>Aircraft lookups show the aircraft, never who owns it.</span></div>
+          <div class="glass"><b>Only you see your flights</b><span>Your logbook is private to your account. We never sell your data.</span></div>
+          <div class="glass"><b>Export anytime</b><span>Download your whole logbook as a spreadsheet whenever you want.</span></div>
+          <div class="glass"><b>Your location stays rounded</b><span>Searching near you sends an approximate area, never your exact position.</span></div>
+          <div class="glass"><b>No owner details</b><span>Aircraft lookups show the aircraft, never who owns it.</span></div>
         </div>
       </div>
     </section>
 
     <section id="pricing" aria-labelledby="pricing-title">
       <div class="wrap">
-        <div class="plan">
+        <div class="plan glass">
           <div>
             <h3 id="pricing-title">One plan. Everything included.</h3>
             <p class="price">Launch pricing goes to the waitlist first.</p>
@@ -351,9 +401,8 @@
 
     <section id="faq" aria-labelledby="faq-title">
       <div class="wrap">
-        <div class="head">
-          <h2 id="faq-title">Questions pilots ask.</h2>
-        </div>
+        <div class="faq-grid">
+        <h2 id="faq-title">Questions pilots ask.</h2>
         <div class="faq">
           <details>
             <summary>How does it know I flew?</summary>
@@ -388,6 +437,7 @@
             <p>Orvix Aero is coming to iPhone first. Join the waitlist and we’ll email you when it’s ready, along with launch pricing.</p>
           </details>
         </div>
+        </div>
       </div>
     </section>
 
@@ -402,7 +452,7 @@
 
   <footer>
     <div class="wrap">
-      <span>© 2026 Orvix Aero</span>
+      <a class="brand" href="/"><img src="logo-light.png" alt="Orvix Aero" width="53" height="44"></a><span>© 2026 Orvix Aero</span>
       <nav aria-label="Footer">
         <a href="mailto:info@orvixaero.com">info@orvixaero.com</a>
         <a href="/privacy.html">Privacy Policy</a>
@@ -439,6 +489,9 @@
       show("Couldn't connect. Check your connection and try again.", 'err');
     } finally { btn.disabled = false; }
   });
+  const bar = document.getElementById('top-bar');
+  const onScroll = () => bar.classList.toggle('scrolled', window.scrollY > 8);
+  onScroll(); window.addEventListener('scroll', onScroll, { passive: true });
   // Links to the waitlist put the cursor in the email field.
   document.querySelectorAll('a[href="#join-email"]').forEach((a) => a.addEventListener('click', () => setTimeout(() => document.getElementById('join-email').focus({ preventScroll: true }), 400)));
 </script>
