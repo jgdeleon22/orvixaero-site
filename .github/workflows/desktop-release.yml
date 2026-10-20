@@ -1,0 +1,38 @@
+# Publishes Orvix Aero for Windows. `npm run deploy:desktop` (in the app
+# repo, on Jorge's PC) pushes the installer to the temporary branch
+# desktop-release; this turns it into a GitHub Release (so the website's
+# history never carries the 100 MB file) and deletes the branch.
+# Download link: https://github.com/jgdeleon22/orvixaero-site/releases/latest/download/OrvixAero-Setup.exe
+name: Windows app release
+
+on:
+  push:
+    branches: [desktop-release]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: desktop-release
+      - name: Create the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          version=$(tr -d ' \r\n' < release/version.txt)
+          test -s release/OrvixAero-Setup.exe
+          tag="desktop-v$version"
+          if gh release view "$tag" >/dev/null 2>&1; then
+            gh release upload "$tag" release/OrvixAero-Setup.exe --clobber
+          else
+            gh release create "$tag" release/OrvixAero-Setup.exe --latest \
+              --title "Orvix Aero for Windows $version" \
+              --notes "Orvix Aero for Windows 10 and 11. Sign in with your Orvix Aero account."
+          fi
+      - name: Delete the temporary branch
+        run: git push origin --delete desktop-release
