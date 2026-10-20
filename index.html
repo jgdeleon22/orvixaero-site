@@ -177,6 +177,14 @@
   .plan ul { columns: 3; column-gap: 32px; margin: 0; padding-left: 1.1em; color: var(--ink-2); font-size: 18px; }
   .plan li { margin: 0 0 12px; break-inside: avoid; }
   .plan li::marker { color: var(--orange); }
+  body[data-launch="pre"] .when-live, body[data-launch="live"] .when-pre { display: none !important; }
+  .prices { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 20px; }
+  .tier { border: 1px solid rgba(157,178,197,.22); border-radius: 16px; padding: 16px 20px; min-width: 180px; }
+  .tier.best { border-color: var(--orange); background: rgba(247,110,25,.07); }
+  .tier .amt { font-family: var(--display); font-weight: 700; font-size: 40px; line-height: 1; }
+  .tier .per { color: var(--ink-2); font-size: 16px; }
+  .tier .tag { display: inline-block; margin-bottom: 8px; font-size: 12px; font-weight: 700; letter-spacing: .08em; color: var(--orange); text-transform: uppercase; }
+  .plan .fine { color: var(--ink-2); font-size: 15px; margin-top: 14px; max-width: 30em; }
   @media (max-width: 1100px) { .plan ul { columns: 2; } }
   @media (max-width: 860px) { .plan { grid-template-columns: 1fr; gap: 32px; } .plan ul { columns: 1; } }
 
@@ -203,7 +211,9 @@
   footer a:hover { color: var(--ink); }
 </style>
 </head>
-<body>
+<!-- Launch switch: change data-launch to "live" on launch day. "pre" shows
+     the waitlist; "live" shows prices and sends people to sign up. -->
+<body data-launch="pre">
   <header class="bar" id="top-bar">
   <div class="wrap top">
     <a class="brand" href="/"><img src="logo-light.png" alt="Orvix Aero" width="83" height="68"></a>
@@ -213,7 +223,8 @@
       <a href="#pricing">Pricing</a>
       <a href="#faq">FAQ</a>
       <a class="login" href="/app/">Log in</a>
-      <a class="cta" href="#join-email">Join the waitlist</a>
+      <a class="cta when-pre" href="#join-email">Join the waitlist</a>
+      <a class="cta when-live" href="/app/">Start now</a>
     </nav>
   </div>
   </header>
@@ -227,14 +238,16 @@
       <div>
         <h1 id="hero-title">One app for the whole trip, from commute to logbook.</h1>
         <p class="lede">Orvix Aero reads your schedule, tracks every leg of your trip, shows your commute live, checks FAR 117, finds food near your gate, and logs the flight when you land. For airline and GA pilots.</p>
-        <form class="join" id="join" novalidate aria-labelledby="hero-title">
+        <form class="join when-pre" id="join" novalidate aria-labelledby="hero-title">
           <label class="hp" aria-hidden="true">Company <input name="company" tabindex="-1" autocomplete="off"></label>
           <label for="join-email" class="hp">Email</label>
           <input id="join-email" name="email" type="email" inputmode="email" autocomplete="email" placeholder="you@example.com" required>
           <button type="submit">Join the waitlist</button>
         </form>
-        <p class="join-msg" id="join-msg" role="status" aria-live="polite"></p>
-        <p class="fine">Coming to iPhone first. We’ll only email you about the launch.</p>
+        <p class="join-msg when-pre" id="join-msg" role="status" aria-live="polite"></p>
+        <p class="fine when-pre">Coming to iPhone first. We’ll only email you about the launch.</p>
+        <p class="when-live" style="margin-top:28px"><a class="button" href="/app/">Start now</a></p>
+        <p class="fine when-live">On iPhone, the web and Windows. $9.99 a month or $79.99 a year, one subscription for every device.</p>
       </div>
 
       </div>
@@ -406,19 +419,29 @@
         <div class="plan glass">
           <div>
             <h3 id="pricing-title">One plan. Everything included.</h3>
-            <p class="price">Launch pricing goes to the waitlist first.</p>
-            <p class="lede" style="margin-top:14px">No feature tiers to compare. Every pilot gets the full app.</p>
-            <a class="button" href="#join-email" style="margin-top:24px">Join the waitlist</a>
+            <p class="price when-pre">Launch pricing goes to the waitlist first.</p>
+            <div class="prices when-live">
+              <div class="tier best"><span class="tag">Best value</span><div class="amt">$79.99</div><div class="per">per year · about $6.67/mo</div></div>
+              <div class="tier"><span class="tag">&nbsp;</span><div class="amt">$9.99</div><div class="per">per month</div></div>
+            </div>
+            <p class="lede" style="margin-top:14px">No feature tiers to compare. Every pilot gets the full app on iPhone, the web and Windows, with one subscription.</p>
+            <a class="button when-pre" href="#join-email" style="margin-top:24px">Join the waitlist</a>
+            <a class="button when-live" href="/app/" style="margin-top:24px">Start now</a>
+            <p class="fine when-live">Subscribe on the web or in the iPhone app; either one unlocks every device. Renews automatically until you cancel, any time, from Settings. Have a gift or invite code? Enter it when you sign up.</p>
           </div>
           <ul>
+            <li>Daily Briefing and sign-in reminder</li>
             <li>Automatic logbook</li>
             <li>Imports and spreadsheet export</li>
             <li>Totals and currency</li>
             <li>FAR 117 duty and rest planning</li>
+            <li>Schedule from a screenshot, any airline’s text or a calendar file</li>
             <li>Schedule calendar and live trips</li>
             <li>Trip info: weather, inbound aircraft, KCM</li>
             <li>Pay estimate</li>
-            <li>Goals and printable reports</li>
+            <li>Goals and printable reports: 8710, lookback, résumé</li>
+            <li>Graphs by type, class, power and year</li>
+            <li>iPhone, web and Windows app</li>
             <li>Flight map</li>
             <li>Live radar, worldwide</li>
             <li>Weather and D-ATIS</li>
@@ -474,9 +497,17 @@
             <summary>Who can see my flights?</summary>
             <p>Only you. Read the <a href="/privacy.html">privacy policy</a> for the details.</p>
           </details>
-          <details>
+          <details class="when-pre">
             <summary>When does it launch?</summary>
             <p>Orvix Aero is coming to iPhone first. Join the waitlist and we’ll email you when it’s ready, along with launch pricing.</p>
+          </details>
+          <details class="when-live">
+            <summary>How much is it, and does it work on my computer?</summary>
+            <p>$9.99 a month or $79.99 a year. One subscription covers the iPhone app, the web app at orvixaero.com and the Windows app. Subscribe on whichever you like; cancel any time.</p>
+          </details>
+          <details class="when-live">
+            <summary>What happens if I cancel?</summary>
+            <p>You keep everything until the end of the period you paid for. After that your logbook stays saved, you can still export it, and it’s all there again if you come back.</p>
           </details>
         </div>
         </div>
@@ -486,8 +517,10 @@
     <section class="closing" aria-labelledby="closing-title">
       <div class="wrap">
         <h2 id="closing-title">Close the other five apps.</h2>
-        <p class="lede">Be first to fly with Orvix Aero when it reaches the App Store.</p>
-        <a class="button" href="#join-email" style="margin-top:26px">Join the waitlist</a>
+        <p class="lede when-pre">Be first to fly with Orvix Aero when it reaches the App Store.</p>
+        <a class="button when-pre" href="#join-email" style="margin-top:26px">Join the waitlist</a>
+        <p class="lede when-live">On iPhone, the web and Windows. $9.99 a month or $79.99 a year.</p>
+        <a class="button when-live" href="/app/" style="margin-top:26px">Start now</a>
       </div>
     </section>
   </main>
