@@ -1,0 +1,8 @@
+# Orvix Aero. The marketing pages are for everyone; the web app and the
+# iPhone preview are behind sign-in and stay out of search results.
+User-agent: *
+Allow: /
+Disallow: /app/
+Disallow: /phone/
+
+Sitemap: https://orvixaero.com/sitemap.xml
