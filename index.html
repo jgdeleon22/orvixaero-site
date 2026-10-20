@@ -6,7 +6,7 @@
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#06101C">
 <title>Orvix Aero: Pilot Logbook, FAR 117 and Schedule App for Airline Pilots</title>
-<meta name="description" content="Orvix Aero is the pilot logbook app built by an airline pilot: automatic logbook, FAR 117 duty and rest, schedule from a screenshot, a daily trip Briefing, 8710/IACRA reports, D-ATIS and commuter flights. iPhone, web and Windows.">
+<meta name="description" content="Orvix Aero is the pilot logbook app built by an airline pilot: automatic logbook, FAR 117 duty and rest, schedule from a screenshot, training and checks, a daily trip Briefing with FAA delays, 8710/IACRA reports, D-ATIS and commuter flights. iPhone, web and Windows.">
 <link rel="canonical" href="https://orvixaero.com/">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <meta name="keywords" content="pilot logbook app, airline pilot app, FAR 117 calculator, digital pilot logbook, flight duty period, crew schedule app, 8710 IACRA, pilot currency tracker, commuter pilot">
@@ -321,7 +321,8 @@
               <li><b>Flight alerts</b><span>Save a flight and get a notification for delays, cancellations, gates and gate changes.</span></li>
               <li><b>Live radar</b><span>A moving radar loop you can drag and zoom, worldwide.</span></li>
               <li><b>Weather and D-ATIS</b><span>METAR, TAF and the current ATIS letter, runways and winds.</span></li>
-              <li><b>FAA delays</b><span>Ground stops and delay programs at both ends of your trip.</span></li>
+              <li><b>FAA delays</b><span>Ground stops and delay programs at both ends of your trip, right next to the weather.</span></li>
+              <li><b>Delay and weather alerts</b><span>A push in the 12 hours before your flight if your airport gets a ground stop or the arrival forecast drops to IFR.</span></li>
             </ul>
           </div>
           <div class="phase glass">
@@ -330,7 +331,8 @@
             <ul>
               <li><b>Food near your gate</b><span>Parked at D29? See what’s open in your concourse, with terminal and gate next to each place.</span></li>
               <li><b>Near the FBO</b><span>Flying GA, see the closest places to eat from where you parked.</span></li>
-              <li><b>Near the hotel</b><span>On a layover, find restaurants, bars and things to do around you.</span></li>
+              <li><b>Near the hotel</b><span>On a layover, find restaurants, bars and things to do: movie theaters, bowling, malls, bike and kayak rentals, golf and more.</span></li>
+              <li><b>Layover notes</b><span>Your own notes per city (the hotel shuttle door, the taco place you liked), back on your Briefing next time you overnight there.</span></li>
               <li><b>Jumpseat guide</b><span>The basics of riding along, and typical jumpseat counts by type.</span></li>
             </ul>
           </div>
@@ -341,7 +343,8 @@
               <li><b>A logbook that fills itself in</b><span>It notices the takeoff and landing, finds the airports, times and tail number, and asks you to confirm.</span></li>
               <li><b>Totals like a paper logbook</b><span>PIC, SIC, night, cross-country, multi-engine, instrument and every category and class.</span></li>
               <li><b>Currency</b><span>Day and night landings, instrument currency, medical and flight review, flagged before anything lapses.</span></li>
-              <li><b>Your flight map</b><span>Every airport and route you’ve flown.</span></li>
+              <li><b>Your flight map</b><span>Every airport and route you’ve flown, with countries and nautical miles.</span></li>
+              <li><b>Works offline</b><span>Log a flight in airplane mode. It syncs on its own when you’re back online.</span></li>
             </ul>
           </div>
         </div>
@@ -359,11 +362,27 @@
           <div class="glass"><b>Live trips</b><span>Each leg is tracked from about 20 hours out. When the last flight of the day runs late, your FDP end and release move with it.</span></div>
           <div class="glass"><b>Trip info</b><span>Tap a day for the route map, the FAR 117 limits, weather with the TAF line for your times highlighted, the inbound aircraft and the Known Crewmember checkpoints.</span></div>
           <div class="glass"><b>Pay estimate</b><span>Your block hours times your rate, raised to your guarantee, plus per diem for time away. Your rates stay on your phone.</span></div>
+          <div class="glass"><b>Trips in your calendar</b><span>Subscribe once and every duty day shows up in your iPhone or Google calendar, kept up to date. Share it with family.</span></div>
         </div>
       </div>
     </section>
 
-    <section id="far117" class="alt" aria-labelledby="far117-title">
+    <section id="training" class="alt" aria-labelledby="training-title">
+      <div class="wrap">
+        <div class="head">
+          <h2 id="training-title">Training and checks, never a surprise.</h2>
+          <p class="lede">Pick how you fly (airline AQP or traditional, Part 135, Part 61, Part 141 or CFI) and Orvix Aero lists what you need to keep current, with the due month and the grace window worked out.</p>
+        </div>
+        <div class="promises">
+          <div class="glass"><b>Every check in one list</b><span>Proficiency and line checks, CQ, recurrent ground, emergency drills, hazmat, IPCs, instructor recent experience, plus your passport and company ID.</span></div>
+          <div class="glass"><b>Grace months done right</b><span>Where the rules allow it (121.401, 135.301), the window opens the month before and closes the month after, and your anniversary month stays put.</span></div>
+          <div class="glass"><b>On your calendar</b><span>Training days come in from your uploaded schedule, or add them by hand. They show on the Schedule calendar and in your phone’s calendar.</span></div>
+          <div class="glass"><b>Records with you</b><span>Snap your training records. They’re private to your account and on your phone, iPad and computer. Reminders come 60, 30 and 7 days before.</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="far117" aria-labelledby="far117-title">
       <div class="wrap">
         <div class="head">
           <h2 id="far117-title">FAR 117, worked out before you call scheduling.</h2>
@@ -379,7 +398,7 @@
       </div>
     </section>
 
-    <section id="pilots" aria-labelledby="pilots-title">
+    <section id="pilots" class="alt" aria-labelledby="pilots-title">
       <div class="wrap">
         <div class="head">
           <h2 id="pilots-title">Made by an airline pilot, for every kind of pilot.</h2>
@@ -396,6 +415,7 @@
               <li>Exact tail number and aircraft type for each leg</li>
               <li>Your schedule on a calendar from a screenshot, with every leg tracked live</li>
               <li>FAR 117 duty and rest planning for each trip, day by day</li>
+              <li>Training and checks for AQP or traditional programs, with grace months</li>
               <li>Live commute board with gates, plus delay and gate-change alerts</li>
               <li>A monthly pay estimate from your block hours</li>
               <li>Food in your terminal, sorted by how close it is to your gate</li>
@@ -409,6 +429,7 @@
               <li>N-number lookup with type and model from the FAA registry</li>
               <li>Saved aircraft with category and class for your totals</li>
               <li>Currency, flight review and medical in one place</li>
+              <li>IPCs, 61.58 checks and CFI recent experience tracked with reminders</li>
               <li>Endorsements, and the nearest food from the FBO</li>
             </ul>
           </div>
@@ -416,7 +437,7 @@
       </div>
     </section>
 
-    <section id="privacy" class="alt" aria-labelledby="privacy-title">
+    <section id="privacy" aria-labelledby="privacy-title">
       <div class="wrap">
         <div class="head">
           <h2 id="privacy-title">Your logbook stays yours.</h2>
@@ -431,7 +452,7 @@
       </div>
     </section>
 
-    <section id="pricing" aria-labelledby="pricing-title">
+    <section id="pricing" class="alt" aria-labelledby="pricing-title">
       <div class="wrap">
         <div class="plan glass">
           <div>
@@ -456,7 +477,10 @@
             <li>Schedule calendar and live trips</li>
             <li>Trip info: weather, inbound aircraft, KCM</li>
             <li>Pay estimate</li>
-            <li>Goals and printable reports: 8710, lookback, résumé</li>
+            <li>Training and checks with record photos</li>
+            <li>Delay and weather alerts before your flight</li>
+            <li>Trips in your iPhone or Google calendar</li>
+            <li>Goals, lookback charts and printable reports: 8710, résumé</li>
             <li>Graphs by type, class, power and year</li>
             <li>iPhone, web and Windows app</li>
             <li>Flight map</li>
@@ -466,7 +490,9 @@
             <li>Flight and gate alerts</li>
             <li>FAA delays</li>
             <li>Food near your gate or FBO</li>
-            <li>Near me for layovers</li>
+            <li>Near me for layovers, with things to do</li>
+            <li>Layover notes</li>
+            <li>Works offline</li>
             <li>Jumpseat guide</li>
           </ul>
         </div>
