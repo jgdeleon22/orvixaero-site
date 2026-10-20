@@ -33,7 +33,7 @@
 
   <main>
     <h1>Privacy Policy</h1>
-    <p class="updated">Effective October 18, 2026</p>
+    <p class="updated">Effective October 19, 2026</p>
 
     <p>Orvix Aero is a pilot logbook app that fills itself in. This policy explains what information the Orvix Aero app and orvixaero.com collect, why, and the choices you have. In short: your logbook belongs to you, we only use your information to run Orvix Aero, and we never sell it.</p>
 
@@ -43,6 +43,9 @@
       <li><strong>Your pilot profile.</strong> Certificates and ratings you add, starting totals from before Orvix Aero, your medical class and dates, and endorsements, including your instructor’s name, certificate number and signature as they entered it.</li>
       <li><strong>Your logbook.</strong> Flights you enter, import or confirm: dates, airports, times, aircraft and tail numbers, landings, remarks and similar logbook entries, plus settings such as your home airport.</li>
       <li><strong>Location, only if you turn on flight detection.</strong> The app uses your phone’s location, including in the background if you allow it, to notice takeoffs and landings and suggest a logbook entry. We keep the route of each detected flight so you can see it on your map. You can turn this off at any time in your phone’s settings.</li>
+      <li><strong>Your schedule, if you add it.</strong> Trips and months you upload, paste or enter by hand: dates, flight numbers, airports, scheduled times, block times, trip numbers and duty times. If you upload a screenshot, we send it to be read and don’t keep the image. We never read or store pay, credit, sick time or names from your schedule.</li>
+      <li><strong>Saved flights and alerts.</strong> Flights you save for alerts, and your device’s push token so we can send them.</li>
+      <li><strong>Pay rates stay on your phone.</strong> The hourly rate, per diem and guarantee you enter for the pay estimate are stored only on your device and never sent to us.</li>
       <li><strong>Weather and aircraft lookups.</strong> When you look up weather we receive the airport code you searched. When you add an aircraft we look up its public FAA registration record.</li>
       <li><strong>Waitlist.</strong> If you join the waitlist on orvixaero.com, we keep your email address so we can tell you when we launch.</li>
     </ul>
@@ -53,6 +56,8 @@
       <li>To build and show your logbook, totals and flight map.</li>
       <li>To detect flights and suggest entries for you to confirm. Nothing is added to your logbook until you confirm it.</li>
       <li>To show weather for the airports you choose.</li>
+      <li>To lay out your schedule, check it against FAR 117, keep your trips up to date with live flight status, and estimate your pay on your phone.</li>
+      <li>To send the flight alerts you turn on.</li>
       <li>To answer you when you contact us, and to send important account messages such as email confirmations and password resets.</li>
     </ul>
     <p>We do not sell your information, use it for advertising, or share your flights with other pilots. We do not show aircraft owner details.</p>
@@ -63,7 +68,10 @@
       <li><strong>Supabase</strong> stores your account and logbook data.</li>
       <li><strong>Apple and Google</strong> handle sign-in if you choose them.</li>
       <li><strong>aviationweather.gov</strong> (U.S. National Weather Service) provides weather reports; it receives airport codes, not your identity.</li>
-      <li><strong>Expo</strong> delivers app updates.</li>
+      <li><strong>Expo</strong> delivers app updates and, with Apple, push notifications for flight alerts.</li>
+      <li><strong>Anthropic</strong> reads the schedule screenshots you upload. Our server sends the image and gets back the trips and times; your name and email aren’t sent with it.</li>
+      <li><strong>AeroDataBox</strong> and <strong>Aviationstack</strong> provide flight status and gates. Our server asks about a flight number, date and airports; your identity isn’t sent.</li>
+      <li><strong>Known Crewmember</strong> checkpoint information comes from the public knowncrewmember.org site; only airport codes are looked up.</li>
       <li><strong>NOAA / National Weather Service</strong> provides the radar layer on the map; your phone loads radar images for the area you’re viewing.</li>
       <li><strong>OpenStreetMap</strong> data, served by <strong>Geoapify</strong> (and Geofabrik's Postpass for gate numbers), provides places around airports. Our server asks for places near an airport; your identity and location are not sent.</li>
       <li><strong>Near me</strong> (optional): when you ask for places around you, the app sends only a rounded location, accurate to about 1 km, to our server, which looks up places around that spot and keeps the results for a week so others nearby can reuse them. Your exact position stays on your phone and is used only to sort the list by distance.</li>
@@ -79,7 +87,7 @@
     <h2>Your choices</h2>
     <ul>
       <li><strong>Export.</strong> You can export your whole logbook as a CSV file at any time, for free, from Settings → Your data.</li>
-      <li><strong>Delete.</strong> You can delete your account in the app. This permanently deletes your account, logbook, flight routes and settings.</li>
+      <li><strong>Delete.</strong> You can delete your account in the app. This permanently deletes your account, logbook, flight routes, schedule, saved flights and settings.</li>
       <li><strong>Location.</strong> You can turn location access off in your phone’s settings; you can still log flights by hand.</li>
       <li><strong>Questions or requests.</strong> Email <a href="mailto:info@orvixaero.com">info@orvixaero.com</a> to ask about, correct or delete your information, or to leave the waitlist.</li>
     </ul>

@@ -226,7 +226,7 @@
       <div class="wrap hero">
       <div>
         <h1 id="hero-title">One app for the whole trip, from commute to logbook.</h1>
-        <p class="lede">Orvix Aero plans your commute, watches your flight, shows radar and the ATIS, finds food near your gate, and logs the flight when you land. For airline and GA pilots.</p>
+        <p class="lede">Orvix Aero reads your schedule, tracks every leg of your trip, shows your commute live, checks FAR 117, finds food near your gate, and logs the flight when you land. For airline and GA pilots.</p>
         <form class="join" id="join" novalidate aria-labelledby="hero-title">
           <label class="hp" aria-hidden="true">Company <input name="company" tabindex="-1" autocomplete="off"></label>
           <label for="join-email" class="hp">Email</label>
@@ -287,7 +287,7 @@
             <div class="step">1</div>
             <h3>Before you go</h3>
             <ul>
-              <li><b>Commute planner</b><span>Enter your report time and get the last flight that lands in time, plus a backup.</span></li>
+              <li><b>Live commute board</b><span>Search any two airports, by IATA or ICAO code, and see every flight with its status, gates and time left on a live map.</span></li>
               <li><b>Flight alerts</b><span>Save a flight and get a notification for delays, cancellations, gates and gate changes.</span></li>
               <li><b>Live radar</b><span>A moving radar loop you can drag and zoom, worldwide.</span></li>
               <li><b>Weather and D-ATIS</b><span>METAR, TAF and the current ATIS letter, runways and winds.</span></li>
@@ -318,7 +318,22 @@
       </div>
     </section>
 
-    <section id="far117" aria-labelledby="far117-title">
+    <section id="schedule" aria-labelledby="schedule-title">
+      <div class="wrap">
+        <div class="head">
+          <h2 id="schedule-title">Your schedule, on one calendar.</h2>
+          <p class="lede">Upload a screenshot of your month or a trip and Orvix Aero lays it out: report and release times, layover cities, and a FAR 117 check on every duty day.</p>
+        </div>
+        <div class="promises">
+          <div class="glass"><b>Upload your schedule</b><span>A screenshot or pasted text, month or trip. You check what it read before anything is saved. Flying GA? Add a trip by hand.</span></div>
+          <div class="glass"><b>Live trips</b><span>Each leg is tracked from about 20 hours out. When the last flight of the day runs late, your FDP end and release move with it.</span></div>
+          <div class="glass"><b>Trip info</b><span>Tap a day for the route map, the FAR 117 limits, weather with the TAF line for your times highlighted, the inbound aircraft and the Known Crewmember checkpoints.</span></div>
+          <div class="glass"><b>Pay estimate</b><span>Your block hours times your rate, raised to your guarantee, plus per diem for time away. Your rates stay on your phone.</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="far117" class="alt" aria-labelledby="far117-title">
       <div class="wrap">
         <div class="head">
           <h2 id="far117-title">FAR 117, worked out before you call scheduling.</h2>
@@ -328,7 +343,7 @@
           <div class="glass"><b>Legal to report</b><span>See if you’re legal to report now, or the earliest time you will be, from your rest and cumulative limits.</span></div>
           <div class="glass"><b>FDP and flight-time limits</b><span>Tables A, B and C for your report time, segments and crew, plus 60 h in 168, 190 h and 100 h in 672, and 1,000 h in 365 days.</span></div>
           <div class="glass"><b>Duty log</b><span>Report, block-in and release times for each duty, suggested from the flights you logged that day.</span></div>
-          <div class="glass"><b>Trip planner</b><span>Paste a trip from your airline schedule and every duty is checked ahead of time: FDP, block, rest between days and the running totals.</span></div>
+          <div class="glass"><b>Trip planner</b><span>Upload or paste a trip from your airline schedule and every duty is checked ahead of time: FDP, block, rest between days and the running totals. The calendar marks each day green, amber or red.</span></div>
         </div>
         <p class="lede" style="margin-top:18px;font-size:14px">A planning aid based on 14 CFR Part 117. It doesn’t replace your airline’s records or scheduling, and it doesn’t cover split duty or reserve.</p>
       </div>
@@ -348,8 +363,10 @@
               <li>Import your airline crew log, with relief seats (FB, FC, IRO) logged as SIC and no landing</li>
               <li>Import from Logbook Pro, ForeFlight or a spreadsheet, with duplicates skipped</li>
               <li>Exact tail number and aircraft type for each leg</li>
-              <li>FAR 117 duty and rest planning, with trips pasted from your schedule</li>
-              <li>Commute planner with backups and live delay alerts</li>
+              <li>Your schedule on a calendar from a screenshot, with every leg tracked live</li>
+              <li>FAR 117 duty and rest planning for each trip, day by day</li>
+              <li>Live commute board with gates, plus delay and gate-change alerts</li>
+              <li>A monthly pay estimate from your block hours</li>
               <li>Food in your terminal, sorted by how close it is to your gate</li>
             </ul>
           </div>
@@ -397,11 +414,14 @@
             <li>Imports and spreadsheet export</li>
             <li>Totals and currency</li>
             <li>FAR 117 duty and rest planning</li>
+            <li>Schedule calendar and live trips</li>
+            <li>Trip info: weather, inbound aircraft, KCM</li>
+            <li>Pay estimate</li>
             <li>Goals and printable reports</li>
             <li>Flight map</li>
             <li>Live radar, worldwide</li>
             <li>Weather and D-ATIS</li>
-            <li>Commute planner</li>
+            <li>Live commute board</li>
             <li>Flight and gate alerts</li>
             <li>FAA delays</li>
             <li>Food near your gate or FBO</li>
@@ -431,7 +451,15 @@
           </details>
           <details>
             <summary>How do flight alerts work?</summary>
-            <p>Tap the bell on any flight in the commute planner. You’ll get a notification when it’s delayed or cancelled, when a gate is posted, and when the gate changes, at both ends.</p>
+            <p>Tap the bell on any flight on the commute board. You’ll get a notification when it’s delayed or cancelled, when a gate is posted, and when the gate changes, at both ends.</p>
+          </details>
+          <details>
+            <summary>Can it read my schedule?</summary>
+            <p>Yes. Upload a screenshot of your month or a trip, or paste the text, and check what it read before you save it. The screenshot isn’t kept, and pay, credit and sick figures are never read from it.</p>
+          </details>
+          <details>
+            <summary>How does the pay estimate work?</summary>
+            <p>Enter your hourly rate, per diem and monthly guarantee. Orvix Aero multiplies your block hours by your rate, raises it to the guarantee if needed, and adds per diem for your time away from base. Your rates stay on your phone. It’s a rough guide, not your paycheck: contract rules like credit and rigs aren’t included.</p>
           </details>
           <details>
             <summary>Does it show seat loads?</summary>
