@@ -177,7 +177,7 @@
   .window picture { display: block; }
   .window img { display: block; width: 100%; height: auto; }
   .desk-main { max-width: 1120px; margin: 0 auto; }
-  .desk-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; max-width: 1120px; margin: 28px auto 0; }
+  .desk-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px 24px; align-items: start; max-width: 1120px; margin: 28px auto 0; }
   .desk-cap { margin-top: 14px; color: var(--ink-2); font-size: 16px; }
   .desk-cap b { color: var(--ink); font-weight: 600; }
   .desk-cta { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: center; margin-top: 40px; }
@@ -339,13 +339,21 @@
           <p class="lede">The Windows app and the web app give you the whole picture on a big screen: totals, goals, FAR 117 and your next trip at a glance.</p>
         </div>
         <figure class="desk-main" style="margin:0">
-          <div class="window"><div class="chrome"><i></i><i></i><i></i><span>Orvix Aero</span></div><picture><source srcset="shots/desk-home.webp" type="image/webp"><img src="shots/desk-home.jpg" alt="Orvix Aero for Windows home dashboard: total time, next trip, goals, hours by month and FAR 117 limits" width="1600" height="813" loading="lazy" decoding="async"></picture></div>
-          <figcaption class="desk-cap"><b>Home.</b> Total time, next trip, goals toward your ratings, the last 12 months and FAR 117, all on one screen.</figcaption>
+          <div class="window"><div class="chrome"><i></i><i></i><i></i><span>Orvix Aero</span></div><picture><source srcset="shots/desk-home.webp" type="image/webp"><img src="shots/desk-home.jpg" alt="Orvix Aero for Windows home dashboard: total time, next trip, pay, goals, hours by month and FAR 117 limits" width="1600" height="599" loading="lazy" decoding="async"></picture></div>
+          <figcaption class="desk-cap"><b>Home.</b> Total time, next trip, pay this month, goals toward your ratings, the last 12 months and FAR 117, all on one screen.</figcaption>
         </figure>
         <div class="desk-row">
           <figure style="margin:0">
-            <div class="window"><div class="chrome"><i></i><i></i><i></i><span>Orvix Aero</span></div><picture><source srcset="shots/desk-far117.webp" type="image/webp"><img src="shots/desk-far117.jpg" alt="FAR 117 screen: legal to report now, cumulative limits and a duty planner" width="1000" height="611" loading="lazy" decoding="async"></picture></div>
+            <div class="window"><div class="chrome"><i></i><i></i><i></i><span>Orvix Aero</span></div><picture><source srcset="shots/desk-stats.webp" type="image/webp"><img src="shots/desk-stats.jpg" alt="Stats screen: totals, hours by aircraft type, day and night, time by role and most visited airports" width="1000" height="522" loading="lazy" decoding="async"></picture></div>
+            <figcaption class="desk-cap"><b>Stats.</b> Totals, hours by type, class and power, day and night, PIC and SIC, and your most visited airports.</figcaption>
+          </figure>
+          <figure style="margin:0">
+            <div class="window"><div class="chrome"><i></i><i></i><i></i><span>Orvix Aero</span></div><picture><source srcset="shots/desk-far117.webp" type="image/webp"><img src="shots/desk-far117.jpg" alt="FAR 117 screen: legal to report now, cumulative limits and a duty planner" width="1000" height="425" loading="lazy" decoding="async"></picture></div>
             <figcaption class="desk-cap"><b>FAR 117.</b> Legal to report, cumulative limits and the longest legal duty for a planned report.</figcaption>
+          </figure>
+          <figure style="margin:0">
+            <div class="window"><div class="chrome"><i></i><i></i><i></i><span>Orvix Aero</span></div><picture><source srcset="shots/desk-reports.webp" type="image/webp"><img src="shots/desk-reports.jpg" alt="Reports screen: printable logbook, FAA 8710-1 time record, lookback summary, currency and pilot résumé" width="1000" height="450" loading="lazy" decoding="async"></picture></div>
+            <figcaption class="desk-cap"><b>Reports.</b> A printable logbook in four layouts, the 8710-1 time record for IACRA, currency and a one-page résumé.</figcaption>
           </figure>
           <figure style="margin:0">
             <div class="window"><div class="chrome"><i></i><i></i><i></i><span>Orvix Aero</span></div><picture><source srcset="shots/desk-weather.webp" type="image/webp"><img src="shots/desk-weather.jpg" alt="Weather and radar screen: live NEXRAD radar loop and decoded METAR for KMCO" width="1000" height="610" loading="lazy" decoding="async"></picture></div>
