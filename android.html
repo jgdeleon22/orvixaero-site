@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#06101C">
+<title>Test Orvix Aero on Android</title>
+<meta name="description" content="Help launch Orvix Aero on Google Play. Android pilots test the app free for 14 days before it goes public.">
+<link rel="canonical" href="https://orvixaero.com/android.html">
+<link rel="icon" href="favicon.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://orvixaero.com/android.html">
+<meta property="og:title" content="Test Orvix Aero on Android">
+<meta property="og:description" content="Android pilots: help launch Orvix Aero on Google Play. Free while you test.">
+<meta property="og:image" content="https://orvixaero.com/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --night: #050D17; --night-2: #08131F;
+    --edge: rgba(157, 178, 197, .16); --edge-2: rgba(157, 178, 197, .28);
+    --ink: #F2F6FA; --ink-2: #A3B6C8; --ink-3: #6F879B;
+    --orange: #F76E19; --orange-2: #FF8A3D; --green: #2DB46E;
+    --display: "Barlow Condensed", "Arial Narrow", sans-serif; --text: "Barlow", system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; color: var(--ink); font-family: var(--text); font-size: 18px; line-height: 1.55; -webkit-font-smoothing: antialiased;
+    background: radial-gradient(ellipse 70% 900px at 100% 0%, rgba(247,110,25,.14), transparent 60%) no-repeat, var(--night); min-height: 100vh; }
+  html { background: var(--night); }
+  a { color: var(--orange-2); }
+  :focus-visible { outline: 3px solid var(--orange-2); outline-offset: 3px; border-radius: 6px; }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 clamp(16px, 4vw, 48px); }
+  header { display: flex; align-items: center; justify-content: space-between; height: 112px; }
+  header img { height: 88px; width: auto; display: block; }
+  header a.home { color: var(--ink-2); text-decoration: none; font-weight: 500; font-size: 16px; }
+  main { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: clamp(32px, 5vw, 72px); align-items: start; padding: clamp(24px, 5vw, 64px) 0 80px; }
+  @media (max-width: 900px) { main { grid-template-columns: 1fr; } }
+  .kicker { color: var(--orange); font-weight: 600; font-size: 14px; letter-spacing: .1em; text-transform: uppercase; margin: 0 0 12px; }
+  h1 { font-family: var(--display); font-weight: 700; font-size: clamp(48px, 6vw, 84px); line-height: .98; margin: 0; text-wrap: balance; }
+  .lede { color: var(--ink-2); font-size: clamp(18px, 1.4vw, 21px); margin: 22px 0 0; max-width: 34em; }
+  h2 { font-family: var(--display); font-weight: 600; font-size: 28px; margin: 40px 0 14px; }
+  ol.steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; counter-reset: s; }
+  ol.steps li { counter-increment: s; display: grid; grid-template-columns: 40px 1fr; gap: 14px; align-items: start; }
+  ol.steps li::before { content: counter(s); width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; background: rgba(247,110,25,.14); color: var(--orange-2); font-family: var(--display); font-weight: 700; font-size: 22px; }
+  ol.steps b { display: block; font-weight: 600; }
+  ol.steps span { color: var(--ink-2); font-size: 16px; }
+  .jump { display: none; margin-top: 24px; text-align: center; color: #fff; background: var(--orange); border-radius: 14px; padding: 15px 20px; font-weight: 600; text-decoration: none; }
+  @media (max-width: 900px) { .jump { display: block; } }
+  .card h2 { line-height: 1.05; }
+  .perks { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+  .perks span { border: 1px solid var(--edge-2); border-radius: 999px; padding: 7px 14px; font-size: 15px; color: var(--ink-2); }
+  .card { background: linear-gradient(180deg, rgba(170,196,220,.08), rgba(170,196,220,.03)); border: 1px solid var(--edge); border-radius: 22px; padding: clamp(24px, 3vw, 36px); position: sticky; top: 24px; }
+  @media (max-width: 900px) { .card { position: static; } }
+  .card h2 { margin-top: 0; font-size: 32px; }
+  .card p.sub { color: var(--ink-2); font-size: 16px; margin: -6px 0 22px; }
+  label { display: block; font-weight: 600; font-size: 15px; margin: 16px 0 6px; }
+  label small { color: var(--ink-3); font-weight: 500; }
+  input, select { width: 100%; font: inherit; font-size: 17px; color: var(--ink); background: rgba(5,13,23,.6); border: 1px solid var(--edge-2); border-radius: 12px; padding: 13px 14px; }
+  select { appearance: none; background-image: linear-gradient(45deg, transparent 50%, var(--ink-2) 50%), linear-gradient(135deg, var(--ink-2) 50%, transparent 50%); background-position: calc(100% - 20px) 55%, calc(100% - 14px) 55%; background-size: 6px 6px; background-repeat: no-repeat; }
+  select option { background: #0A1420; }
+  input::placeholder { color: var(--ink-3); }
+  .hint { color: var(--ink-3); font-size: 14px; margin-top: 6px; }
+  button { margin-top: 24px; width: 100%; font: inherit; font-weight: 600; font-size: 18px; color: #fff; background: var(--orange); border: 0; border-radius: 14px; padding: 15px 20px; cursor: pointer; box-shadow: 0 10px 30px rgba(247,110,25,.28); }
+  button:hover { background: var(--orange-2); }
+  button:disabled { opacity: .6; cursor: default; }
+  .hp { position: absolute; left: -9999px; }
+  .msg { min-height: 24px; margin-top: 14px; font-size: 16px; color: var(--ink-2); }
+  .msg.ok { color: #6BE0A2; }
+  .msg.err { color: #F2817A; }
+  .fine { color: var(--ink-3); font-size: 14px; margin-top: 16px; }
+  .done { display: none; text-align: center; padding: 20px 0 8px; }
+  .done .tick { width: 64px; height: 64px; border-radius: 50%; margin: 0 auto 16px; display: grid; place-items: center; background: rgba(45,180,110,.16); color: #6BE0A2; font-size: 34px; }
+  .done h3 { font-family: var(--display); font-size: 34px; margin: 0 0 8px; }
+  .done p { color: var(--ink-2); margin: 0 0 18px; }
+  .share { display: inline-block; color: var(--ink); border: 1px solid var(--edge-2); border-radius: 12px; padding: 11px 18px; font-weight: 600; font-size: 16px; text-decoration: none; background: none; cursor: pointer; width: auto; margin: 0; box-shadow: none; }
+  .share:hover { border-color: var(--ink-2); background: none; }
+  footer { border-top: 1px solid var(--edge); padding: 28px 0 44px; color: var(--ink-3); font-size: 15px; }
+  footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 14px; }
+  footer a { color: var(--ink-2); text-decoration: none; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <a href="/"><img src="logo-light.png" alt="Orvix Aero" width="107" height="88"></a>
+      <a class="home" href="/">orvixaero.com</a>
+    </header>
+    <main>
+      <div>
+        <p class="kicker">Android pilots wanted</p>
+        <h1>Help launch Orvix Aero on Google Play.</h1>
+        <p class="lede">Before a new app can go on the Play Store, Google needs 12 people to test it for 14 days. If you fly and carry an Android phone, you can help it get there, and use the whole app free while you test.</p>
+        <a class="jump" href="#signup">Join the test</a>
+        <div class="perks"><span>Free while you test</span><span>About 2 minutes to join</span><span>Your feedback shapes the app</span></div>
+
+        <h2>How it works</h2>
+        <ol class="steps">
+          <li><div><b>Leave the Gmail on your Android phone</b><span>It has to be the Google account you use for the Play Store.</span></div></li>
+          <li><div><b>Get your invite</b><span>We email you a link to join the test on Google Play, usually within a day.</span></div></li>
+          <li><div><b>Install it from the Play Store</b><span>Tap the link, choose “Become a tester”, then install Orvix Aero like any other app.</span></div></li>
+          <li><div><b>Keep it for 14 days</b><span>Leave it installed and open it now and then: log a flight, check the weather, upload your schedule. Tell us what breaks or what’s missing.</span></div></li>
+        </ol>
+
+        <h2>What you’re testing</h2>
+        <p style="color:var(--ink-2);margin:0">A logbook that fills itself in, FAR 117 checks, your schedule from a screenshot, the commute board with gate alerts, weather and D-ATIS, training and currency. <a href="/">See everything it does</a>.</p>
+      </div>
+
+      <div class="card" id="signup">
+        <form id="form" novalidate>
+          <h2>Join the Android test</h2>
+          <p class="sub">Android phone and a Google account needed.</p>
+          <label class="hp" aria-hidden="true">Company <input name="company" tabindex="-1" autocomplete="off"></label>
+          <label for="first">First name <small>(optional)</small></label>
+          <input id="first" name="first" autocomplete="given-name" maxlength="60" placeholder="Alex">
+          <label for="email">Gmail on your Android phone</label>
+          <input id="email" name="email" type="email" inputmode="email" autocomplete="email" required maxlength="254" placeholder="you@gmail.com">
+          <p class="hint">Most people’s Play Store account ends in @gmail.com.</p>
+          <label for="flying">What do you fly? <small>(optional)</small></label>
+          <select id="flying" name="flying">
+            <option value="">Choose one</option>
+            <option>Airline</option>
+            <option>Regional</option>
+            <option>Cargo</option>
+            <option>Corporate / Part 135</option>
+            <option>General aviation</option>
+            <option>Helicopter</option>
+            <option>Military</option>
+            <option>Student pilot / CFI</option>
+            <option>Other</option>
+          </select>
+          <button type="submit">Count me in</button>
+          <p class="msg" id="msg" role="status" aria-live="polite"></p>
+          <p class="fine">We only use your email to invite you to the test and to ask how it’s going. <a href="/privacy.html">Privacy policy</a>.</p>
+        </form>
+        <div class="done" id="done">
+          <div class="tick" aria-hidden="true">✓</div>
+          <h3>You’re on the list.</h3>
+          <p>Watch your inbox for the invite to the Google Play test. Know another pilot with an Android phone? Send them this page.</p>
+          <button class="share" id="share" type="button">Share this page</button>
+        </div>
+      </div>
+    </main>
+  </div>
+  <footer>
+    <div class="wrap"><span>© 2026 Orvix Aero</span><span><a href="mailto:info@orvixaero.com">info@orvixaero.com</a> · <a href="/privacy.html">Privacy</a> · <a href="/terms.html">Terms</a></span></div>
+  </footer>
+<script>
+  // Saves the sign-up to Supabase (insert-only table, nobody can read it from here).
+  const SUPABASE_URL = "https://uxnjglagrrprnsliyaed.supabase.co";
+  const SUPABASE_KEY = "sb_publishable_8vrxn8kJD8_lXdJ-a6_eqg_EtHNC4B8";
+  const form = document.getElementById('form');
+  const msg = document.getElementById('msg');
+  const show = (t, k) => { msg.textContent = t; msg.className = 'msg' + (k ? ' ' + k : ''); };
+  const finish = () => { form.style.display = 'none'; document.getElementById('done').style.display = 'block'; };
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (form.company.value) return finish();
+    const email = form.email.value.trim().toLowerCase();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) return show('Enter the email for your Google account, like you@gmail.com.', 'err');
+    const btn = form.querySelector('button'); btn.disabled = true; show('Adding you…');
+    try {
+      const res = await fetch(SUPABASE_URL + '/rest/v1/android_testers', {
+        method: 'POST',
+        headers: { apikey: SUPABASE_KEY, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
+        body: JSON.stringify({ email, first_name: form.first.value.trim().slice(0, 60), flying: form.flying.value.slice(0, 60) })
+      });
+      if (res.ok || res.status === 409) finish();
+      else show("That didn't go through. Try again, or email info@orvixaero.com.", 'err');
+    } catch { show("Couldn't connect. Check your connection and try again.", 'err'); }
+    finally { btn.disabled = false; }
+  });
+  document.getElementById('share').addEventListener('click', async () => {
+    const data = { title: 'Test Orvix Aero on Android', text: 'Android pilots: help launch Orvix Aero on Google Play. Free while you test.', url: 'https://orvixaero.com/android.html' };
+    try { if (navigator.share) return await navigator.share(data); await navigator.clipboard.writeText(data.url); document.getElementById('share').textContent = 'Link copied'; } catch {}
+  });
+</script>
+</body>
+</html>
