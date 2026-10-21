@@ -6,4 +6,3 @@ Disallow: /app/
 Disallow: /phone/
 
 Sitemap: https://orvixaero.com/sitemap.xml
-Disallow: /play/
