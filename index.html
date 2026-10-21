@@ -636,5 +636,6 @@
   // Links to the waitlist put the cursor in the email field.
   document.querySelectorAll('a[href="#join-email"]').forEach((a) => a.addEventListener('click', () => setTimeout(() => document.getElementById('join-email').focus({ preventScroll: true }), 400)));
 </script>
+<script>try{if(!/^(localhost|127\.)/.test(location.hostname))fetch("https://uxnjglagrrprnsliyaed.supabase.co/functions/v1/site-hit",{method:"POST",keepalive:true,body:JSON.stringify({path:location.pathname,ref:document.referrer})}).catch(function(){})}catch(e){}</script>
 </body>
 </html>

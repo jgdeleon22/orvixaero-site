@@ -178,5 +178,6 @@
     try { if (navigator.share) return await navigator.share(data); await navigator.clipboard.writeText(data.url); document.getElementById('share').textContent = 'Link copied'; } catch {}
   });
 </script>
+<script>try{if(!/^(localhost|127\.)/.test(location.hostname))fetch("https://uxnjglagrrprnsliyaed.supabase.co/functions/v1/site-hit",{method:"POST",keepalive:true,body:JSON.stringify({path:location.pathname,ref:document.referrer})}).catch(function(){})}catch(e){}</script>
 </body>
 </html>
