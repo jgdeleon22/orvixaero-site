@@ -158,6 +158,16 @@
   .head h2 { font-size: clamp(44px, 4.6vw, 84px); text-wrap: balance; }
   @media (max-width: 900px) { .head { grid-template-columns: 1fr; gap: 16px; } }
 
+  /* App screenshots in phone frames. */
+  .shots { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(18px, 3vw, 44px); align-items: end; max-width: 1040px; margin: 0 auto; }
+  .shot { margin: 0; display: flex; flex-direction: column; align-items: center; gap: 18px; }
+  .shot .phone { width: 100%; max-width: 300px; border-radius: 44px; padding: 10px; background: linear-gradient(160deg, #1B2A3B, #0A1420); box-shadow: 0 0 0 1px rgba(157,178,197,.22), 0 40px 80px rgba(0,0,0,.55), 0 0 60px rgba(247,110,25,.08); }
+  .shot .phone picture, .shot .phone img { display: block; width: 100%; border-radius: 34px; aspect-ratio: 620 / 1347; object-fit: cover; object-position: top; }
+  .shot.lead .phone { max-width: 330px; transform: translateY(-28px); box-shadow: 0 0 0 1px rgba(247,110,25,.35), 0 50px 100px rgba(0,0,0,.6), 0 0 90px rgba(247,110,25,.16); }
+  .shot figcaption { text-align: center; max-width: 280px; }
+  .shot figcaption b { display: block; font-family: var(--display); font-weight: 600; font-size: 24px; }
+  .shot figcaption span { color: var(--ink-2); font-size: 16px; }
+  @media (max-width: 820px) { .shots { grid-template-columns: 1fr; } .shot.lead .phone { transform: none; } .shot .phone { max-width: 280px; } }
   /* Get the app: three ways in. */
   .platforms { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
   .platform { padding: 30px; display: flex; flex-direction: column; gap: 10px; }
@@ -284,6 +294,29 @@
 
       </div>
     </div>
+
+    <section id="screens" aria-labelledby="screens-title">
+      <div class="wrap">
+        <div class="head">
+          <h2 id="screens-title">See it in action.</h2>
+          <p class="lede">Real screens from the iPhone app. The web and Windows apps show the same logbook, schedule and limits on a bigger screen.</p>
+        </div>
+        <div class="shots">
+          <figure class="shot">
+            <div class="phone"><picture><source srcset="shots/schedule.webp" type="image/webp"><img src="shots/schedule.jpg" alt="Orvix Aero schedule: an October calendar with trips, report times and FAR 117 status dots" width="620" height="1347" loading="lazy" decoding="async"></picture></div>
+            <figcaption><b>Your month at a glance</b><span>Trips, training and FAR 117 lights on one calendar.</span></figcaption>
+          </figure>
+          <figure class="shot lead">
+            <div class="phone"><picture><source srcset="shots/home.webp" type="image/webp"><img src="shots/home.jpg" alt="Orvix Aero home screen: on duty, total time 7,459 hours, KMCO weather and currency status" width="620" height="1347" loading="lazy" decoding="async"></picture></div>
+            <figcaption><b>Everything for today</b><span>Duty status, total time, home airport weather and currency.</span></figcaption>
+          </figure>
+          <figure class="shot">
+            <div class="phone"><picture><source srcset="shots/stats.webp" type="image/webp"><img src="shots/stats.jpg" alt="Orvix Aero stats: FAR 117 cumulative limits with progress bars and an hours-by-month chart" width="620" height="1347" loading="lazy" decoding="async"></picture></div>
+            <figcaption><b>Limits before they bite</b><span>FAR 117 cumulative limits and hours by month.</span></figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
 
     <section id="morning" aria-labelledby="morning-title">
       <div class="wrap story">
