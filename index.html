@@ -161,8 +161,9 @@
   /* App screenshots in phone frames. */
   .shots { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(18px, 3vw, 44px); align-items: end; max-width: 1040px; margin: 0 auto; }
   .shot { margin: 0; display: flex; flex-direction: column; align-items: center; gap: 18px; }
-  .shot .phone { width: 100%; max-width: 300px; border-radius: 44px; padding: 10px; background: linear-gradient(160deg, #1B2A3B, #0A1420); box-shadow: 0 0 0 1px rgba(157,178,197,.22), 0 40px 80px rgba(0,0,0,.55), 0 0 60px rgba(247,110,25,.08); }
-  .shot .phone picture, .shot .phone img { display: block; width: 100%; border-radius: 34px; aspect-ratio: 620 / 1347; object-fit: cover; object-position: top; }
+  .shot .phone { width: 100%; max-width: 300px; box-sizing: border-box; border-radius: 44px; padding: 10px; background: linear-gradient(160deg, #1B2A3B, #0A1420); box-shadow: 0 0 0 1px rgba(157,178,197,.22), 0 40px 80px rgba(0,0,0,.55), 0 0 60px rgba(247,110,25,.08); }
+  .shot .phone picture { display: block; border-radius: 34px; overflow: hidden; }
+  .shot .phone img { display: block; width: 100%; height: auto; }
   .shot.lead .phone { max-width: 330px; transform: translateY(-28px); box-shadow: 0 0 0 1px rgba(247,110,25,.35), 0 50px 100px rgba(0,0,0,.6), 0 0 90px rgba(247,110,25,.16); }
   .shot figcaption { text-align: center; max-width: 280px; }
   .shot figcaption b { display: block; font-family: var(--display); font-weight: 600; font-size: 24px; }
@@ -173,7 +174,8 @@
   .window .chrome { display: flex; align-items: center; gap: 8px; padding: 11px 14px; background: #0F1B29; border-bottom: 1px solid var(--edge); color: var(--ink-3); font-size: 13px; }
   .window .chrome i { width: 10px; height: 10px; border-radius: 50%; background: rgba(157,178,197,.25); display: inline-block; }
   .window .chrome span { margin-left: 6px; }
-  .window picture, .window img { display: block; width: 100%; height: auto; }
+  .window picture { display: block; }
+  .window img { display: block; width: 100%; height: auto; }
   .desk-main { max-width: 1120px; margin: 0 auto; }
   .desk-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; max-width: 1120px; margin: 28px auto 0; }
   .desk-cap { margin-top: 14px; color: var(--ink-2); font-size: 16px; }
