@@ -97,6 +97,17 @@
   .radar-live .pulse { width: 8px; height: 8px; border-radius: 50%; background: #E5484D; box-shadow: 0 0 0 0 rgba(229, 72, 77, .6); }
   @media (prefers-reduced-motion: no-preference) { .radar-live .pulse { animation: pulse 2s infinite; } @keyframes pulse { 70% { box-shadow: 0 0 0 8px rgba(229, 72, 77, 0); } 100% { box-shadow: 0 0 0 0 rgba(229, 72, 77, 0); } } }
   .hero { position: relative; z-index: 2; display: grid; grid-template-columns: minmax(0, 44%) minmax(0, 1fr); gap: clamp(40px, 5vw, 96px); align-items: center; padding-block: 48px 96px; }
+  /* iPhones fanned on the right of the hero. */
+  .hero-phones { position: relative; height: clamp(520px, 46vw, 760px); }
+  .hp-phone { position: absolute; top: 50%; left: 50%; width: clamp(220px, 19vw, 320px); padding: 9px; border-radius: 42px; background: linear-gradient(160deg, #1B2A3B, #0A1420); box-shadow: 0 0 0 1px rgba(157,178,197,.22), 0 40px 90px rgba(0,0,0,.6); }
+  .hp-phone picture { display: block; border-radius: 33px; overflow: hidden; }
+  .hp-phone img { display: block; width: 100%; height: auto; }
+  .hp-phone.front { z-index: 3; transform: translate(-50%, -50%); box-shadow: 0 0 0 1px rgba(247,110,25,.35), 0 50px 110px rgba(0,0,0,.65), 0 0 90px rgba(247,110,25,.18); }
+  .hp-phone.back { z-index: 1; opacity: .9; filter: saturate(.9) brightness(.85); }
+  .hp-phone.left { transform: translate(-112%, -46%) rotate(-7deg) scale(.86); }
+  .hp-phone.right { transform: translate(12%, -46%) rotate(7deg) scale(.86); }
+  @media (max-width: 1000px) { .hero-phones { height: 560px; } .hp-phone { width: 230px; } }
+  @media (max-width: 560px) { .hero-phones { height: 470px; } .hp-phone { width: 200px; } .hp-phone.left { transform: translate(-95%, -46%) rotate(-7deg) scale(.8); } .hp-phone.right { transform: translate(-5%, -46%) rotate(7deg) scale(.8); } }
   .hero h1 { font-size: clamp(56px, 6.6vw, 124px); text-wrap: balance; }
   .hero .lede { margin-top: 26px; }
   @media (max-width: 1000px) { .hero { grid-template-columns: minmax(0, 1fr); gap: 44px; padding-top: 24px; } .hero-band { min-height: 0; } }
@@ -308,32 +319,14 @@
         <p class="when-live hero-links" style="margin-top:28px"><a class="button" href="/app/">Start now</a><a class="button ghost" href="https://github.com/jgdeleon22/orvixaero-site/releases/latest/download/OrvixAero-Setup.exe" download>Download for Windows</a></p>
         <p class="fine when-live">Available now on the web and Windows; the iPhone app is coming soon to the App Store. $9.99 a month or $79.99 a year, one subscription for every device.</p>
       </div>
+      <div class="hero-phones" aria-label="Orvix Aero on iPhone">
+        <div class="hp-phone back left"><picture><source srcset="shots/schedule.webp?v=2" type="image/webp"><img src="shots/schedule.jpg?v=2" alt="Schedule screen: a month calendar with trips and FAR 117 status" width="620" height="1347" loading="lazy" decoding="async"></picture></div>
+        <div class="hp-phone back right"><picture><source srcset="shots/commuter.webp?v=2" type="image/webp"><img src="shots/commuter.jpg?v=2" alt="Commuter board: nonstop flights to work with live departure times" width="620" height="1347" loading="lazy" decoding="async"></picture></div>
+        <div class="hp-phone front"><picture><source srcset="shots/home.webp?v=2" type="image/webp"><img src="shots/home.jpg?v=2" alt="Home screen: duty status, total time, home airport weather and currency" width="620" height="1347" fetchpriority="high" decoding="async"></picture></div>
+      </div>
 
       </div>
     </div>
-
-    <section id="screens" aria-labelledby="screens-title">
-      <div class="wrap">
-        <div class="head">
-          <h2 id="screens-title">See it in action.</h2>
-          <p class="lede">Real screens from the iPhone app. The web and Windows apps show the same logbook, schedule and limits on a bigger screen.</p>
-        </div>
-        <div class="shots">
-          <figure class="shot">
-            <div class="phone"><picture><source srcset="shots/schedule.webp?v=2" type="image/webp"><img src="shots/schedule.jpg?v=2" alt="Orvix Aero schedule: an October calendar with trips, report times and FAR 117 status dots" width="620" height="1347" loading="lazy" decoding="async"></picture></div>
-            <figcaption><b>Your month at a glance</b><span>Trips, training and FAR 117 lights on one calendar.</span></figcaption>
-          </figure>
-          <figure class="shot lead">
-            <div class="phone"><picture><source srcset="shots/home.webp?v=2" type="image/webp"><img src="shots/home.jpg?v=2" alt="Orvix Aero home screen: duty status, total time, home airport weather and currency status" width="620" height="1347" loading="lazy" decoding="async"></picture></div>
-            <figcaption><b>Everything for today</b><span>Duty status, total time, home airport weather and currency.</span></figcaption>
-          </figure>
-          <figure class="shot">
-            <div class="phone"><picture><source srcset="shots/commuter.webp?v=2" type="image/webp"><img src="shots/commuter.jpg?v=2" alt="Orvix Aero commuter board: every nonstop LAX to DEN today, with live departure countdown, terminal and gate" width="620" height="1347" loading="lazy" decoding="async"></picture></div>
-            <figcaption><b>Your commute, live</b><span>Every nonstop to work, with gates, delays and alerts.</span></figcaption>
-          </figure>
-        </div>
-      </div>
-    </section>
 
     <section id="desktop" class="alt" aria-labelledby="desktop-title">
       <div class="wrap">
