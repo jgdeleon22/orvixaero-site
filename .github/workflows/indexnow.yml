@@ -1,0 +1,27 @@
+# Tells Bing (and through it Yahoo, DuckDuckGo, Ecosia), Yandex, Seznam and
+# Naver about the site's pages whenever they change, using IndexNow.
+# The key file 522954c5f78f2caa5ce471c6c0fe03ee.txt at the site root proves
+# the site is ours. Only pages in sitemap.xml are sent (never /app/).
+name: IndexNow
+on:
+  push:
+    branches: [main]
+    paths: ['*.html', 'sitemap.xml']
+  workflow_dispatch:
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Wait for GitHub Pages to publish
+        if: github.event_name == 'push'
+        run: sleep 120
+      - name: Send the sitemap's pages
+        run: |
+          urls=$(grep -o '<loc>[^<]*' sitemap.xml | sed 's/<loc>//' | jq -R . | jq -s -c .)
+          body=$(jq -n -c --argjson urls "$urls" '{host:"orvixaero.com",key:"522954c5f78f2caa5ce471c6c0fe03ee",keyLocation:"https://orvixaero.com/522954c5f78f2caa5ce471c6c0fe03ee.txt",urlList:$urls}')
+          echo "$body"
+          code=$(curl -s -o resp.txt -w '%{http_code}' -X POST https://api.indexnow.org/indexnow -H 'Content-Type: application/json; charset=utf-8' -d "$body")
+          echo "IndexNow answered $code"; cat resp.txt
+          # 200 = accepted, 202 = accepted (key check pending)
+          [ "$code" = 200 ] || [ "$code" = 202 ]
