@@ -1,0 +1,638 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#06101C">
+<title>Orvix Aero: Pilot Logbook, FAR 117 and Schedule App for Airline Pilots</title>
+<meta name="description" content="Orvix Aero is the pilot logbook app built by an airline pilot: automatic logbook, FAR 117 duty and rest, schedule from a screenshot, training and checks, a daily trip Briefing with FAA delays, 8710/IACRA reports, D-ATIS and commuter flights. iPhone, web and Windows.">
+
+<meta name="robots" content="noindex">
+<meta name="keywords" content="pilot logbook app, airline pilot app, FAR 117 calculator, digital pilot logbook, flight duty period, crew schedule app, 8710 IACRA, pilot currency tracker, commuter pilot, helicopter pilot logbook, NVG currency">
+<link rel="icon" href="favicon.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Orvix Aero">
+<meta property="og:url" content="https://orvixaero.com/">
+<meta property="og:title" content="Orvix Aero: the pilot app for the whole trip">
+<meta property="og:description" content="Logbook, FAR 117, your schedule from a screenshot and a daily Briefing, in one app built by an airline pilot.">
+<meta property="og:image" content="https://orvixaero.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Orvix Aero: the pilot app for the whole trip. Logbook, FAR 117, schedule and daily Briefing.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Orvix Aero: the pilot app for the whole trip">
+<meta name="twitter:description" content="Logbook, FAR 117, your schedule from a screenshot and a daily Briefing, in one app built by an airline pilot.">
+<meta name="twitter:image" content="https://orvixaero.com/og-image.png">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Organization", "name": "Orvix Aero", "url": "https://orvixaero.com/", "logo": "https://orvixaero.com/icon.png", "email": "info@orvixaero.com"}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebSite", "name": "Orvix Aero", "url": "https://orvixaero.com/"}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "SoftwareApplication", "name": "Orvix Aero", "applicationCategory": "TravelApplication", "operatingSystem": "iOS, Windows, Web", "url": "https://orvixaero.com/", "image": "https://orvixaero.com/og-image.png", "description": "Pilot logbook and trip app: automatic logbook, FAR 117 duty and rest, schedule from a screenshot, daily Briefing, 8710/IACRA reports, D-ATIS and commuter flights."}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "How does it know I flew?", "acceptedAnswer": {"@type": "Answer", "text": "With your permission, Orvix Aero uses your iPhone’s location in the background. It looks for a takeoff roll followed by a real climb, then a landing. Driving doesn’t look like that, so it isn’t logged. Nothing is saved until you confirm it."}}, {"@type": "Question", "name": "Will it drain my battery?", "acceptedAnswer": {"@type": "Answer", "text": "Location updates are batched so the phone isn’t woken constantly, and you can turn detection off anytime. You can always log flights by hand."}}, {"@type": "Question", "name": "Can I bring my existing logbook?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Import a ForeFlight or Logbook Pro export, an airline crew log, or a spreadsheet. Still on paper? Photograph each page and Orvix Aero reads the rows for you to check. Or snap your airline’s time summary and your hours load as starting totals. You see a preview first, and duplicates are skipped."}}, {"@type": "Question", "name": "How do flight alerts work?", "acceptedAnswer": {"@type": "Answer", "text": "Tap the bell on any flight on the commute board. You’ll get a notification when it’s delayed or cancelled, when a gate is posted, and when the gate changes, at both ends."}}, {"@type": "Question", "name": "Can it read my schedule?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Upload a screenshot of your month or a trip, or paste the text, and check what it read before you save it. The screenshot isn’t kept, and pay, credit and sick figures are never read from it."}}, {"@type": "Question", "name": "How does the pay estimate work?", "acceptedAnswer": {"@type": "Answer", "text": "Enter your hourly rate, per diem and monthly guarantee. Orvix Aero multiplies your block hours by your rate, raises it to the guarantee if needed, and adds per diem for your time away from base. Your rates stay on your phone. It’s a rough guide, not your paycheck: contract rules like credit and rigs aren’t included."}}, {"@type": "Question", "name": "Does it show seat loads?", "acceptedAnswer": {"@type": "Answer", "text": "No. Loads live in each airline’s own systems, and sharing them can get employees in trouble, so Orvix Aero doesn’t collect or show them. You get schedules, live status, delays and alerts instead."}}, {"@type": "Question", "name": "Where does the radar come from?", "acceptedAnswer": {"@type": "Answer", "text": "In the U.S., National Weather Service NEXRAD radar. Elsewhere, radar mosaics shared by national weather services. It’s for awareness, not flight planning."}}, {"@type": "Question", "name": "Who can see my flights?", "acceptedAnswer": {"@type": "Answer", "text": "Only you. Read the privacy policy for the details."}}, {"@type": "Question", "name": "How much is it, and does it work on my computer?", "acceptedAnswer": {"@type": "Answer", "text": "$9.99 a month or $79.99 a year. One subscription covers the web app at orvixaero.com, the Windows app and the iPhone app, which is coming soon to the App Store. Cancel any time."}}]}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --night: #050D17;
+    --night-2: #08131F;
+    --glass: rgba(170, 196, 220, .055);
+    --glass-2: rgba(170, 196, 220, .09);
+    --edge: rgba(157, 178, 197, .16);
+    --edge-2: rgba(157, 178, 197, .28);
+    --ink: #F2F6FA;
+    --ink-2: #A3B6C8;
+    --ink-3: #6F879B;
+    --dep: #7FB4E6;      /* departure strip edge */
+    --arr: #E8C77A;      /* arrival strip edge */
+    --orange: #F76E19;
+    --orange-2: #FF8A3D;
+    --green: #2DB46E;
+    --display: "Barlow Condensed", "Arial Narrow", sans-serif;
+    --text: "Barlow", system-ui, sans-serif;
+    --gutter: clamp(20px, 4vw, 64px);
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: var(--night); color: var(--ink); font-family: var(--text); font-size: 19px; line-height: 1.55; -webkit-font-smoothing: antialiased; }
+  img { max-width: 100%; display: block; }
+  a { color: inherit; }
+  :focus-visible { outline: 3px solid var(--orange-2); outline-offset: 3px; border-radius: 6px; }
+  .wrap { width: 100%; max-width: 1680px; margin-inline: auto; padding-inline: var(--gutter); }
+  h1, h2, h3 { font-family: var(--display); font-weight: 700; margin: 0; line-height: .98; letter-spacing: -0.01em; }
+  p { margin: 0; }
+  .lede { color: var(--ink-2); font-size: clamp(19px, 1.35vw, 22px); max-width: 36em; }
+
+  /* ---- Header: full-width, frosted when scrolled ---- */
+  .bar { position: sticky; top: 0; z-index: 10; transition: background .25s, border-color .25s; border-bottom: 1px solid transparent; }
+  .bar.scrolled { background: rgba(5, 13, 23, .72); backdrop-filter: blur(14px) saturate(140%); -webkit-backdrop-filter: blur(14px) saturate(140%); border-bottom-color: var(--edge); }
+  .top { display: flex; align-items: center; justify-content: space-between; height: 96px; }
+  .brand { display: flex; align-items: center; gap: 14px; text-decoration: none; }
+  .brand img { height: 68px; width: auto; }
+  .top nav { display: flex; align-items: center; gap: 36px; font-weight: 500; font-size: 17px; }
+  .top nav a { text-decoration: none; color: var(--ink-2); transition: color .15s; }
+  .top nav a:hover { color: var(--ink); }
+  .top nav .login { color: var(--ink); padding: 11px 18px; border: 1px solid var(--edge-2); border-radius: 12px; font-weight: 600; }
+  .top nav .login:hover { border-color: var(--ink-2); }
+  .top nav .cta { color: #fff; background: var(--orange); padding: 12px 22px; border-radius: 12px; font-weight: 600; box-shadow: 0 0 0 1px rgba(255,255,255,.08) inset, 0 8px 28px rgba(247, 110, 25, .28); }
+  .top nav .cta:hover { background: var(--orange-2); color: #fff; }
+  @media (max-width: 820px) { .top { height: 76px; } .brand img { height: 52px; } .top nav { gap: 10px; } .top nav a:not(.cta):not(.login) { display: none; } .top nav .login, .top nav .cta { padding: 10px 14px; font-size: 15px; } }
+
+  /* ---- Hero: full-bleed sky with a HUD horizon and one flight path ---- */
+  .hero-band { position: relative; overflow: hidden; margin-top: -96px; padding-top: 96px; min-height: min(100vh, 1000px); display: flex; align-items: center; background: var(--night); }
+  /* Live U.S. radar behind the hero (Leaflet, not interactive) */
+  .radar { position: absolute; inset: 0; z-index: 0; background: var(--night); }
+  .radar .leaflet-container, .radar { background: #050D17; }
+  .radar .leaflet-tile-pane { filter: saturate(1.15); }
+  .radar .leaflet-control-attribution { background: rgba(5, 13, 23, .6) !important; color: var(--ink-3); font: 11px var(--text); }
+  .radar .leaflet-control-attribution a { color: var(--ink-2); }
+  /* Keeps the headline readable over the map and fades the map into the page */
+  .shade { position: absolute; inset: 0; z-index: 1; pointer-events: none;
+    background:
+      linear-gradient(90deg, rgba(5, 13, 23, .94) 0%, rgba(5, 13, 23, .78) 30%, rgba(5, 13, 23, .25) 60%, rgba(5, 13, 23, .15) 100%),
+      linear-gradient(180deg, rgba(5, 13, 23, .55) 0%, transparent 18%, transparent 70%, var(--night) 100%); }
+  @media (max-width: 1000px) { .shade { background: linear-gradient(180deg, rgba(5,13,23,.75), rgba(5,13,23,.85) 60%, var(--night)); } }
+  .radar-live { display: none !important; position: absolute; z-index: 2; left: var(--gutter); bottom: 22px; margin: 0; display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 500; color: var(--ink-2); }
+  .radar-live .pulse { width: 8px; height: 8px; border-radius: 50%; background: #E5484D; box-shadow: 0 0 0 0 rgba(229, 72, 77, .6); }
+  @media (prefers-reduced-motion: no-preference) { .radar-live .pulse { animation: pulse 2s infinite; } @keyframes pulse { 70% { box-shadow: 0 0 0 8px rgba(229, 72, 77, 0); } 100% { box-shadow: 0 0 0 0 rgba(229, 72, 77, 0); } } }
+  .hero { position: relative; z-index: 2; display: grid; grid-template-columns: minmax(0, 44%) minmax(0, 1fr); gap: clamp(40px, 5vw, 96px); align-items: center; padding-block: 48px 96px; }
+  /* iPhones fanned on the right of the hero. */
+  .hero-phones { position: relative; height: clamp(520px, 46vw, 760px); }
+  .hp-phone { position: absolute; top: 50%; left: 50%; width: clamp(220px, 19vw, 320px); padding: 9px; border-radius: 42px; background: linear-gradient(160deg, #1B2A3B, #0A1420); box-shadow: 0 0 0 1px rgba(157,178,197,.22), 0 40px 90px rgba(0,0,0,.6); }
+  .hp-phone picture { display: block; border-radius: 33px; overflow: hidden; }
+  .hp-phone img { display: block; width: 100%; height: auto; }
+  .hp-phone.front { z-index: 3; transform: translate(-50%, -50%); box-shadow: 0 0 0 1px rgba(247,110,25,.35), 0 50px 110px rgba(0,0,0,.65), 0 0 90px rgba(247,110,25,.18); }
+  .hp-phone.back { z-index: 1; opacity: .9; filter: saturate(.9) brightness(.85); }
+  .hp-phone.left { transform: translate(-112%, -46%) rotate(-7deg) scale(.86); }
+  .hp-phone.right { transform: translate(12%, -46%) rotate(7deg) scale(.86); }
+  @media (max-width: 1000px) { .hero-phones { height: 560px; } .hp-phone { width: 230px; } }
+  @media (max-width: 560px) { .hero-phones { height: 470px; } .hp-phone { width: 200px; } .hp-phone.left { transform: translate(-95%, -46%) rotate(-7deg) scale(.8); } .hp-phone.right { transform: translate(-5%, -46%) rotate(7deg) scale(.8); } }
+  .hero h1 { font-size: clamp(56px, 6.6vw, 124px); text-wrap: balance; }
+  .hero .lede { margin-top: 26px; }
+  @media (max-width: 1000px) { .hero { grid-template-columns: minmax(0, 1fr); gap: 44px; padding-top: 24px; } .hero-band { min-height: 0; } }
+
+  .join { display: flex; gap: 10px; margin-top: 36px; max-width: 540px; }
+  .join input[type=email] { flex: 1; min-width: 0; font: inherit; font-size: 18px; color: var(--ink); background: var(--glass); border: 1px solid var(--edge-2); border-radius: 14px; padding: 15px 18px; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+  .join input::placeholder { color: var(--ink-3); }
+  .join button, .button { font: inherit; font-weight: 600; font-size: 18px; color: #fff; background: var(--orange); border: 0; border-radius: 14px; padding: 15px 24px; cursor: pointer; text-decoration: none; display: inline-block; white-space: nowrap; box-shadow: 0 0 0 1px rgba(255,255,255,.08) inset, 0 10px 30px rgba(247, 110, 25, .28); }
+  .join button:hover, .button:hover { background: var(--orange-2); }
+  .join button:disabled { opacity: .6; cursor: default; }
+  @media (max-width: 480px) { .join { flex-direction: column; } .join button { width: 100%; } }
+  .hp { position: absolute; left: -9999px; }
+  .join-msg { min-height: 24px; margin-top: 10px; font-size: 15px; color: var(--ink-2); }
+  .join-msg.ok { color: var(--green); }
+  .join-msg.err { color: #F2817A; }
+  .fine { margin-top: 4px; font-size: 15px; color: var(--ink-3); }
+
+  /* ---- Flight strips, as glass ---- */
+  .rack { display: grid; gap: 10px; }
+  .strip { position: relative; display: grid; grid-template-columns: 8.2em 1fr 5.6em; border-radius: 14px; overflow: hidden;
+    background: linear-gradient(180deg, rgba(170, 196, 220, .10), rgba(170, 196, 220, .04)); border: 1px solid var(--edge);
+    backdrop-filter: blur(16px) saturate(130%); -webkit-backdrop-filter: blur(16px) saturate(130%); box-shadow: 0 18px 40px rgba(0, 0, 0, .28); }
+  /* lit edge: blue for departure, amber for arrival, as on real strip boards */
+  .strip::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--dep); box-shadow: 0 0 14px var(--dep); }
+  .strip.arr::before { background: var(--arr); box-shadow: 0 0 14px var(--arr); }
+  .strip > div { padding: 14px 16px; border-left: 1px solid var(--edge); min-width: 0; }
+  .strip > div:first-child { border-left: 0; padding-left: 20px; }
+  .strip .id { font-family: var(--display); font-weight: 700; font-size: 27px; line-height: 1; }
+  .strip .sub { font-size: 13px; color: var(--ink-3); margin-top: 4px; }
+  .strip .what { font-family: var(--display); font-weight: 500; font-size: 23px; line-height: 1.12; color: var(--ink); }
+  .strip .when { text-align: right; font-family: var(--display); font-weight: 600; font-size: 22px; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+  .strip .flag { display: inline-block; font-family: var(--text); font-size: 12px; font-weight: 600; padding: 2px 8px; border-radius: 6px; margin-left: 8px; vertical-align: 4px; }
+  .flag.alert { background: var(--orange); color: #fff; }
+  .flag.ok { background: rgba(45, 180, 110, .2); color: #6BE0A2; border: 1px solid rgba(45, 180, 110, .45); }
+  @media (max-width: 560px) {
+    .strip { grid-template-columns: 1fr auto; }
+    .strip > div:nth-child(2) { grid-column: 1 / -1; grid-row: 2; border-left: 0; border-top: 1px solid var(--edge); padding-left: 20px; }
+    .strip .what { font-size: 20px; }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .rack .strip { opacity: 0; }
+    .rack.in .strip { animation: rack .6s cubic-bezier(.2, .8, .2, 1) both; }
+    .rack.in .strip:nth-child(1) { animation-delay: .05s; }
+    .rack.in .strip:nth-child(2) { animation-delay: .3s; }
+    .rack.in .strip:nth-child(3) { animation-delay: .55s; }
+    .rack.in .strip:nth-child(4) { animation-delay: .8s; }
+    .rack.in .strip:nth-child(5) { animation-delay: 1.05s; }
+    @keyframes rack { from { opacity: 0; transform: translateX(40px); } to { opacity: 1; transform: none; } }
+  }
+  .story { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: clamp(40px, 5vw, 96px); align-items: center; }
+  .story h2 { font-size: clamp(44px, 4.6vw, 84px); text-wrap: balance; }
+  .story .lede { margin-top: 22px; }
+  @media (max-width: 1000px) { .story { grid-template-columns: minmax(0, 1fr); } }
+
+  /* ---- Sections: full-width bands ---- */
+  section { padding: clamp(80px, 9vw, 140px) 0; position: relative; }
+  section.alt { background: linear-gradient(180deg, var(--night-2), var(--night)); border-block: 1px solid rgba(157, 178, 197, .08); }
+  .head { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 56px; align-items: end; margin-bottom: 56px; }
+  .head h2 { font-size: clamp(44px, 4.6vw, 84px); text-wrap: balance; }
+  @media (max-width: 900px) { .head { grid-template-columns: 1fr; gap: 16px; } }
+
+  /* App screenshots in phone frames. */
+  .shots { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(18px, 3vw, 44px); align-items: end; max-width: 1040px; margin: 0 auto; }
+  .shot { margin: 0; display: flex; flex-direction: column; align-items: center; gap: 18px; }
+  .shot .phone { width: 100%; max-width: 300px; box-sizing: border-box; border-radius: 44px; padding: 10px; background: linear-gradient(160deg, #1B2A3B, #0A1420); box-shadow: 0 0 0 1px rgba(157,178,197,.22), 0 40px 80px rgba(0,0,0,.55), 0 0 60px rgba(247,110,25,.08); }
+  .shot .phone picture { display: block; border-radius: 34px; overflow: hidden; }
+  .shot .phone img { display: block; width: 100%; height: auto; }
+  .shot.lead .phone { max-width: 330px; transform: translateY(-28px); box-shadow: 0 0 0 1px rgba(247,110,25,.35), 0 50px 100px rgba(0,0,0,.6), 0 0 90px rgba(247,110,25,.16); }
+  .shot figcaption { text-align: center; max-width: 280px; }
+  .shot figcaption b { display: block; font-family: var(--display); font-weight: 600; font-size: 24px; }
+  .shot figcaption span { color: var(--ink-2); font-size: 16px; }
+  @media (max-width: 820px) { .shots { grid-template-columns: 1fr; } .shot.lead .phone { transform: none; } .shot .phone { max-width: 280px; } }
+  /* Windows app screenshots in window frames. */
+  .window { border-radius: 16px; overflow: hidden; background: #0A1420; box-shadow: 0 0 0 1px rgba(157,178,197,.22), 0 40px 90px rgba(0,0,0,.55); }
+  .window .chrome { display: flex; align-items: center; gap: 8px; padding: 11px 14px; background: #0F1B29; border-bottom: 1px solid var(--edge); color: var(--ink-3); font-size: 13px; }
+  .window .chrome i { width: 10px; height: 10px; border-radius: 50%; background: rgba(157,178,197,.25); display: inline-block; }
+  .window .chrome span { margin-left: 6px; }
+  .window picture { display: block; }
+  .window img { display: block; width: 100%; height: auto; }
+  .desk { max-width: 1120px; margin: 0 auto; }
+  .desk figure { margin: 0; }
+  .desk-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 36px 28px; margin-top: 36px; }
+  .desk-row .window picture { aspect-ratio: 16 / 9; overflow: hidden; }
+  .desk-row .window img { height: 100%; object-fit: cover; object-position: top left; }
+  .desk-cap { margin-top: 14px; color: var(--ink-2); font-size: 16px; }
+  .desk-cap b { color: var(--ink); font-weight: 600; }
+  .desk-cta { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: center; margin-top: 40px; }
+  @media (max-width: 820px) { .desk-row { grid-template-columns: 1fr; } }
+  /* Get the app: three ways in. */
+  .platforms { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+  .platform { padding: 30px; display: flex; flex-direction: column; gap: 10px; }
+  .platform .ico { width: 52px; height: 52px; border-radius: 14px; display: grid; place-items: center; background: rgba(247, 110, 25, .13); color: var(--orange); margin-bottom: 6px; }
+  .platform .ico svg { width: 26px; height: 26px; }
+  .platform b { font-family: var(--display); font-weight: 600; font-size: 28px; line-height: 1.1; }
+  .platform span { color: var(--ink-2); font-size: 17px; }
+  .platform .button { margin-top: auto; align-self: flex-start; }
+  .platform .soon { margin-top: auto; align-self: flex-start; color: var(--ink-2); border: 1px solid var(--edge-2); border-radius: 14px; padding: 13px 20px; font-weight: 600; font-size: 17px; }
+  .platform .meta { color: var(--ink-3); font-size: 14px; }
+  .button.ghost { background: transparent; box-shadow: none; border: 1px solid var(--edge-2); color: var(--ink); }
+  .button.ghost:hover { border-color: var(--ink-2); }
+  .hero-links { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+  @media (max-width: 900px) { .platforms { grid-template-columns: 1fr; } }
+  .glass { background: linear-gradient(180deg, rgba(170, 196, 220, .07), rgba(170, 196, 220, .025)); border: 1px solid var(--edge); border-radius: 22px; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+
+  .phases { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+  .phase { padding: 34px 34px 38px; }
+  .phase .step { font-family: var(--display); font-weight: 600; font-size: 20px; color: var(--orange); }
+  .phase h3 { font-size: 40px; margin: 6px 0 22px; }
+  .phase ul { list-style: none; margin: 0; padding: 0; }
+  .phase li { padding: 16px 0; border-top: 1px solid var(--edge); }
+  .phase li:first-child { border-top: 0; padding-top: 0; }
+  .phase li b { display: block; font-weight: 600; font-size: 19px; }
+  .phase li span { display: block; color: var(--ink-2); font-size: 17px; line-height: 1.5; margin-top: 3px; }
+  @media (max-width: 1000px) { .phases { grid-template-columns: 1fr; } }
+
+  .two { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 20px; }
+  .two > div { padding: 40px; }
+  .two h3 { font-size: 42px; margin-bottom: 14px; }
+  .two p { color: var(--ink-2); }
+  .two ul { margin: 20px 0 0; padding-left: 1.1em; color: var(--ink-2); }
+  .two li { margin: 8px 0; }
+  .two li::marker { color: var(--orange); }
+  @media (max-width: 900px) { .two { grid-template-columns: 1fr; } .two > div { padding: 28px; } }
+
+  .promises { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; }
+  .promises div { padding: 28px; }
+  .promises b { display: block; font-size: 21px; font-weight: 600; margin-bottom: 6px; }
+  .promises span { color: var(--ink-2); font-size: 17px; }
+  @media (max-width: 1100px) { .promises { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 640px) { .promises { grid-template-columns: 1fr; } }
+
+  .plan { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 64px; align-items: center; padding: clamp(32px, 4vw, 64px);
+    background: radial-gradient(ellipse 80% 120% at 0% 0%, rgba(247, 110, 25, .12), transparent 60%), linear-gradient(180deg, rgba(170, 196, 220, .07), rgba(170, 196, 220, .025)); }
+  .plan h3 { font-size: clamp(44px, 4vw, 68px); }
+  .plan .price { font-family: var(--display); font-weight: 600; font-size: 26px; color: var(--ink-2); margin-top: 12px; }
+  .plan ul { columns: 3; column-gap: 32px; margin: 0; padding-left: 1.1em; color: var(--ink-2); font-size: 18px; }
+  .plan li { margin: 0 0 12px; break-inside: avoid; }
+  .plan li::marker { color: var(--orange); }
+  body[data-launch="pre"] .when-live, body[data-launch="live"] .when-pre { display: none !important; }
+  .prices { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 20px; }
+  .tier { border: 1px solid rgba(157,178,197,.22); border-radius: 16px; padding: 16px 20px; min-width: 180px; }
+  .tier.best { border-color: var(--orange); background: rgba(247,110,25,.07); }
+  .tier .amt { font-family: var(--display); font-weight: 700; font-size: 40px; line-height: 1; }
+  .tier .per { color: var(--ink-2); font-size: 16px; }
+  .tier .tag { display: inline-block; margin-bottom: 8px; font-size: 12px; font-weight: 700; letter-spacing: .08em; color: var(--orange); text-transform: uppercase; }
+  .plan .fine { color: var(--ink-2); font-size: 15px; margin-top: 14px; max-width: 30em; }
+  @media (max-width: 1100px) { .plan ul { columns: 2; } }
+  @media (max-width: 860px) { .plan { grid-template-columns: 1fr; gap: 32px; } .plan ul { columns: 1; } }
+
+  .faq-grid { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: 64px; align-items: start; }
+  .faq-grid h2 { font-size: clamp(44px, 4.6vw, 84px); position: sticky; top: 130px; }
+  @media (max-width: 900px) { .faq-grid { grid-template-columns: 1fr; gap: 24px; } .faq-grid h2 { position: static; } }
+  .faq details { border-top: 1px solid var(--edge); }
+  .faq details:last-child { border-bottom: 1px solid var(--edge); }
+  .faq summary { list-style: none; cursor: pointer; padding: 22px 44px 22px 0; position: relative; font-family: var(--display); font-weight: 600; font-size: 28px; }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq summary::after { content: "+"; position: absolute; right: 6px; top: 18px; font-size: 32px; color: var(--orange); font-family: var(--text); font-weight: 400; }
+  .faq details[open] summary::after { content: "–"; }
+  .faq details p { color: var(--ink-2); padding: 0 0 24px; max-width: 42em; }
+
+  .closing { overflow: hidden; background: radial-gradient(ellipse 60% 80% at 85% 100%, rgba(247, 110, 25, .16), transparent 70%), linear-gradient(180deg, var(--night), #071526); }
+  .closing h2 { font-size: clamp(52px, 6.4vw, 120px); max-width: 11em; }
+  .closing .lede { margin-top: 20px; }
+
+  footer { border-top: 1px solid var(--edge); padding: 36px 0 52px; color: var(--ink-3); font-size: 15px; }
+  footer .wrap { display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap; }
+  footer .brand img { height: 44px; }
+  footer nav { display: flex; gap: 26px; }
+  footer a { color: var(--ink-2); text-decoration: none; }
+  footer a:hover { color: var(--ink); }
+  /* ---- Shorter page (v2) ---- */
+  section { padding: clamp(64px, 7vw, 112px) 0; }
+  .feats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+  .feat { overflow: hidden; display: flex; flex-direction: column; transition: border-color .2s, transform .2s; }
+  .feat:hover { border-color: var(--edge-2); transform: translateY(-3px); }
+  .feat-shot { aspect-ratio: 16 / 9; overflow: hidden; background: #0A1420; border-bottom: 1px solid var(--edge); }
+  .feat-shot picture, .feat-shot img { display: block; width: 100%; height: 100%; }
+  .feat-shot img { object-fit: cover; object-position: top left; }
+  .feat-shot.phone-crop img { object-position: center 22%; }
+  .feat-body { padding: 22px 24px 26px; }
+  .feat-body b { display: block; font-family: var(--display); font-weight: 600; font-size: 27px; line-height: 1.1; margin-bottom: 8px; }
+  .feat-body span { color: var(--ink-2); font-size: 17px; line-height: 1.5; }
+  @media (max-width: 1100px) { .feats { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 640px) { .feats { grid-template-columns: 1fr; } }
+  .also { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 36px; }
+  .also span { font-size: 15px; color: var(--ink-2); border: 1px solid var(--edge); border-radius: 999px; padding: 7px 14px; }
+  .also .also-lbl { border: 0; padding-left: 0; color: var(--orange); font-weight: 600; letter-spacing: .06em; text-transform: uppercase; font-size: 13px; }
+  .maker { margin-top: 28px; color: var(--ink-2); font-size: 18px; }
+  .maker b { color: var(--ink); }
+  .devices { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 28px; align-items: center; }
+  .devices-shot { margin: 0; }
+  .devices .platforms { grid-template-columns: 1fr; gap: 14px; }
+  .devices .platform { flex-direction: row; align-items: center; gap: 18px; padding: 20px 22px; }
+  .devices .platform .ico { margin: 0; flex: none; }
+  .devices .platform > div:nth-child(2) { flex: 1; min-width: 0; }
+  .devices .platform b { display: block; font-size: 25px; }
+  .devices .platform span:not(.soon) { display: block; font-size: 16px; }
+  .devices .platform .meta { margin-top: 4px; font-size: 13px; }
+  .devices .platform .button, .devices .platform .soon { margin: 0; flex: none; font-size: 16px; padding: 12px 18px; }
+  @media (max-width: 1000px) { .devices { grid-template-columns: 1fr; } }
+  @media (max-width: 520px) { .devices .platform { flex-wrap: wrap; } .devices .platform .button, .devices .platform .soon { width: 100%; text-align: center; } }
+  .plan-side { display: grid; gap: 14px; }
+  .plan-lbl { font-size: 13px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--orange); }
+  .plan-lbl:not(:first-child) { margin-top: 14px; }
+  .checks { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; columns: auto !important; }
+  .checks li { position: relative; padding-left: 30px; color: var(--ink); font-size: 18px; margin: 0; }
+  .checks li::before { content: ""; position: absolute; left: 0; top: 5px; width: 18px; height: 18px; border-radius: 50%; background: rgba(45,180,110,.18) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236BE0A2' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 12.5l4 4 8-9'/%3E%3C/svg%3E") center / 12px no-repeat; }
+  .feat-shot:not(.phone-crop) img { object-position: 30% top; }
+  @media (max-width: 520px) { .prices { flex-wrap: nowrap; gap: 10px; } .tier { min-width: 0; flex: 1; padding: 14px; } .tier .amt { font-size: 32px; } .tier .per { font-size: 14px; } }
+  .closing-in { display: flex; justify-content: space-between; align-items: flex-end; gap: 32px; flex-wrap: wrap; }
+  .closing h2 { font-size: clamp(48px, 5.6vw, 104px); }
+</style>
+</head>
+<!-- Launch switch: change data-launch to "live" on launch day. "pre" shows
+     the waitlist; "live" shows prices and sends people to sign up. -->
+<body data-launch="live">
+  <header class="bar" id="top-bar">
+  <div class="wrap top">
+    <a class="brand" href="/"><img src="logo-light.png" alt="Orvix Aero" width="83" height="68"></a>
+    <nav aria-label="Main">
+      <a href="#features">What it does</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#faq">FAQ</a>
+      <a href="#get">Devices</a>
+      <a class="login" href="/app/">Log in</a>
+      <a class="cta when-pre" href="#join-email">Join the waitlist</a>
+      <a class="cta when-live" href="/app/">Start now</a>
+    </nav>
+  </div>
+  </header>
+
+  <main>
+    <div class="hero-band">
+      <div class="radar" id="radar" aria-hidden="true"></div>
+      <div class="shade" aria-hidden="true"></div>
+      <p class="radar-live" id="radar-live" aria-live="off"><span class="pulse"></span><span id="radar-time">Live radar</span></p>
+      <div class="wrap hero">
+      <div>
+        <h1 id="hero-title">One app for the whole trip, from commute to logbook.</h1>
+        <p class="lede">Orvix Aero reads your schedule, tracks every leg of your trip, shows your commute live, checks FAR 117, finds food near your gate, and logs the flight when you land. For airline and GA pilots.</p>
+        <form class="join when-pre" id="join" novalidate aria-labelledby="hero-title">
+          <label class="hp" aria-hidden="true">Company <input name="company" tabindex="-1" autocomplete="off"></label>
+          <label for="join-email" class="hp">Email</label>
+          <input id="join-email" name="email" type="email" inputmode="email" autocomplete="email" placeholder="you@example.com" required>
+          <button type="submit">Join the waitlist</button>
+        </form>
+        <p class="join-msg when-pre" id="join-msg" role="status" aria-live="polite"></p>
+        <p class="fine when-pre">Coming to iPhone first. We’ll only email you about the launch.</p>
+        <p class="when-live hero-links" style="margin-top:28px"><a class="button" href="/app/">Start now</a><a class="button ghost" href="https://github.com/jgdeleon22/orvixaero-site/releases/latest/download/OrvixAero-Setup.exe" download>Download for Windows</a></p>
+        <p class="fine when-live">Available now on the web and Windows; the iPhone app is coming soon to the App Store. $9.99 a month or $79.99 a year, one subscription for every device.</p>
+      </div>
+      <div class="hero-phones" aria-label="Orvix Aero on iPhone">
+        <div class="hp-phone back left"><picture><source srcset="shots/schedule.webp?v=2" type="image/webp"><img src="shots/schedule.jpg?v=2" alt="Schedule screen: a month calendar with trips and FAR 117 status" width="620" height="1347" loading="lazy" decoding="async"></picture></div>
+        <div class="hp-phone back right"><picture><source srcset="shots/commuter.webp?v=2" type="image/webp"><img src="shots/commuter.jpg?v=2" alt="Commuter board: nonstop flights to work with live departure times" width="620" height="1347" loading="lazy" decoding="async"></picture></div>
+        <div class="hp-phone front"><picture><source srcset="shots/home.webp?v=2" type="image/webp"><img src="shots/home.jpg?v=2" alt="Home screen: duty status, total time, home airport weather and currency" width="620" height="1347" fetchpriority="high" decoding="async"></picture></div>
+      </div>
+
+      </div>
+    </div>
+
+    <section id="features" class="alt" aria-labelledby="features-title">
+      <div class="wrap">
+        <div class="head">
+          <h2 id="features-title">Everything you open on a trip, in one app.</h2>
+          <p class="lede">No more jumping between a logbook, a weather app, a flight tracker and a map to find lunch.</p>
+        </div>
+        <div class="feats">
+          <article class="feat glass">
+            <div class="feat-shot phone-crop"><picture><source srcset="shots/commuter.webp?v=2" type="image/webp"><img src="shots/commuter.jpg?v=2" alt="Commuter board with nonstop flights and live departure times" width="620" height="1347" loading="lazy" decoding="async"></picture></div>
+            <div class="feat-body"><b>Commute and alerts</b><span>Every flight between two airports, live, with a push when a gate moves or a flight is delayed.</span></div>
+          </article>
+          <article class="feat glass">
+            <div class="feat-shot phone-crop"><picture><source srcset="shots/schedule.webp?v=2" type="image/webp"><img src="shots/schedule.jpg?v=2" alt="Schedule calendar with trips and FAR 117 status" width="620" height="1347" loading="lazy" decoding="async"></picture></div>
+            <div class="feat-body"><b>Schedule from a screenshot</b><span>Upload your month or a trip. Each leg is tracked live and lands in your phone’s calendar.</span></div>
+          </article>
+          <article class="feat glass">
+            <div class="feat-shot"><picture><source srcset="shots/desk-far117.webp?v=2" type="image/webp"><img src="shots/desk-far117.jpg?v=2" alt="FAR 117 screen: legal to report now and cumulative limits" width="1000" height="425" loading="lazy" decoding="async"></picture></div>
+            <div class="feat-body"><b>FAR 117, worked out</b><span>Legal to report, FDP and cumulative limits, and every trip checked day by day before you fly it.</span></div>
+          </article>
+          <article class="feat glass">
+            <div class="feat-shot"><picture><source srcset="shots/desk-stats.webp?v=2" type="image/webp"><img src="shots/desk-stats.jpg?v=2" alt="Stats screen: totals and hours by aircraft type" width="1000" height="522" loading="lazy" decoding="async"></picture></div>
+            <div class="feat-body"><b>A logbook that fills itself in</b><span>It notices the takeoff and landing, finds the airports, times and tail number, and asks you to confirm.</span></div>
+          </article>
+          <article class="feat glass">
+            <div class="feat-shot"><picture><source srcset="shots/desk-weather.webp?v=2" type="image/webp"><img src="shots/desk-weather.jpg?v=2" alt="Live radar loop and decoded METAR" width="1000" height="610" loading="lazy" decoding="async"></picture></div>
+            <div class="feat-body"><b>Weather, D-ATIS and delays</b><span>Live radar, METAR and TAF in plain language, the ATIS letter and FAA ground stops at both ends.</span></div>
+          </article>
+          <article class="feat glass">
+            <div class="feat-shot"><picture><source srcset="shots/desk-reports.webp?v=2" type="image/webp"><img src="shots/desk-reports.jpg?v=2" alt="Reports: printable logbook, 8710-1 time record and currency" width="1000" height="450" loading="lazy" decoding="async"></picture></div>
+            <div class="feat-body"><b>Training, currency and reports</b><span>Checks with grace months, currency flagged before it lapses, the 8710 for IACRA and a printable logbook.</span></div>
+          </article>
+        </div>
+        <div class="also">
+          <span class="also-lbl">Also inside</span>
+          <span>Food near your gate or FBO</span><span>Layover finds and notes</span><span>Pay estimate</span><span>Imports from ForeFlight and Logbook Pro</span><span>Paper logbook scan</span><span>Helicopter and NVG currency</span><span>Jumpseat guide</span><span>Works offline</span>
+        </div>
+        <p class="maker"><b>Made by an airline pilot.</b> Built for airline, Part 135, GA, CFI and helicopter pilots.</p>
+      </div>
+    </section>
+
+    <section id="get" aria-labelledby="get-title">
+      <div class="wrap">
+        <div class="head">
+          <h2 id="get-title">iPhone, web and Windows. One subscription.</h2>
+          <p class="lede">Your logbook, schedule and plan follow you from the phone in your pocket to the big screen at home.</p>
+        </div>
+        <div class="devices">
+          <figure class="devices-shot">
+            <div class="window"><div class="chrome"><i></i><i></i><i></i><span>Orvix Aero for Windows</span></div><picture><source srcset="shots/desk-home.webp?v=2" type="image/webp"><img src="shots/desk-home.jpg?v=2" alt="Orvix Aero for Windows home dashboard: total time, next trip, goals, hours by month and FAR 117 limits" width="1600" height="599" loading="lazy" decoding="async"></picture></div>
+          </figure>
+          <div class="platforms">
+            <div class="glass platform">
+              <div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 5.5l7.5-1v7H3zM11.5 4.4L21 3v8.5h-9.5zM3 12.5h7.5v7L3 18.5zM11.5 12.5H21V21l-9.5-1.4z"/></svg></div>
+              <div><b>Windows app</b><span>Its own window, desktop alerts and one-click updates.</span><p class="meta">Windows 10 or 11 · signed · about 100 MB</p></div>
+              <a class="button" href="https://github.com/jgdeleon22/orvixaero-site/releases/latest/download/OrvixAero-Setup.exe" download>Download</a>
+            </div>
+            <div class="glass platform">
+              <div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/></svg></div>
+              <div><b>Web app</b><span>Any browser on a Mac, PC or tablet. Nothing to install.</span></div>
+              <a class="button ghost" href="/app/">Open</a>
+            </div>
+            <div class="glass platform">
+              <div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6.5" y="2.5" width="11" height="19" rx="2.5"/><path d="M10.5 18.5h3"/></svg></div>
+              <div><b>iPhone app</b><span>Automatic flight detection, Lock Screen trips and push alerts.</span></div>
+              <span class="soon">Coming soon</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="pricing" class="alt" aria-labelledby="pricing-title">
+      <div class="wrap">
+        <div class="plan glass">
+          <div>
+            <h3 id="pricing-title">One plan. Everything included.</h3>
+            <p class="price when-pre">Launch pricing goes to the waitlist first.</p>
+            <div class="prices when-live">
+              <div class="tier best"><span class="tag">Best value</span><div class="amt">$79.99</div><div class="per">per year · about $6.67/mo</div></div>
+              <div class="tier"><span class="tag">&nbsp;</span><div class="amt">$9.99</div><div class="per">per month</div></div>
+            </div>
+            <a class="button when-pre" href="#join-email" style="margin-top:28px">Join the waitlist</a>
+            <a class="button when-live" href="/app/" style="margin-top:28px">Start now</a>
+            <p class="fine when-live">Renews until you cancel, any time, from Settings. Have a gift or invite code? Enter it when you sign up.</p>
+          </div>
+          <div class="plan-side">
+            <p class="plan-lbl">Every feature, on every device</p>
+            <ul class="checks">
+              <li>Automatic logbook, totals and currency</li>
+              <li>FAR 117 duty and rest planning</li>
+              <li>Schedule calendar with live trips</li>
+              <li>Commute board with flight and gate alerts</li>
+              <li>Weather, radar, D-ATIS and FAA delays</li>
+              <li>Training, checks and printable reports</li>
+            </ul>
+            <p class="plan-lbl">Your logbook stays yours</p>
+            <ul class="checks">
+              <li>Only you can see your flights. We never sell your data.</li>
+              <li>Export your whole logbook as a spreadsheet anytime.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="faq" aria-labelledby="faq-title">
+      <div class="wrap">
+        <div class="faq-grid">
+        <h2 id="faq-title">Questions pilots ask.</h2>
+        <div class="faq">
+          <details>
+            <summary>How does it know I flew?</summary>
+            <p>With your permission, Orvix Aero uses your iPhone’s location in the background. It looks for a takeoff roll followed by a real climb, then a landing. Driving doesn’t look like that, so it isn’t logged. Nothing is saved until you confirm it, and you can always log flights by hand.</p>
+          </details>
+          <details>
+            <summary>Can I bring my existing logbook?</summary>
+            <p>Yes. Import a ForeFlight or Logbook Pro export, an airline crew log, or a spreadsheet. Still on paper? Photograph each page and Orvix Aero reads the rows for you to check. You see a preview first, and duplicates are skipped.</p>
+          </details>
+          <details>
+            <summary>Can it read my schedule?</summary>
+            <p>Yes. Upload a screenshot of your month or a trip, or paste the text, and check what it read before you save it. The screenshot isn’t kept, and pay, credit and sick figures are never read from it.</p>
+          </details>
+          <details>
+            <summary>Who can see my flights?</summary>
+            <p>Only you. Your logbook is private to your account, searches near you send an approximate area, and aircraft lookups never show who owns the aircraft. Read the <a href="/privacy.html">privacy policy</a> for the details.</p>
+          </details>
+          <details class="when-pre">
+            <summary>When does it launch?</summary>
+            <p>Orvix Aero is coming to iPhone first. Join the waitlist and we’ll email you when it’s ready, along with launch pricing.</p>
+          </details>
+          <details class="when-live">
+            <summary>How much is it, and does it work on my computer?</summary>
+            <p>$9.99 a month or $79.99 a year. One subscription covers the web app at orvixaero.com, the Windows app and the iPhone app, which is coming soon to the App Store.</p>
+          </details>
+          <details class="when-live">
+            <summary>What happens if I cancel?</summary>
+            <p>You keep everything until the end of the period you paid for. After that your logbook stays saved, you can still export it, and it’s all there again if you come back.</p>
+          </details>
+        </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="closing" aria-labelledby="closing-title">
+      <div class="wrap closing-in">
+        <div>
+          <h2 id="closing-title">Close the other five apps.</h2>
+          <p class="lede when-pre">Be first to fly with Orvix Aero when it reaches the App Store.</p>
+          <p class="lede when-live">On the web and Windows now, iPhone soon.</p>
+        </div>
+        <div class="hero-links">
+          <a class="button when-pre" href="#join-email">Join the waitlist</a>
+          <a class="button when-live" href="/app/">Start now</a>
+          <a class="button ghost when-live" href="https://github.com/jgdeleon22/orvixaero-site/releases/latest/download/OrvixAero-Setup.exe" download>Download for Windows</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <a class="brand" href="/"><img src="logo-light.png" alt="Orvix Aero" width="53" height="44"></a><span>© 2026 Orvix Aero</span>
+      <nav aria-label="Footer">
+        <a href="mailto:info@orvixaero.com">info@orvixaero.com</a>
+        <a href="/app/">Log in</a>
+        <a href="/privacy.html">Privacy Policy</a>
+        <a href="/terms.html">Terms of Use</a>
+      </nav>
+    </div>
+  </footer>
+<script>
+  // Waitlist: saves the email to Supabase (insert-only table, no reads).
+  const SUPABASE_URL = "https://uxnjglagrrprnsliyaed.supabase.co";
+  const SUPABASE_KEY = "sb_publishable_8vrxn8kJD8_lXdJ-a6_eqg_EtHNC4B8";
+  const form = document.getElementById('join');
+  const msg = document.getElementById('join-msg');
+  const show = (text, kind) => { msg.textContent = text; msg.className = 'join-msg' + (kind ? ' ' + kind : ''); };
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email = form.email.value.trim().toLowerCase();
+    if (form.company.value) return show("You're on the list. We'll email you at launch.", 'ok');
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) return show('Enter a valid email address, like you@example.com.', 'err');
+    const btn = form.querySelector('button');
+    btn.disabled = true; show('Adding you…');
+    try {
+      const res = await fetch(SUPABASE_URL + '/rest/v1/waitlist', {
+        method: 'POST',
+        headers: { 'apikey': SUPABASE_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+        body: JSON.stringify({ email, source: 'orvixaero.com' })
+      });
+      if (res.ok || res.status === 409) {
+        form.reset();
+        show(res.status === 409 ? "You're already on the list. We'll email you at launch." : "You're on the list. We'll email you at launch.", 'ok');
+      } else {
+        show("That didn't go through. Try again, or email info@orvixaero.com.", 'err');
+      }
+    } catch (err) {
+      show("Couldn't connect. Check your connection and try again.", 'err');
+    } finally { btn.disabled = false; }
+  });
+  // Live radar behind the hero: the last hour of U.S. NEXRAD radar (Iowa
+  // Environmental Mesonet tiles, a frame every 5 minutes), looping. Each
+  // frame fades in over the last once it has loaded, so it never flashes.
+  (function radar() {
+    const el = document.getElementById('radar');
+    const label = document.getElementById('radar-time');
+    const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const js = document.createElement('script');
+    js.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+    js.onload = () => {
+      const L = window.L;
+      const map = L.map(el, { zoomControl: false, dragging: false, scrollWheelZoom: false, doubleClickZoom: false, boxZoom: false, keyboard: false, touchZoom: false, attributionControl: true, zoomSnap: 0.25, inertia: false });
+      map.attributionControl.setPrefix(false).setPosition('bottomright');
+      const fit = () => {
+        const wide = el.clientWidth > 1000;
+        // Lower 48, pushed right on wide screens so the headline sits over the Pacific.
+        map.fitBounds([[23, -126], [50, -66]], wide ? { paddingTopLeft: [el.clientWidth * 0.36, 90], paddingBottomRight: [40, 40] } : { padding: [10, 10] });
+      };
+      fit(); window.addEventListener('resize', fit);
+      const esri = 'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas';
+      L.tileLayer(esri + '/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}', { maxZoom: 10, attribution: 'Radar: NWS NEXRAD via <a href="https://mesonet.agron.iastate.edu">IEM</a> · Map &copy; Esri, &copy; OpenStreetMap' }).addTo(map);
+      const IEM = 'https://mesonet.agron.iastate.edu/cache/tile.py/1.0.0/nexrad-n0q-900913';
+      const STEP = 5 * 60000, N = 12;
+      const newest = Math.floor(Date.now() / STEP) * STEP;
+      const frames = Array.from({ length: N }, (_, i) => newest - (N - 1 - i) * STEP);
+      const url = (t) => { const back = Math.round((newest - t) / 60000); return (back <= 0 ? IEM : IEM + '-m' + String(back).padStart(2, '0') + 'm') + '/{z}/{x}/{y}.png?_=' + newest / 60000; };
+      const loaded = new Set(); const layers = new Map(); let shown = null, index = N - 1;
+      const clock = (t) => new Date(t).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+      const show = (t) => {
+        if (!loaded.has(t) || t === shown) return;
+        const next = layers.get(t); next.bringToFront();
+        const box = next.getContainer(); box.style.transition = shown == null ? 'none' : 'opacity .25s ease-out';
+        next.setOpacity(.8); const prev = shown; shown = t;
+        setTimeout(() => { layers.forEach((l, k) => { if (k !== shown && l.options.opacity) { l.getContainer().style.transition = 'none'; l.setOpacity(0); } }); }, prev == null ? 0 : 280);
+        const ago = Math.round((newest - t) / 60000);
+        label.textContent = 'Live radar · ' + clock(t) + (ago ? ' (' + ago + ' min ago)' : '');
+      };
+      // Load the newest frame first so something shows right away.
+      [...frames].reverse().forEach((t) => {
+        const layer = L.tileLayer(url(t), { opacity: 0, maxNativeZoom: 8, maxZoom: 10, keepBuffer: 0 });
+        layer.on('load', () => { loaded.add(t); if (shown == null && t === newest) show(t); });
+        layers.set(t, layer.addTo(map));
+      });
+      if (still) return;
+      const tick = () => {
+        if (loaded.size === N) { index = (index + 1) % N; show(frames[index]); }
+        setTimeout(tick, index === N - 1 ? 1600 : 650);
+      };
+      setTimeout(tick, 1600);
+    };
+    document.head.appendChild(js);
+  })();
+
+  // The strips rack up once, when that section comes into view.
+  const rackEl = document.querySelector('.rack');
+  if (rackEl && 'IntersectionObserver' in window) {
+    const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { rackEl.classList.add('in'); io.disconnect(); } }), { threshold: 0.3 });
+    io.observe(rackEl);
+  } else if (rackEl) rackEl.classList.add('in');
+
+  const bar = document.getElementById('top-bar');
+  const onScroll = () => bar.classList.toggle('scrolled', window.scrollY > 8);
+  onScroll(); window.addEventListener('scroll', onScroll, { passive: true });
+  // Links to the waitlist put the cursor in the email field.
+  document.querySelectorAll('a[href="#join-email"]').forEach((a) => a.addEventListener('click', () => setTimeout(() => document.getElementById('join-email').focus({ preventScroll: true }), 400)));
+</script>
+</body>
+</html>
