@@ -168,6 +168,18 @@
   .shot figcaption b { display: block; font-family: var(--display); font-weight: 600; font-size: 24px; }
   .shot figcaption span { color: var(--ink-2); font-size: 16px; }
   @media (max-width: 820px) { .shots { grid-template-columns: 1fr; } .shot.lead .phone { transform: none; } .shot .phone { max-width: 280px; } }
+  /* Windows app screenshots in window frames. */
+  .window { border-radius: 16px; overflow: hidden; background: #0A1420; box-shadow: 0 0 0 1px rgba(157,178,197,.22), 0 40px 90px rgba(0,0,0,.55); }
+  .window .chrome { display: flex; align-items: center; gap: 8px; padding: 11px 14px; background: #0F1B29; border-bottom: 1px solid var(--edge); color: var(--ink-3); font-size: 13px; }
+  .window .chrome i { width: 10px; height: 10px; border-radius: 50%; background: rgba(157,178,197,.25); display: inline-block; }
+  .window .chrome span { margin-left: 6px; }
+  .window picture, .window img { display: block; width: 100%; height: auto; }
+  .desk-main { max-width: 1120px; margin: 0 auto; }
+  .desk-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; max-width: 1120px; margin: 28px auto 0; }
+  .desk-cap { margin-top: 14px; color: var(--ink-2); font-size: 16px; }
+  .desk-cap b { color: var(--ink); font-weight: 600; }
+  .desk-cta { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: center; margin-top: 40px; }
+  @media (max-width: 820px) { .desk-row { grid-template-columns: 1fr; } }
   /* Get the app: three ways in. */
   .platforms { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
   .platform { padding: 30px; display: flex; flex-direction: column; gap: 10px; }
@@ -314,6 +326,33 @@
             <div class="phone"><picture><source srcset="shots/stats.webp" type="image/webp"><img src="shots/stats.jpg" alt="Orvix Aero stats: FAR 117 cumulative limits with progress bars and an hours-by-month chart" width="620" height="1347" loading="lazy" decoding="async"></picture></div>
             <figcaption><b>Limits before they bite</b><span>FAR 117 cumulative limits and hours by month.</span></figcaption>
           </figure>
+        </div>
+      </div>
+    </section>
+
+    <section id="desktop" class="alt" aria-labelledby="desktop-title">
+      <div class="wrap">
+        <div class="head">
+          <h2 id="desktop-title">On your computer, too.</h2>
+          <p class="lede">The Windows app and the web app give you the whole picture on a big screen: totals, goals, FAR 117 and your next trip at a glance.</p>
+        </div>
+        <figure class="desk-main" style="margin:0">
+          <div class="window"><div class="chrome"><i></i><i></i><i></i><span>Orvix Aero</span></div><picture><source srcset="shots/desk-home.webp" type="image/webp"><img src="shots/desk-home.jpg" alt="Orvix Aero for Windows home dashboard: total time, next trip, goals, hours by month and FAR 117 limits" width="1600" height="813" loading="lazy" decoding="async"></picture></div>
+          <figcaption class="desk-cap"><b>Home.</b> Total time, next trip, goals toward your ratings, the last 12 months and FAR 117, all on one screen.</figcaption>
+        </figure>
+        <div class="desk-row">
+          <figure style="margin:0">
+            <div class="window"><div class="chrome"><i></i><i></i><i></i><span>Orvix Aero</span></div><picture><source srcset="shots/desk-far117.webp" type="image/webp"><img src="shots/desk-far117.jpg" alt="FAR 117 screen: legal to report now, cumulative limits and a duty planner" width="1000" height="611" loading="lazy" decoding="async"></picture></div>
+            <figcaption class="desk-cap"><b>FAR 117.</b> Legal to report, cumulative limits and the longest legal duty for a planned report.</figcaption>
+          </figure>
+          <figure style="margin:0">
+            <div class="window"><div class="chrome"><i></i><i></i><i></i><span>Orvix Aero</span></div><picture><source srcset="shots/desk-weather.webp" type="image/webp"><img src="shots/desk-weather.jpg" alt="Weather and radar screen: live NEXRAD radar loop and decoded METAR for KMCO" width="1000" height="610" loading="lazy" decoding="async"></picture></div>
+            <figcaption class="desk-cap"><b>Weather &amp; radar.</b> Live radar loop and the METAR in plain language for any airport.</figcaption>
+          </figure>
+        </div>
+        <div class="desk-cta">
+          <a class="button" href="https://github.com/jgdeleon22/orvixaero-site/releases/latest/download/OrvixAero-Setup.exe" download>Download for Windows</a>
+          <a class="button ghost" href="/app/">Open the web app</a>
         </div>
       </div>
     </section>
