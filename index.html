@@ -158,6 +158,20 @@
   .head h2 { font-size: clamp(44px, 4.6vw, 84px); text-wrap: balance; }
   @media (max-width: 900px) { .head { grid-template-columns: 1fr; gap: 16px; } }
 
+  /* Get the app: three ways in. */
+  .platforms { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+  .platform { padding: 30px; display: flex; flex-direction: column; gap: 10px; }
+  .platform .ico { width: 52px; height: 52px; border-radius: 14px; display: grid; place-items: center; background: rgba(247, 110, 25, .13); color: var(--orange); margin-bottom: 6px; }
+  .platform .ico svg { width: 26px; height: 26px; }
+  .platform b { font-family: var(--display); font-weight: 600; font-size: 28px; line-height: 1.1; }
+  .platform span { color: var(--ink-2); font-size: 17px; }
+  .platform .button { margin-top: auto; align-self: flex-start; }
+  .platform .soon { margin-top: auto; align-self: flex-start; color: var(--ink-2); border: 1px solid var(--edge-2); border-radius: 14px; padding: 13px 20px; font-weight: 600; font-size: 17px; }
+  .platform .meta { color: var(--ink-3); font-size: 14px; }
+  .button.ghost { background: transparent; box-shadow: none; border: 1px solid var(--edge-2); color: var(--ink); }
+  .button.ghost:hover { border-color: var(--ink-2); }
+  .hero-links { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+  @media (max-width: 900px) { .platforms { grid-template-columns: 1fr; } }
   .glass { background: linear-gradient(180deg, rgba(170, 196, 220, .07), rgba(170, 196, 220, .025)); border: 1px solid var(--edge); border-radius: 22px; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
 
   .phases { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
@@ -239,6 +253,7 @@
       <a href="#pilots">Airline &amp; GA</a>
       <a href="#pricing">Pricing</a>
       <a href="#faq">FAQ</a>
+      <a href="#get">Download</a>
       <a class="login" href="/app/">Log in</a>
       <a class="cta when-pre" href="#join-email">Join the waitlist</a>
       <a class="cta when-live" href="/app/">Start now</a>
@@ -263,7 +278,7 @@
         </form>
         <p class="join-msg when-pre" id="join-msg" role="status" aria-live="polite"></p>
         <p class="fine when-pre">Coming to iPhone first. We’ll only email you about the launch.</p>
-        <p class="when-live" style="margin-top:28px"><a class="button" href="/app/">Start now</a></p>
+        <p class="when-live hero-links" style="margin-top:28px"><a class="button" href="/app/">Start now</a><a class="button ghost" href="https://github.com/jgdeleon22/orvixaero-site/releases/latest/download/OrvixAero-Setup.exe" download>Download for Windows</a></p>
         <p class="fine when-live">Available now on the web and Windows; the iPhone app is coming soon to the App Store. $9.99 a month or $79.99 a year, one subscription for every device.</p>
       </div>
 
@@ -449,6 +464,36 @@
           <div class="glass"><b>Export anytime</b><span>Download your whole logbook as a spreadsheet whenever you want.</span></div>
           <div class="glass"><b>Your location stays rounded</b><span>Searching near you sends an approximate area, never your exact position.</span></div>
           <div class="glass"><b>No owner details</b><span>Aircraft lookups show the aircraft, never who owns it.</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="get" aria-labelledby="get-title">
+      <div class="wrap">
+        <div class="head">
+          <h2 id="get-title">Get Orvix Aero.</h2>
+          <p class="lede">Use it in your browser, install it on your Windows PC, or carry it on your iPhone. One account and one subscription work everywhere.</p>
+        </div>
+        <div class="platforms">
+          <div class="glass platform">
+            <div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/></svg></div>
+            <b>Web app</b>
+            <span>Open it in any browser on a Mac, PC or tablet. Nothing to install.</span>
+            <a class="button" href="/app/">Open the web app</a>
+          </div>
+          <div class="glass platform">
+            <div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 5.5l7.5-1v7H3zM11.5 4.4L21 3v8.5h-9.5zM3 12.5h7.5v7L3 18.5zM11.5 12.5H21V21l-9.5-1.4z"/></svg></div>
+            <b>Windows app</b>
+            <span>Its own window and taskbar icon, desktop flight alerts, and one-click updates from Settings.</span>
+            <a class="button" href="https://github.com/jgdeleon22/orvixaero-site/releases/latest/download/OrvixAero-Setup.exe" download>Download for Windows</a>
+            <p class="meta">Windows 10 or 11 · signed installer · about 100 MB</p>
+          </div>
+          <div class="glass platform">
+            <div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6.5" y="2.5" width="11" height="19" rx="2.5"/><path d="M10.5 18.5h3"/></svg></div>
+            <b>iPhone app</b>
+            <span>Automatic flight detection, Lock Screen trips and push alerts. Your plan and logbook come with you.</span>
+            <span class="soon">Coming soon to the App Store</span>
+          </div>
         </div>
       </div>
     </section>
