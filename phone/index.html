@@ -83,6 +83,6 @@
   size(start);
   window.addEventListener('resize', function () { size(document.querySelector('button[aria-pressed="true"]')); });
 </script>
-<script>try{if(!/^(localhost|127\.)/.test(location.hostname))fetch("https://uxnjglagrrprnsliyaed.supabase.co/functions/v1/site-hit",{method:"POST",keepalive:true,body:JSON.stringify({path:location.pathname,ref:document.referrer})}).catch(function(){})}catch(e){}</script>
+<script>try{if(!/^(localhost|127\.)/.test(location.hostname)){var q=new URLSearchParams(location.search);fetch("https://uxnjglagrrprnsliyaed.supabase.co/functions/v1/site-hit",{method:"POST",keepalive:true,body:JSON.stringify({path:location.pathname,ref:document.referrer,tz:Intl.DateTimeFormat().resolvedOptions().timeZone,utm:{source:q.get("utm_source")||"",medium:q.get("utm_medium")||"",campaign:q.get("utm_campaign")||""}})}).catch(function(){})}}catch(e){}</script>
 </body>
 </html>

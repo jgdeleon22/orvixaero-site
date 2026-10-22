@@ -59,7 +59,7 @@
       <li><strong>Pay rates stay on your phone.</strong> The hourly rate, per diem and guarantee you enter for the pay estimate are stored only on your device and never sent to us.</li>
       <li><strong>Weather and aircraft lookups.</strong> When you look up weather we receive the airport code you searched. When you add an aircraft we look up its public FAA registration record.</li>
       <li><strong>Days you use the app.</strong> When you open Orvix Aero we note the date you used it, so we can count how many pilots use the app each day. It's tied to your account and deleted with it, and isn't used for anything else.</li>
-      <li><strong>Website visit counts.</strong> When you visit orvixaero.com, the page counts the visit anonymously so we can see how many people visit each day: the page, the site that linked to it and whether it's a phone. No cookies. Your IP address and browser details are used only to make a one-day code so a visit counts once that day, and are never stored.</li>
+      <li><strong>Website visit counts.</strong> When you visit orvixaero.com, the page counts the visit anonymously so we can see how many people visit each day: the page, the site or tagged link that brought you, whether it's a phone, and your country (and US or Canadian region), worked out from your browser's time zone. No cookies. Your IP address and browser details are used only to make a one-day code so a visit counts once that day, and are never stored.</li>
       <li><strong>Waitlist.</strong> If you join the waitlist on orvixaero.com, we keep your email address so we can tell you when we launch.</li>
     </ul>
 
@@ -125,6 +125,6 @@
     <span><a href="mailto:info@orvixaero.com">info@orvixaero.com</a></span>
   </footer>
 </div>
-<script>try{if(!/^(localhost|127\.)/.test(location.hostname))fetch("https://uxnjglagrrprnsliyaed.supabase.co/functions/v1/site-hit",{method:"POST",keepalive:true,body:JSON.stringify({path:location.pathname,ref:document.referrer})}).catch(function(){})}catch(e){}</script>
+<script>try{if(!/^(localhost|127\.)/.test(location.hostname)){var q=new URLSearchParams(location.search);fetch("https://uxnjglagrrprnsliyaed.supabase.co/functions/v1/site-hit",{method:"POST",keepalive:true,body:JSON.stringify({path:location.pathname,ref:document.referrer,tz:Intl.DateTimeFormat().resolvedOptions().timeZone,utm:{source:q.get("utm_source")||"",medium:q.get("utm_medium")||"",campaign:q.get("utm_campaign")||""}})}).catch(function(){})}}catch(e){}</script>
 </body>
 </html>
