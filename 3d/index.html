@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Orvix 3D character</title>
+<meta name="robots" content="noindex">
+<style>
+  html, body { margin: 0; height: 100%; background: transparent; overflow: hidden; touch-action: none; -webkit-user-select: none; user-select: none; }
+  canvas { display: block; width: 100%; height: 100%; outline: none; -webkit-tap-highlight-color: transparent; }
+</style>
+<script type="importmap">{ "imports": { "three": "./vendor/three.module.min.js" } }</script>
+</head>
+<body>
+<!--
+  Orvix Family 3D character. Models: "Mini Characters 1" by Kenney (CC0, kenney.nl).
+  Rendering: three.js (MIT). Settings come in the URL hash, e.g.
+  #c=male-a&s=tan&h=dark&t=blue&p=dark&g=0&u=0&a=idle&cam=full&spin=0
+    c  character (male-a..f, female-a..f)     s  skin tone      h  hair color
+    t  shirt color   p  pants color           g  glasses 0/1/2 (none, glasses, sunglasses)
+    u  pilot uniform 0/1                       a  action: idle wave walk jump sit drive sleep yes no
+    cam full | bust                            spin 1 = slowly turn (avatar maker); drag to turn
+  The app can also call window.orvix.set({...}). Taps post "tap" to the app and make the character wave.
+-->
+<script type="module">
+import * as THREE from 'three';
+import { GLTFLoader } from './vendor/loaders/GLTFLoader.js';
+
+// Palette cells in colormap.png: 16 columns of 32px (pairs: flat + gradient), rows of 128px.
+// A color is [pair (0-7), row (0-3)].
+const SKIN = { light: [0, 2], tan: [7, 3], warm: [5, 3], brown: [6, 3] };
+const COLORS = {
+  dark: [0, 3], gray: [1, 3], slate: [2, 3], silver: [3, 3], white: [4, 3], brown: [6, 3], tan: [7, 3],
+  cream: [0, 2], green: [1, 2], yellow: [2, 2], orange: [3, 2], red: [4, 2], blue: [5, 2], sky: [6, 2], purple: [7, 2], pink: [0, 1],
+};
+
+const params = () => Object.fromEntries(new URLSearchParams(location.hash.slice(1)));
+let opts = { c: 'male-a', s: '', h: '', t: '', p: '', g: '0', u: '0', a: 'idle', cam: 'full', spin: '0', ...params() };
+
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+renderer.setPixelRatio(Math.min(2, window.devicePixelRatio || 1));
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.setClearColor(0x000000, 0);
+document.body.appendChild(renderer.domElement);
+
+const scene = new THREE.Scene();
+scene.add(new THREE.HemisphereLight(0xffffff, 0x8899aa, 2.2));
+const sun = new THREE.DirectionalLight(0xffffff, 1.6);
+sun.position.set(1.5, 3, 2.5);
+scene.add(sun);
+const camera = new THREE.PerspectiveCamera(30, 1, 0.05, 50);
+
+// A soft round shadow under the feet.
+const shadowTex = (() => {
+  const c = document.createElement('canvas'); c.width = c.height = 64;
+  const g = c.getContext('2d'); const r = g.createRadialGradient(32, 32, 2, 32, 32, 32);
+  r.addColorStop(0, 'rgba(0,0,0,0.35)'); r.addColorStop(1, 'rgba(0,0,0,0)'); g.fillStyle = r; g.fillRect(0, 0, 64, 64);
+  return new THREE.CanvasTexture(c);
+})();
+const shadow = new THREE.Mesh(new THREE.PlaneGeometry(0.7, 0.7), new THREE.MeshBasicMaterial({ map: shadowTex, transparent: true, depthWrite: false }));
+shadow.rotation.x = -Math.PI / 2;
+scene.add(shadow);
+
+const loader = new GLTFLoader();
+const cache = new Map();
+const load = (name) => {
+  if (!cache.has(name)) cache.set(name, loader.loadAsync(`./models/${name}.glb`));
+  return cache.get(name);
+};
+
+let rig = null; // { root, mixer, actions, bones, meshes, base: Map(mesh -> original uv array), char }
+let current = null;
+let extras = [];
+const clock = new THREE.Clock();
+
+// Which palette cell a UV falls in.
+const cellOf = (u, v) => [Math.floor(u * 16), Math.floor(v * 4)];
+
+// Work out each character's regions once: skin, hair, eyes, shirt (torso + arms), pants (legs).
+function regions(meshes, bones) {
+  const head = meshes.find((m) => /head/.test(m.name)) ?? meshes[0];
+  const count = new Map();
+  const huv = head.geometry.attributes.uv;
+  for (let i = 0; i < huv.count; i++) { const k = cellOf(huv.getX(i), huv.getY(i)).join(); count.set(k, (count.get(k) ?? 0) + 1); }
+  // Skin is the tone the face uses (always 220 vertices on these models).
+  let skinKey = [...count.entries()].sort((a, b) => Math.abs(a[1] - 220) - Math.abs(b[1] - 220))[0][0];
+  const isEye = (m, i, key) => {
+    const p = m.geometry.attributes.position;
+    const [cx, cy] = key.split(',').map(Number);
+    return cy === 3 && cx <= 1 && p.getZ(i) > 0.155 && p.getY(i) < 0.52 && Math.abs(p.getX(i)) < 0.11;
+  };
+  // Hair (and beards): head color groups that are big and tall. Glasses are a
+  // thin band, eyes are excluded, so neither gets tinted.
+  const groups = new Map();
+  const hp = head.geometry.attributes.position;
+  for (let i = 0; i < huv.count; i++) {
+    const k = cellOf(huv.getX(i), huv.getY(i)).join();
+    if (k === skinKey || isEye(head, i, k)) continue;
+    const g = groups.get(k) ?? { n: 0, lo: 9, hi: -9 };
+    g.n++; g.lo = Math.min(g.lo, hp.getY(i)); g.hi = Math.max(g.hi, hp.getY(i));
+    groups.set(k, g);
+  }
+  const hairKeys = new Set([...groups.entries()].filter(([, g]) => g.n >= 30 && g.hi - g.lo > 0.12).map(([k]) => k));
+  const out = new Map();
+  for (const m of meshes) {
+    const uv = m.geometry.attributes.uv; const si = m.geometry.attributes.skinIndex;
+    const tags = new Array(uv.count);
+    const isHead = m === head;
+    // The biggest non-skin color on the legs is the pants (the rest is shoes).
+    // Everything else on the torso and arms is the outfit, except props held out
+    // past the hands (crutches), which keep their color.
+    const legCells = new Map(), reach = new Map();
+    const pos = m.geometry.attributes.position;
+    for (let i = 0; i < uv.count; i++) {
+      const k = cellOf(uv.getX(i), uv.getY(i)).join();
+      const bone = m.skeleton?.bones[si?.getX(i) ?? 0]?.name ?? '';
+      if (isHead || k === skinKey) continue;
+      if (/leg/.test(bone)) legCells.set(k, (legCells.get(k) ?? 0) + 1);
+      else reach.set(k, Math.max(reach.get(k) ?? 0, Math.abs(pos.getX(i))));
+    }
+    const pantsKey = [...legCells.entries()].sort((a, b) => b[1] - a[1])[0]?.[0];
+    const isProp = (k) => (reach.get(k) ?? 0) > 0.42;
+    for (let i = 0; i < uv.count; i++) {
+      const k = cellOf(uv.getX(i), uv.getY(i)).join();
+      const bone = m.skeleton?.bones[si?.getX(i) ?? 0]?.name ?? '';
+      if (k === skinKey) tags[i] = 'skin';
+      else if (isHead) tags[i] = isEye(m, i, k) ? 'eye' : hairKeys.has(k) ? 'hair' : 'head';
+      else if (/leg/.test(bone)) tags[i] = k === pantsKey ? 'pants' : 'shoes';
+      else tags[i] = isProp(k) ? 'extra' : 'shirt';
+    }
+    out.set(m, tags);
+  }
+  return out;
+}
+
+// Move a vertex's UV into another palette cell, keeping its spot inside the cell
+// (so the gradients and shading stay).
+function recolor() {
+  if (!rig) return;
+  const uniform = opts.u === '1';
+  const want = {
+    skin: SKIN[opts.s], hair: COLORS[opts.h],
+    shirt: uniform ? COLORS.white : COLORS[opts.t],
+    pants: uniform ? COLORS.dark : COLORS[opts.p],
+    shoes: uniform ? COLORS.dark : null,
+  };
+  for (const [m, tags] of rig.tags) {
+    const uv = m.geometry.attributes.uv; const base = rig.base.get(m);
+    for (let i = 0; i < uv.count; i++) {
+      let u = base[i * 2], v = base[i * 2 + 1];
+      const to = want[tags[i]];
+      if (to) {
+        const [cx, cy] = cellOf(u, v);
+        u += (to[0] * 2 + (cx % 2) - cx) / 16;
+        v += (to[1] - cy) / 4;
+      }
+      uv.setXY(i, u, v);
+    }
+    uv.needsUpdate = true;
+  }
+}
+
+function makeCap() {
+  const g = new THREE.Group();
+  const navy = new THREE.MeshStandardMaterial({ color: 0x1b2a44, roughness: 0.7 });
+  const black = new THREE.MeshStandardMaterial({ color: 0x0c0f14, roughness: 0.4 });
+  const gold = new THREE.MeshStandardMaterial({ color: 0xd8a93b, roughness: 0.35, metalness: 0.6 });
+  const crown = new THREE.Mesh(new THREE.CylinderGeometry(0.2, 0.175, 0.1, 28), navy); crown.position.y = 0.05;
+  const top = new THREE.Mesh(new THREE.CylinderGeometry(0.215, 0.2, 0.028, 28), navy); top.position.y = 0.11;
+  const band = new THREE.Mesh(new THREE.CylinderGeometry(0.18, 0.18, 0.03, 28), black); band.position.y = 0.012;
+  const visor = new THREE.Mesh(new THREE.CylinderGeometry(0.18, 0.18, 0.014, 28, 1, false, -Math.PI / 2.6, Math.PI / 1.3), black);
+  visor.scale.set(1, 1, 1.3); visor.position.set(0, -0.004, 0.035);
+  const badge = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.035, 0.012), gold); badge.position.set(0, 0.06, 0.19);
+  const cord = new THREE.Mesh(new THREE.BoxGeometry(0.26, 0.011, 0.011), gold); cord.position.set(0, 0.022, 0.183);
+  g.add(crown, top, band, visor, badge, cord);
+  return g;
+}
+
+async function dress() {
+  for (const e of extras) e.parent?.remove(e);
+  extras = [];
+  if (!rig) return;
+  const head = rig.bones.head;
+  if (opts.u === '1' && head) {
+    const cap = makeCap();
+    cap.position.set(0, rig.capY, 0.005);
+    head.add(cap); extras.push(cap);
+  }
+  const g = { 1: 'aid-glasses', 2: 'aid-sunglasses' }[opts.g];
+  if (g && head) {
+    const gl = await load(g);
+    const piece = gl.scene.clone(true);
+    piece.position.set(0, 0.1, 0.075); // over the eyes (the piece's origin is its bottom)
+    head.add(piece); extras.push(piece);
+  }
+}
+
+async function build() {
+  const name = /^(male|female)-[a-f]$/.test(opts.c) ? opts.c : 'male-a';
+  if (current !== name) {
+    const gltf = await load(`character-${name}`);
+    if (rig) scene.remove(rig.root);
+    const root = gltf.scene; // each character loads once and is reused
+    const meshes = []; const bones = {};
+    root.traverse((o) => {
+      if (o.isSkinnedMesh || o.isMesh) { o.frustumCulled = false; meshes.push(o); }
+      if (o.isBone) bones[o.name] = o;
+    });
+    const base = new Map(meshes.map((m) => [m, Float32Array.from(m.geometry.attributes.uv.array)]));
+    const mixer = new THREE.AnimationMixer(root);
+    const actions = Object.fromEntries(gltf.animations.map((c) => [c.name, mixer.clipAction(c)]));
+    // Cap and epaulet heights from the model's own size.
+    const box = new THREE.Box3().setFromObject(root);
+    rig = { root, mixer, actions, bones, meshes, base, tags: regions(meshes, bones), capY: 0.33, shoulderY: 0.172, height: box.max.y - box.min.y };
+    // Head top relative to the head bone.
+    if (bones.head) {
+      const hb = new THREE.Vector3(); bones.head.getWorldPosition(hb);
+      rig.capY = box.max.y - hb.y - 0.1;
+    }
+    rig.rest = Object.values(bones).map((b) => [b, b.quaternion.clone()]);
+    scene.add(root);
+    current = name;
+    rig.playing = null;
+  }
+  recolor();
+  await dress();
+  play(opts.a);
+  frame();
+}
+
+// Actions, built from the pack's clips plus a hand-made wave (the pack has none).
+let wave = 0; // seconds of waving left
+let sleeping = false;
+function play(a) {
+  if (!rig) return;
+  sleeping = a === 'sleep';
+  const clip = { idle: 'idle', wave: 'idle', walk: 'walk', jump: 'jump', sit: 'sit', drive: 'drive', sleep: 'sit', yes: 'emote-yes', no: 'emote-no' }[a] ?? 'idle';
+  if (a === 'wave') wave = 2.4;
+  const next = rig.actions[clip] ?? rig.actions.idle;
+  if (rig.playing === next) return;
+  next.reset().fadeIn(0.25).play();
+  if (rig.playing) rig.playing.fadeOut(0.25);
+  if (clip === 'jump') { next.setLoop(THREE.LoopRepeat); }
+  rig.playing = next;
+}
+
+function frame() {
+  const w = window.innerWidth, h = window.innerHeight;
+  renderer.setSize(w, h, false);
+  camera.aspect = w / Math.max(1, h);
+  const H = rig?.height ?? 1;
+  if (opts.cam === 'bust') { camera.position.set(0, H * 0.74, H * 2.15); camera.lookAt(0, H * 0.64, 0); }
+  else { const d = H * 2.9 / Math.min(1, camera.aspect * 1.25); camera.position.set(0, H * 0.62, d); camera.lookAt(0, H * 0.46, 0); }
+  camera.updateProjectionMatrix();
+}
+window.addEventListener('resize', frame);
+
+// Turn by dragging; tap to wave.
+let yaw = 0.35, dragging = false, lastX = 0, moved = 0;
+renderer.domElement.addEventListener('pointerdown', (e) => { dragging = true; lastX = e.clientX; moved = 0; });
+window.addEventListener('pointermove', (e) => { if (!dragging) return; const dx = e.clientX - lastX; lastX = e.clientX; moved += Math.abs(dx); yaw += dx * 0.012; });
+window.addEventListener('pointerup', () => {
+  if (dragging && moved < 6) { wave = 2.4; post('tap'); }
+  dragging = false;
+});
+const post = (m) => { try { window.ReactNativeWebView?.postMessage(m); } catch {} try { parent !== window && parent.postMessage(m, '*'); } catch {} };
+
+const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+renderer.setAnimationLoop(() => {
+  const dt = Math.min(0.05, clock.getDelta());
+  if (!rig) return;
+  for (const [b, q] of rig.rest) b.quaternion.copy(q); // clips overwrite what they animate; this resets the rest
+  rig.mixer.update(reduce ? 0 : dt);
+  if (opts.spin === '1' && !dragging && !reduce) yaw += dt * 0.5;
+  rig.root.rotation.y = yaw;
+  // Wave: lift the right arm over the clip and swing the hand.
+  const arm = rig.bones['arm-right'];
+  if (wave > 0 && arm) {
+    wave -= dt;
+    const t = 2.4 - wave; const lift = Math.min(1, t * 4, wave * 4);
+    arm.rotation.z -= lift * (1.45 + Math.sin(t * 11) * 0.3); // arm up, hand swinging
+  }
+  // Sleeping: sit, head down, slow breathing.
+  if (sleeping && rig.bones.head) {
+    const t = clock.elapsedTime;
+    rig.bones.head.rotation.x += 0.45 + Math.sin(t * 1.4) * 0.04;
+  }
+  renderer.render(scene, camera);
+});
+
+window.orvix = {
+  debug: () => ({ clip: rig?.playing?.getClip().name, time: rig?.playing?.time, w: rig?.playing?.getEffectiveWeight(), names: Object.keys(rig?.actions ?? {}).length, armQ: rig?.bones['arm-right']?.quaternion.toArray().map((x) => +x.toFixed(2)) }),
+  set(next) { opts = { ...opts, ...next }; build().catch(fail); },
+};
+window.addEventListener('hashchange', () => { opts = { c: 'male-a', s: '', h: '', t: '', p: '', g: '0', u: '0', a: 'idle', cam: 'full', spin: '0', ...params() }; build().catch(fail); });
+const fail = (e) => post('error:' + (e?.message ?? e));
+document.addEventListener('message', (e) => { try { window.orvix.set(JSON.parse(e.data)); } catch {} });
+window.addEventListener('message', (e) => { if (typeof e.data === 'string' && e.data.startsWith('{')) { try { window.orvix.set(JSON.parse(e.data)); } catch {} } });
+build().then(() => post('ready')).catch(fail);
+</script>
+</body>
+</html>
