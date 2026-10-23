@@ -29,7 +29,7 @@
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Organization", "name": "Orvix Aero", "url": "https://orvixaero.com/", "logo": "https://orvixaero.com/icon.png", "email": "info@orvixaero.com", "sameAs": ["https://www.facebook.com/profile.php?id=61595560295276"]}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebSite", "name": "Orvix Aero", "url": "https://orvixaero.com/"}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "SoftwareApplication", "name": "Orvix Aero", "applicationCategory": "TravelApplication", "operatingSystem": "iOS, Windows, Web", "url": "https://orvixaero.com/", "image": "https://orvixaero.com/og-image.png", "description": "Pilot logbook and trip app: automatic logbook, FAR 117 duty and rest, schedule from a screenshot, daily Briefing, 8710/IACRA reports, D-ATIS and commuter flights."}</script>
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "How does it know I flew?", "acceptedAnswer": {"@type": "Answer", "text": "With your permission, Orvix Aero uses your iPhone’s location in the background. It looks for a takeoff roll followed by a real climb, then a landing. Driving doesn’t look like that, so it isn’t logged. Nothing is saved until you confirm it, and you can always log flights by hand."}}, {"@type": "Question", "name": "Can I bring my existing logbook?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Import a ForeFlight or Logbook Pro export, an airline crew log, or a spreadsheet. Still on paper? Photograph each page and Orvix Aero reads the rows for you to check. You see a preview first, and duplicates are skipped."}}, {"@type": "Question", "name": "Can it read my schedule?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Upload a screenshot of your month or a trip, or paste the text, and check what it read before you save it. The screenshot isn’t kept, and pay, credit and sick figures are never read from it."}}, {"@type": "Question", "name": "Who can see my flights?", "acceptedAnswer": {"@type": "Answer", "text": "Only you. Your logbook is private to your account, searches near you send an approximate area, and aircraft lookups never show who owns the aircraft. Read the privacy policy for the details."}}, {"@type": "Question", "name": "How much is it, and does it work on my computer?", "acceptedAnswer": {"@type": "Answer", "text": "$9.99 a month or $79.99 a year. One subscription covers the web app at orvixaero.com, the Windows app and the iPhone app, which is coming soon to the App Store."}}, {"@type": "Question", "name": "What happens if I cancel?", "acceptedAnswer": {"@type": "Answer", "text": "You keep everything until the end of the period you paid for. After that your logbook stays saved, you can still export it, and it’s all there again if you come back."}}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "How does it know I flew?", "acceptedAnswer": {"@type": "Answer", "text": "With your permission, Orvix Aero uses your iPhone’s location in the background. It looks for a takeoff roll followed by a real climb, then a landing. Driving doesn’t look like that, so it isn’t logged. Nothing is saved until you confirm it, and you can always log flights by hand."}}, {"@type": "Question", "name": "Can I bring my existing logbook?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Import a ForeFlight or Logbook Pro export, an airline crew log, or a spreadsheet. Still on paper? Photograph each page and Orvix Aero reads the rows for you to check. You see a preview first, and duplicates are skipped."}}, {"@type": "Question", "name": "Can it read my schedule?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Upload a screenshot of your month or a trip, or paste the text, and check what it read before you save it. The screenshot isn’t kept, and pay, credit and sick figures are never read from it."}}, {"@type": "Question", "name": "Who can see my flights?", "acceptedAnswer": {"@type": "Answer", "text": "Only you, plus anyone you invite to Orvix Family, and you choose what each of them sees. Your logbook is private to your account, searches near you send an approximate area, and aircraft lookups never show who owns the aircraft. Read the privacy policy for the details."}}, {"@type": "Question", "name": "Does my family have to pay?", "acceptedAnswer": {"@type": "Answer", "text": "No. Orvix Family is free for the people you invite. Live flight tracking, landing alerts and pickups turn on when you have Orvix Aero Pro; your calendar, the countdown home and the family chat work either way."}}, {"@type": "Question", "name": "How much is it, and does it work on my computer?", "acceptedAnswer": {"@type": "Answer", "text": "$9.99 a month or $79.99 a year. One subscription covers the web app at orvixaero.com, the Windows app and the iPhone app, which is coming soon to the App Store."}}, {"@type": "Question", "name": "What happens if I cancel?", "acceptedAnswer": {"@type": "Answer", "text": "You keep everything until the end of the period you paid for. After that your logbook stays saved, you can still export it, and it’s all there again if you come back."}}]}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
@@ -298,6 +298,29 @@
   .also .also-lbl { border: 0; padding-left: 0; color: var(--orange); font-weight: 600; letter-spacing: .06em; text-transform: uppercase; font-size: 13px; }
   .maker { margin-top: 28px; color: var(--ink-2); font-size: 18px; }
   .maker b { color: var(--ink); }
+
+  /* ---- Orvix Family ---- */
+  #family { padding-block: clamp(80px, 9vw, 150px); position: relative; overflow: hidden; }
+  #family::before { content: ""; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(60% 70% at 80% 40%, rgba(247, 110, 25, .10), transparent 70%), radial-gradient(40% 50% at 10% 90%, rgba(127, 180, 230, .08), transparent 70%); }
+  .fam { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: clamp(40px, 5vw, 96px); align-items: center; }
+  .kicker { color: var(--orange-2); font-weight: 600; font-size: 16px; margin-bottom: 14px; }
+  .fam-copy h2 { font-size: clamp(44px, 4.6vw, 84px); text-wrap: balance; }
+  .fam-copy .lede { margin-top: 22px; }
+  .fam-list { list-style: none; padding: 0; margin: 34px 0 0; display: grid; gap: 18px; }
+  .fam-list li { display: grid; gap: 2px; padding-left: 22px; position: relative; }
+  .fam-list li::before { content: ""; position: absolute; left: 0; top: 11px; width: 9px; height: 9px; border-radius: 50%; background: var(--orange); box-shadow: 0 0 0 4px rgba(247, 110, 25, .15); }
+  .fam-list b { font-family: var(--display); font-weight: 600; font-size: 25px; line-height: 1.15; }
+  .fam-list span { color: var(--ink-2); font-size: 17px; }
+  .fam-note { margin-top: 28px; color: var(--ink-3); font-size: 15px; max-width: 34em; }
+  .fam-phones { position: relative; height: clamp(560px, 48vw, 780px); }
+  .fp { position: absolute; top: 50%; left: 50%; width: clamp(220px, 18vw, 300px); padding: 9px; border-radius: 42px; background: linear-gradient(160deg, #1B2A3B, #0A1420); box-shadow: 0 0 0 1px rgba(157,178,197,.22), 0 40px 90px rgba(0,0,0,.6); }
+  .fp picture { display: block; border-radius: 33px; overflow: hidden; }
+  .fp img { width: 100%; height: auto; }
+  .fp-2 { z-index: 3; transform: translate(-50%, -50%); box-shadow: 0 0 0 1px rgba(247,110,25,.35), 0 50px 110px rgba(0,0,0,.65), 0 0 90px rgba(247,110,25,.18); }
+  .fp-1 { z-index: 1; transform: translate(-112%, -44%) rotate(-7deg) scale(.86); filter: brightness(.85); }
+  .fp-3 { z-index: 1; transform: translate(12%, -44%) rotate(7deg) scale(.86); filter: brightness(.85); }
+  @media (max-width: 1000px) { .fam { grid-template-columns: minmax(0, 1fr); } .fam-phones { height: 560px; } .fp { width: 230px; } }
+  @media (max-width: 560px) { .fam-phones { height: 470px; } .fp { width: 196px; } .fp-1 { transform: translate(-95%, -44%) rotate(-7deg) scale(.8); } .fp-3 { transform: translate(-5%, -44%) rotate(7deg) scale(.8); } }
   .devices { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 28px; align-items: center; }
   .devices-shot { margin: 0; }
   .devices .platforms { grid-template-columns: 1fr; gap: 14px; }
@@ -330,6 +353,7 @@
     <a class="brand" href="/"><img src="logo-light.png" alt="Orvix Aero" width="121" height="100"></a>
     <nav aria-label="Main">
       <a href="#features">What it does</a>
+      <a href="#family">For your family</a>
       <a href="#pricing">Pricing</a>
       <a href="#faq">FAQ</a>
       <a href="#get">Devices</a>
@@ -348,7 +372,7 @@
       <div class="wrap hero">
       <div>
         <h1 id="hero-title">One app for the whole trip, from commute to logbook.</h1>
-        <p class="lede">Orvix Aero reads your schedule, tracks every leg of your trip, shows your commute live, checks FAR 117, finds food near your gate, and logs the flight when you land. For airline and GA pilots.</p>
+        <p class="lede">Orvix Aero reads your schedule, tracks every leg of your trip, shows your commute live, checks FAR 117, finds food near your gate, and logs the flight when you land. Your family follows along in Orvix Family, free. For airline and GA pilots.</p>
         <form class="join when-pre" id="join" novalidate aria-labelledby="hero-title">
           <label class="hp" aria-hidden="true">Company <input name="company" tabindex="-1" autocomplete="off"></label>
           <label for="join-email" class="hp">Email</label>
@@ -382,7 +406,7 @@
           </article>
           <article class="feat glass">
             <div class="feat-shot phone-crop"><picture><source srcset="shots/schedule.webp?v=2" type="image/webp"><img src="shots/schedule.jpg?v=2" alt="Schedule calendar with trips and FAR 117 status" width="620" height="1347" loading="lazy" decoding="async"></picture></div>
-            <div class="feat-body"><b>Schedule from a screenshot</b><span>Upload your month or a trip. Each leg is tracked live and lands in your phone’s calendar.</span></div>
+            <div class="feat-body"><b>Schedule from a screenshot</b><span>Upload your month or a trip. Each leg is tracked live, release times move when you land late, and trips show up in Apple or Google Calendar.</span></div>
           </article>
           <article class="feat glass">
             <div class="feat-shot"><picture><source srcset="shots/desk-far117.webp?v=2" type="image/webp"><img src="shots/desk-far117.jpg?v=2" alt="FAR 117 screen: legal to report now and cumulative limits" width="1000" height="425" loading="lazy" decoding="async"></picture></div>
@@ -403,9 +427,32 @@
         </div>
         <div class="also">
           <span class="also-lbl">Also inside</span>
-          <span>Food near your gate or FBO</span><span>Layover finds and notes</span><span>Pay estimate</span><span>Imports from ForeFlight and Logbook Pro</span><span>Paper logbook scan</span><span>Helicopter and NVG currency</span><span>Jumpseat guide</span><span>Works offline</span>
+          <span>Daily Briefing for your trip</span><span>Inbound aircraft and KCM access points</span><span>Lock Screen widget and Live Activity</span><span>Trips in Apple or Google Calendar</span><span>Food near your gate or FBO</span><span>Layover finds and notes</span><span>Pay estimate</span><span>Imports from ForeFlight and Logbook Pro</span><span>Paper logbook scan</span><span>Helicopter and NVG currency</span><span>Jumpseat guide</span><span>Works offline</span>
         </div>
         <p class="maker"><b>Made by airline pilots.</b> Built for airline, Part 135, GA, CFI and helicopter pilots.</p>
+      </div>
+    </section>
+
+    <section id="family" aria-labelledby="family-title">
+      <div class="wrap fam">
+        <div class="fam-copy">
+          <p class="kicker">Orvix Family</p>
+          <h2 id="family-title">Your family always knows where you are.</h2>
+          <p class="lede">A free companion app for the people at home. Invite them from Orvix Aero and they see your trip the way you’d tell it: where you are, when you land, and when you’re home.</p>
+          <ul class="fam-list">
+            <li><b>Flying, away or home</b><span>A window that shows your day, a live flight map, and a countdown until you’re home.</span></li>
+            <li><b>“Made it” and landed alerts</b><span>One tap tells them you’re on the plane; landings, delays and gates arrive on their own.</span></li>
+            <li><b>Pickups that time themselves</b><span>They get a “time to leave” alert from the live landing time, and you see them on the way.</span></li>
+            <li><b>A family chat built for trips</b><span>Messages, photos, voice notes and goodnights across time zones, plus a photo album sorted by trip.</span></li>
+            <li><b>Fun while you’re gone</b><span>Guess the landing, a “bring me back” wish list, a passport of your cities, kids’ mode and a year in review.</span></li>
+          </ul>
+          <p class="fam-note">You choose what each person sees, and you can pause sharing any day. Live flights and pickups come with Orvix Aero Pro.</p>
+        </div>
+        <div class="fam-phones" aria-label="Orvix Family on iPhone">
+          <div class="fp fp-1"><picture><source srcset="shots/family-pickup.webp" type="image/webp"><img src="shots/family-pickup.jpg" alt="Orvix Family pickup screen: lands at 6:40 PM, with a time-to-leave alert" width="620" height="1347" loading="lazy" decoding="async"></picture></div>
+          <div class="fp fp-2"><picture><source srcset="shots/family-home.webp" type="image/webp"><img src="shots/family-home.jpg" alt="Orvix Family home: an airplane window showing the pilot is home, a made-it update and a guess-the-landing game" width="620" height="1347" loading="lazy" decoding="async"></picture></div>
+          <div class="fp fp-3"><picture><source srcset="shots/family-wish.webp" type="image/webp"><img src="shots/family-wish.jpg" alt="Orvix Family wish list: ask your pilot to bring something back from a trip city" width="620" height="1347" loading="lazy" decoding="async"></picture></div>
+        </div>
       </div>
     </section>
 
@@ -493,7 +540,11 @@
           </details>
           <details>
             <summary>Who can see my flights?</summary>
-            <p>Only you. Your logbook is private to your account, searches near you send an approximate area, and aircraft lookups never show who owns the aircraft. Read the <a href="/privacy.html">privacy policy</a> for the details.</p>
+            <p>Only you, plus anyone you invite to Orvix Family, and you choose what each of them sees. Your logbook is private to your account, searches near you send an approximate area, and aircraft lookups never show who owns the aircraft. Read the <a href="/privacy.html">privacy policy</a> for the details.</p>
+          </details>
+          <details>
+            <summary>Does my family have to pay?</summary>
+            <p>No. Orvix Family is free for the people you invite. Live flight tracking, landing alerts and pickups turn on when you have Orvix Aero Pro; your calendar, the countdown home and the family chat work either way.</p>
           </details>
           <details class="when-pre">
             <summary>When does it launch?</summary>
