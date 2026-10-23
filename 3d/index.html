@@ -256,7 +256,7 @@ function frame() {
 window.addEventListener('resize', frame);
 
 // Turn by dragging; tap to wave.
-let yaw = 0.35, dragging = false, lastX = 0, moved = 0;
+let yaw = 0.2, dragging = false, lastX = 0, moved = 0;
 renderer.domElement.addEventListener('pointerdown', (e) => { dragging = true; lastX = e.clientX; moved = 0; });
 window.addEventListener('pointermove', (e) => { if (!dragging) return; const dx = e.clientX - lastX; lastX = e.clientX; moved += Math.abs(dx); yaw += dx * 0.012; });
 window.addEventListener('pointerup', () => {
