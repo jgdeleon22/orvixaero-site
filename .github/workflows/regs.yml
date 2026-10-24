@@ -1,0 +1,35 @@
+# Refreshes the FARs & AIM reference at orvixaero.com/regs/ (read by the
+# Orvix Aero app) from eCFR and the FAA every week, and whenever the builder
+# changes. Commits only when the text changed.
+name: FARs & AIM
+on:
+  schedule:
+    - cron: '17 9 * * 1'
+  push:
+    branches: [main]
+    paths: ['tools/regs/**', '.github/workflows/regs.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency: regs
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Build
+        run: node tools/regs/build.mjs
+      - name: Commit if changed
+        run: |
+          git add regs
+          # index.json carries a build time; only commit when a book changed.
+          if git diff --cached --quiet -- 'regs/*.json' ':!regs/index.json' && git ls-files --error-unmatch regs/index.json >/dev/null 2>&1; then
+            echo "No changes"; exit 0
+          fi
+          git config user.name "orvix-regs-bot"
+          git config user.email "noreply@orvixaero.com"
+          git commit -m "FARs & AIM refresh"
+          git push
