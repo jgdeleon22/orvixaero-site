@@ -140,11 +140,11 @@ function parseFar(xml, part) {
     const body = m[6];
     const head = strip(/<HEAD>([\s\S]*?)<\/HEAD>/.exec(body)?.[1] ?? '');
     const isSec = m[5] === 'SECTION';
+    if (/\[Reserved\]/i.test(head) && !/<P>/.test(body)) continue;
     let n = decode(m[4]);
     let h = head;
     if (isSec) {
-      h = head.replace(/^§+\s*[\d.]+[a-z]?(\s*-\s*[\d.]+)?\s*/i, '').replace(/\.$/, '');
-      if (/^\[Reserved\]$/i.test(h) && !/<P>/.test(body)) continue;
+      h = head.replace(/^§+\s*[\d.]+[a-z]?(\s*-\s*[\d.]+[a-z]?)?\s*/i, '').replace(/\.$/, '');
     } else {
       // "Appendix A to Part 61—Practical Test ..." → n "App. A", h the title
       const a = /^(.+?)\s*[—–]\s*(.+)$/.exec(head);
@@ -336,28 +336,36 @@ async function main() {
     });
   }
 
-  // AIM: one book per chapter, plus the appendices.
-  const idxUrl = AIM_BASE + 'index.html';
-  const idx = LOCAL ? await readFile(join(LOCAL, 'aimidx.html'), 'utf8') : await get(idxUrl);
-  const effective = /Effective:?\s*(?:<[^>]+>\s*)*([\d/]+|\w+ \d{1,2}, \d{4})/i.exec(idx)?.[1] ?? '';
-  const change = /Change:?\s*(?:<[^>]+>\s*)*(Change \d+|Basic)/i.exec(idx)?.[1] ?? '';
-  const pages = [...new Set([...idx.matchAll(/href="\.?\/?(chap\d+_section_\d+\.html)"/g)].map((m) => m[1]))];
-  const chapters = new Map();
-  for (const pg of pages) {
-    const c = +/chap(\d+)_/.exec(pg)[1];
-    if (!chapters.has(c)) chapters.set(c, []);
-    chapters.get(c).push(pg);
-  }
-  const chapName = (c) => strip(new RegExp(`href="\\.?/?chap_${c}\\.html"[^>]*>([\\s\\S]*?)</a>`).exec(idx)?.[1] ?? `Chapter ${c}`);
-  for (const [c, pgs] of [...chapters].sort((a, b) => a[0] - b[0])) {
-    const secs = [];
-    for (const pg of pgs) {
-      const url = AIM_BASE + pg;
-      const html = LOCAL ? await readFile(join(LOCAL, pg), 'utf8').catch(() => null) : await get(url);
-      if (html) secs.push(...parseAimPage(html, url));
+  // AIM: one book per chapter. If FAA.gov is down, keep last week's AIM.
+  try {
+    const idxUrl = AIM_BASE + 'index.html';
+    const idx = LOCAL ? await readFile(join(LOCAL, 'aimidx.html'), 'utf8') : await get(idxUrl);
+    const effective = /Effective:?\s*(?:<[^>]+>\s*)*([\d/]+|\w+ \d{1,2}, \d{4})/i.exec(idx)?.[1] ?? '';
+    const change = /Change:?\s*(?:<[^>]+>\s*)*(Change \d+|Basic)/i.exec(idx)?.[1] ?? '';
+    const pages = [...new Set([...idx.matchAll(/href="\.?\/?(chap\d+_section_\d+\.html)"/g)].map((m) => m[1]))];
+    const chapters = new Map();
+    for (const pg of pages) {
+      const c = +/chap(\d+)_/.exec(pg)[1];
+      if (!chapters.has(c)) chapters.set(c, []);
+      chapters.get(c).push(pg);
     }
-    if (!secs.length) continue;
-    await write({ id: `aim-${c}`, kind: 'aim', title: `AIM Ch. ${c}`, name: chapName(c).replace(/^Chapter \d+\.\s*/, ''), asof: [effective, change].filter(Boolean).join(' · '), url: AIM_BASE + `chap_${c}.html`, secs });
+    const chapName = (c) => strip(new RegExp(`href="\\.?/?chap_${c}\\.html"[^>]*>([\\s\\S]*?)</a>`).exec(idx)?.[1] ?? `Chapter ${c}`);
+    for (const [c, pgs] of [...chapters].sort((a, b) => a[0] - b[0])) {
+      const secs = [];
+      for (const pg of pgs) {
+        const url = AIM_BASE + pg;
+        const html = LOCAL ? await readFile(join(LOCAL, pg), 'utf8').catch(() => null) : await get(url);
+        if (html) secs.push(...parseAimPage(html, url));
+      }
+      if (!secs.length) continue;
+      await write({ id: `aim-${c}`, kind: 'aim', title: `AIM Ch. ${c}`, name: chapName(c).replace(/^Chapter \d+\.\s*/, ''), asof: [effective, change].filter(Boolean).join(' · '), url: AIM_BASE + `chap_${c}.html`, secs });
+    }
+  } catch (e) {
+    if (LOCAL) throw e;
+    console.warn('AIM not refreshed:', e.message);
+    const old = JSON.parse(await readFile(join(OUT, 'index.json'), 'utf8').catch(() => '{"books":[]}'));
+    const have = new Set(books.map((b) => b.id));
+    for (const b of old.books) if (b.kind === 'aim' && !have.has(b.id)) books.push(b);
   }
 
   const index = { built: new Date().toISOString(), books };
