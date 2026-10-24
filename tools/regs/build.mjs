@@ -20,8 +20,9 @@
 // search headings before a book is saved on the phone.
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const OUT = new URL('../../regs/', import.meta.url).pathname;
+const OUT = fileURLToPath(new URL('../../regs/', import.meta.url));
 const args = process.argv.slice(2);
 const LOCAL = args[0] === '--local' ? args[1] : null;
 
