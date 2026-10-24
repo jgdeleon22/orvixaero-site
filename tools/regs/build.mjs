@@ -274,7 +274,15 @@ function parseAimPage(html, pageUrl) {
 async function get(url, tries = 4) {
   for (let a = 1; ; a++) {
     try {
-      const r = await fetch(url, { headers: { 'accept-encoding': 'gzip, deflate', 'user-agent': 'OrvixAero-regs/1.0 (+https://orvixaero.com)' } });
+      // FAA.gov turns away requests that don't look like a browser.
+      const r = await fetch(url, {
+        headers: {
+          accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+          'accept-encoding': 'gzip, deflate',
+          'accept-language': 'en-US,en;q=0.9',
+          'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36',
+        },
+      });
       if (!r.ok) throw new Error(`${r.status} ${url}`);
       return await r.text();
     } catch (e) {
