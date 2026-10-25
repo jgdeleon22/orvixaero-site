@@ -126,6 +126,21 @@
     </ul>
     <p>Orvix Family doesn't show ads, doesn't sell your information, and doesn't share your location with anyone except the pilot of your family. You can leave a family at any time in Settings; deleting your account removes your account and your messages.</p>
 
+    <h2 id="cabin">Orvix Cabin</h2>
+    <p>Orvix Cabin is the app for flight attendants. It uses the same account system and servers as Orvix Aero, so everything above about Supabase, Expo, Apple, Google, notifications and deleting your account applies to it too. This section explains what is different.</p>
+    <ul>
+      <li><strong>Your account.</strong> Your name and email address from sign-in with Apple, Google or email, and whether you set the account up as a flight attendant's.</li>
+      <li><strong>Your schedule.</strong> The trips you add: duty periods, flights, report and release times and layover cities. A screenshot or text you use to add a trip is sent to our server and read by <strong>Anthropic</strong> (Claude) to pull out the trip, then discarded; it isn't kept. We ask the reader to leave out names, crew lists, employee numbers, pay and hotel details.</li>
+      <li><strong>Live flights.</strong> To show delays, gates and the plane coming in, our server looks up your flight numbers with <strong>AeroDataBox</strong> and <strong>FlightAware</strong>. Only flight numbers, dates and airports are sent, never your name.</li>
+      <li><strong>Layover notes and crew tips.</strong> Your notes for a city are private to you. Tips you choose to share (public places only, like a restaurant or a gym) can be read by other Orvix Aero and Orvix Cabin members and show as “A pilot” or the name you give, not your email. Tips can be reported and are hidden after several reports.</li>
+      <li><strong>Crashpads.</strong> If you create or join a crashpad, its name, members and the nights each member plans to stay are visible to that crashpad's members only.</li>
+      <li><strong>Kept only on your phone.</strong> Documents and expiry dates (passport, visa, recurrent), trip expenses and receipt photos, pay rates and rigs, packing lists and alarm settings stay on your device and are never sent to us.</li>
+      <li><strong>Food and errands nearby.</strong> A rounded position (about 1 km) is sent to our server to find places from <strong>OpenStreetMap</strong> via <strong>Geoapify</strong>; your exact location stays on your phone.</li>
+      <li><strong>Feedback.</strong> What you write and any screenshots you attach, stored privately for the Orvix team.</li>
+      <li><strong>Family.</strong> If you invite family to Orvix Family, the <a href="#family">Orvix Family</a> section applies to what they see.</li>
+    </ul>
+    <p>Orvix Cabin never shows or collects your airline's internal data, such as seat loads, standby lists or crew lists. It doesn't show ads and doesn't sell your information.</p>
+
     <h2>Children</h2>
     <p>Orvix Aero is not directed to children under 13, and we do not knowingly collect information from them.</p>
 
