@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="color-scheme" content="light">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<link rel="icon" href="favicon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pilot flight time — Orvix Aero</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root { --ink: #0A3341; --ink-2: #4E6670; --rule: #DCE3E7; --paper: #F6F7F8; --orange-ink: #B4500F; --focus: #F76E19; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font-family: "Barlow", system-ui, sans-serif; font-size: 17px; line-height: 1.5; }
+  header { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 20px; border-bottom: 1px solid var(--rule); background: #fff; }
+  header img { height: 40px; width: auto; display: block; }
+  header .note { color: var(--ink-2); font-size: 14px; }
+  button { font: 600 15px "Barlow", system-ui, sans-serif; color: #fff; background: var(--ink); border: 0; border-radius: 10px; padding: 10px 16px; cursor: pointer; }
+  button:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+  iframe { display: block; width: 100%; border: 0; background: #fff; min-height: calc(100vh - 70px); }
+  .msg { max-width: 560px; margin: 80px auto; padding: 0 24px; text-align: center; }
+  .msg h1 { font-family: "Barlow Condensed", sans-serif; font-size: 34px; margin: 0 0 8px; }
+  @media print { header { display: none; } }
+</style>
+</head>
+<body>
+<header>
+  <a href="/"><img src="logo.png" alt="Orvix Aero"></a>
+  <span class="note">Shared by the pilot from their Orvix Aero logbook</span>
+  <button id="print" hidden>Print or save PDF</button>
+</header>
+<div id="out"><p class="msg">Loading…</p></div>
+<script>
+(function () {
+  var t = new URLSearchParams(location.search).get('t') || location.hash.slice(1);
+  var out = document.getElementById('out');
+  function fail(m) { out.innerHTML = '<div class="msg"><h1>Can’t show this page</h1><p></p></div>'; out.querySelector('p').textContent = m; }
+  if (!t) return fail('This link is missing its code. Ask the pilot to send it again.');
+  fetch('https://uxnjglagrrprnsliyaed.supabase.co/functions/v1/share-link?t=' + encodeURIComponent(t))
+    .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, j: j }; }); })
+    .then(function (x) {
+      if (!x.ok || x.j.kind !== 'cv') return fail(x.j.error || 'This link doesn’t work.');
+      var f = document.createElement('iframe');
+      f.title = 'Pilot flight time';
+      f.setAttribute('sandbox', 'allow-same-origin allow-modals');
+      f.srcdoc = x.j.html;
+      f.onload = function () { try { f.style.height = f.contentDocument.documentElement.scrollHeight + 'px'; } catch (e) {} };
+      out.innerHTML = '';
+      out.appendChild(f);
+      var p = document.getElementById('print');
+      p.hidden = false;
+      p.onclick = function () { f.contentWindow.print(); };
+    })
+    .catch(function () { fail('Couldn’t load this page. Check your connection and try again.'); });
+})();
+</script>
+</body>
+</html>
