@@ -345,6 +345,21 @@
   @media (max-width: 520px) { .prices { flex-wrap: nowrap; gap: 10px; } .tier { min-width: 0; flex: 1; padding: 14px; } .tier .amt { font-size: 32px; } .tier .per { font-size: 14px; } }
   .closing-in { display: flex; justify-content: space-between; align-items: flex-end; gap: 32px; flex-wrap: wrap; }
   .closing h2 { font-size: clamp(48px, 5.6vw, 104px); }
+
+  /* Welcome video: plays once per visitor on arrival, replay from the hero. */
+  .intro { position: fixed; inset: 0; z-index: 1000; display: none; align-items: center; justify-content: center; background: rgba(3, 9, 16, .9); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+  .intro.open { display: flex; }
+  .intro-box { position: relative; height: min(88vh, 900px); aspect-ratio: 9 / 16; max-width: calc(100vw - 32px); border-radius: 28px; overflow: hidden; background: #06101C; box-shadow: 0 30px 90px rgba(0,0,0,.6), 0 0 0 1px var(--edge-2); }
+  .intro-box video { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .intro-bar { position: absolute; left: 0; right: 0; top: 0; display: flex; justify-content: space-between; gap: 10px; padding: 14px; }
+  .intro-bar button { font: 600 15px/1 var(--text); color: var(--ink); background: rgba(6, 16, 28, .72); border: 1px solid var(--edge-2); border-radius: 999px; padding: 10px 16px; cursor: pointer; }
+  .intro-bar button:focus-visible, .watch:focus-visible { outline: 2px solid var(--orange); outline-offset: 2px; }
+  .intro-progress { position: absolute; left: 0; bottom: 0; height: 4px; width: 0; background: var(--orange); }
+  .watch { display: inline-flex; align-items: center; gap: 10px; margin: 18px 0 6px; text-align: left; padding: 0; background: none; border: 0; color: var(--ink); font: 600 17px/1.2 var(--text); cursor: pointer; }
+  .watch .play { width: 40px; height: 40px; border-radius: 50%; background: var(--orange); display: grid; place-items: center; box-shadow: 0 8px 24px rgba(247,110,25,.4); }
+  .watch .play:after { content: ""; border-left: 13px solid #06101C; border-top: 8px solid transparent; border-bottom: 8px solid transparent; margin-left: 4px; }
+  .watch:hover .play { background: var(--orange-2); }
+  @media (max-width: 560px) { .intro-box { height: auto; width: calc(100vw - 24px); max-height: 92vh; border-radius: 22px; } }
 </style>
 </head>
 <!-- Launch switch: change data-launch to "live" on launch day. "pre" shows
@@ -384,6 +399,7 @@
         <p class="join-msg when-pre" id="join-msg" role="status" aria-live="polite"></p>
         <p class="fine when-pre">Coming to iPhone first. We’ll only email you about the launch.</p>
         <p class="when-live hero-links" style="margin-top:28px"><a class="button" href="https://apps.apple.com/us/app/orvix-aero-pilot-logbook/id6824412999">Download on the App Store</a> <a class="button ghost" href="/app/">Use it on the web</a></p>
+        <button class="watch" id="watch-intro" type="button"><span class="play" aria-hidden="true"></span>Watch the 40-second tour: Orvix Aero and Orvix Family</button>
         <p class="fine when-live">Free to download for iPhone, plus the web and Windows. Orvix Aero Pro is $9.99 a month or $79.99 a year, one subscription for every device.</p>
       </div>
       <div class="hero-phones" aria-label="Orvix Aero on iPhone">
@@ -689,5 +705,49 @@
   document.querySelectorAll('a[href="#join-email"]').forEach((a) => a.addEventListener('click', () => setTimeout(() => document.getElementById('join-email').focus({ preventScroll: true }), 400)));
 </script>
 <script>try{if(!/^(localhost|127\.)/.test(location.hostname)){var q=new URLSearchParams(location.search);fetch("https://uxnjglagrrprnsliyaed.supabase.co/functions/v1/site-hit",{method:"POST",keepalive:true,body:JSON.stringify({path:location.pathname,ref:document.referrer,tz:Intl.DateTimeFormat().resolvedOptions().timeZone,utm:{source:q.get("utm_source")||"",medium:q.get("utm_medium")||"",campaign:q.get("utm_campaign")||""}})}).catch(function(){})}}catch(e){}</script>
+
+  <div class="intro" id="intro" role="dialog" aria-modal="true" aria-label="Welcome to Orvix Aero: a 40-second tour">
+    <div class="intro-box">
+      <video id="intro-video" playsinline muted preload="none" poster="promo/orvix-promo-poster.jpg">
+        <source src="promo/orvix-promo.mp4" type="video/mp4">
+      </video>
+      <div class="intro-bar">
+        <button type="button" id="intro-sound" aria-pressed="false">🔊 Sound on</button>
+        <button type="button" id="intro-skip">Skip ✕</button>
+      </div>
+      <div class="intro-progress" id="intro-progress"></div>
+    </div>
+  </div>
+<script>
+(function () {
+  var box = document.getElementById('intro'), v = document.getElementById('intro-video');
+  var sound = document.getElementById('intro-sound'), skip = document.getElementById('intro-skip'), bar = document.getElementById('intro-progress');
+  var KEY = 'orvix.intro.seen', last = null;
+  function seen() { try { return localStorage.getItem(KEY) === '1'; } catch (e) { return false; } }
+  function remember() { try { localStorage.setItem(KEY, '1'); } catch (e) {} }
+  function open(withSound) {
+    last = document.activeElement;
+    box.classList.add('open'); document.body.style.overflow = 'hidden';
+    v.currentTime = 0; v.muted = !withSound; sound.setAttribute('aria-pressed', String(withSound)); sound.textContent = withSound ? '🔇 Mute' : '🔊 Sound on';
+    var p = v.play(); if (p && p.catch) p.catch(function () { v.muted = true; v.play().catch(function () {}); });
+    skip.focus(); remember();
+  }
+  function close() {
+    v.pause(); box.classList.remove('open'); document.body.style.overflow = '';
+    if (last && last.focus) last.focus();
+  }
+  sound.addEventListener('click', function () { v.muted = !v.muted; sound.setAttribute('aria-pressed', String(!v.muted)); sound.textContent = v.muted ? '🔊 Sound on' : '🔇 Mute'; });
+  skip.addEventListener('click', close);
+  v.addEventListener('ended', function () { setTimeout(close, 400); });
+  v.addEventListener('timeupdate', function () { if (v.duration) bar.style.width = (100 * v.currentTime / v.duration) + '%'; });
+  box.addEventListener('click', function (e) { if (e.target === box) close(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && box.classList.contains('open')) close(); });
+  var w = document.getElementById('watch-intro'); if (w) w.addEventListener('click', function () { open(true); });
+  // Greet first-time visitors (not bots, not people who asked for less motion, not deep links).
+  var calm = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var bot = /bot|crawl|spider|slurp|lighthouse|headless/i.test(navigator.userAgent);
+  if (!seen() && !calm && !bot && !location.hash && !/[?&]nointro\b/.test(location.search)) setTimeout(function () { open(false); }, 600);
+})();
+</script>
 </body>
 </html>
