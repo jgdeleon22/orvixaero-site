@@ -351,7 +351,7 @@
   .intro.open { display: flex; }
   .intro-box { position: relative; height: min(88vh, 900px); aspect-ratio: 9 / 16; max-width: calc(100vw - 32px); border-radius: 28px; overflow: hidden; background: #06101C; box-shadow: 0 30px 90px rgba(0,0,0,.6), 0 0 0 1px var(--edge-2); }
   .intro-box video { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .intro-bar { position: absolute; left: 0; right: 0; top: 0; display: flex; justify-content: space-between; gap: 10px; padding: 14px; }
+  .intro-bar { position: absolute; left: 0; right: 0; top: 0; display: flex; justify-content: flex-end; gap: 10px; padding: 14px; }
   .intro-bar button { font: 600 15px/1 var(--text); color: var(--ink); background: rgba(6, 16, 28, .72); border: 1px solid var(--edge-2); border-radius: 999px; padding: 10px 16px; cursor: pointer; }
   .intro-bar button:focus-visible, .watch:focus-visible { outline: 2px solid var(--orange); outline-offset: 2px; }
   .intro-progress { position: absolute; left: 0; bottom: 0; height: 4px; width: 0; background: var(--orange); }
@@ -399,7 +399,6 @@
         <p class="join-msg when-pre" id="join-msg" role="status" aria-live="polite"></p>
         <p class="fine when-pre">Coming to iPhone first. We’ll only email you about the launch.</p>
         <p class="when-live hero-links" style="margin-top:28px"><a class="button" href="https://apps.apple.com/us/app/orvix-aero-pilot-logbook/id6824412999">Download on the App Store</a> <a class="button ghost" href="/app/">Use it on the web</a></p>
-        <button class="watch" id="watch-intro" type="button"><span class="play" aria-hidden="true"></span>Watch the 40-second tour: Orvix Aero and Orvix Family</button>
         <p class="fine when-live">Free to download for iPhone and iPad, plus the web and Windows. Orvix Aero Pro is $9.99 a month or $79.99 a year, one subscription for every device.</p>
       </div>
       <div class="hero-phones" aria-label="Orvix Aero on iPhone">
@@ -712,7 +711,6 @@
         <source src="promo/orvix-promo.mp4?v=5" type="video/mp4">
       </video>
       <div class="intro-bar">
-        <button type="button" id="intro-sound" aria-pressed="false">🔊 Sound on</button>
         <button type="button" id="intro-skip">Skip ✕</button>
       </div>
       <div class="intro-progress" id="intro-progress"></div>
@@ -721,14 +719,14 @@
 <script>
 (function () {
   var box = document.getElementById('intro'), v = document.getElementById('intro-video');
-  var sound = document.getElementById('intro-sound'), skip = document.getElementById('intro-skip'), bar = document.getElementById('intro-progress');
+  var skip = document.getElementById('intro-skip'), bar = document.getElementById('intro-progress');
   var KEY = 'orvix.intro.seen', last = null;
   function seen() { try { return localStorage.getItem(KEY) === '1'; } catch (e) { return false; } }
   function remember() { try { localStorage.setItem(KEY, '1'); } catch (e) {} }
   function open(withSound) {
     last = document.activeElement;
     box.classList.add('open'); document.body.style.overflow = 'hidden';
-    v.currentTime = 0; v.muted = !withSound; sound.setAttribute('aria-pressed', String(withSound)); sound.textContent = withSound ? '🔇 Mute' : '🔊 Sound on';
+    v.currentTime = 0; v.muted = true; // the greeting plays silently
     var p = v.play(); if (p && p.catch) p.catch(function () { v.muted = true; v.play().catch(function () {}); });
     skip.focus(); remember();
   }
@@ -736,7 +734,6 @@
     v.pause(); box.classList.remove('open'); document.body.style.overflow = '';
     if (last && last.focus) last.focus();
   }
-  sound.addEventListener('click', function () { v.muted = !v.muted; sound.setAttribute('aria-pressed', String(!v.muted)); sound.textContent = v.muted ? '🔊 Sound on' : '🔇 Mute'; });
   skip.addEventListener('click', close);
   v.addEventListener('ended', function () { setTimeout(close, 400); });
   v.addEventListener('timeupdate', function () { if (v.duration) bar.style.width = (100 * v.currentTime / v.duration) + '%'; });
