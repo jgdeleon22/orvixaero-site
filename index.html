@@ -205,6 +205,11 @@
   .platform b { font-family: var(--display); font-weight: 600; font-size: 28px; line-height: 1.1; }
   .platform span { color: var(--ink-2); font-size: 17px; }
   .platform .button { margin-top: auto; align-self: flex-start; }
+  /* Apple's official badge, unmodified; clear space at least a quarter of its height. */
+  .store-row { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; }
+  .store-badge { display: inline-block; line-height: 0; border-radius: 10px; }
+  .store-badge img { height: 54px; width: auto; display: block; }
+  .store-badge:focus-visible { outline: 2px solid var(--orange); outline-offset: 3px; }
   .platform .soon { margin-top: auto; align-self: flex-start; color: var(--ink-2); border: 1px solid var(--edge-2); border-radius: 14px; padding: 13px 20px; font-weight: 600; font-size: 17px; }
   .platform .meta { color: var(--ink-3); font-size: 14px; }
   .button.ghost { background: transparent; box-shadow: none; border: 1px solid var(--edge-2); color: var(--ink); }
@@ -398,7 +403,7 @@
         </form>
         <p class="join-msg when-pre" id="join-msg" role="status" aria-live="polite"></p>
         <p class="fine when-pre">Coming to iPhone first. We’ll only email you about the launch.</p>
-        <p class="when-live hero-links" style="margin-top:28px"><a class="button" href="https://apps.apple.com/us/app/orvix-aero-pilot-logbook/id6824412999">Download on the App Store</a> <a class="button ghost" href="/app/">Use it on the web</a></p>
+        <p class="when-live hero-links store-row" style="margin-top:28px"><a class="store-badge" href="https://apps.apple.com/us/app/orvix-aero-pilot-logbook/id6824412999"><img src="images/app-store-badge.svg" alt="Download on the App Store" width="162" height="54"></a> <a class="button ghost" href="/app/">Use it on the web</a></p>
         <p class="fine when-live">Free to download for iPhone and iPad, plus the web and Windows. Orvix Aero Pro is $9.99 a month or $79.99 a year, one subscription for every device.</p>
       </div>
       <div class="hero-phones" aria-label="Orvix Aero on iPhone">
@@ -515,7 +520,7 @@
               <div class="tier"><span class="tag">&nbsp;</span><div class="amt">$9.99</div><div class="per">per month</div></div>
             </div>
             <a class="button when-pre" href="#join-email" style="margin-top:28px">Join the waitlist</a>
-            <a class="button when-live" href="https://apps.apple.com/us/app/orvix-aero-pilot-logbook/id6824412999" style="margin-top:28px">Download on the App Store</a>
+            <a class="button when-live" href="https://apps.apple.com/us/app/orvix-aero-pilot-logbook/id6824412999" style="margin-top:28px">Get the app</a>
             <p class="fine when-live">Start a subscription in the iPhone or iPad app or on the web. Renews until you cancel, any time, from Settings. Have a gift or invite code? Enter it when you sign up.</p>
           </div>
           <div class="plan-side">
@@ -589,7 +594,7 @@
         </div>
         <div class="hero-links">
           <a class="button when-pre" href="#join-email">Join the waitlist</a>
-          <a class="button when-live" href="https://apps.apple.com/us/app/orvix-aero-pilot-logbook/id6824412999">Download on the App Store</a>
+          <a class="button when-live" href="https://apps.apple.com/us/app/orvix-aero-pilot-logbook/id6824412999">Get the iPhone and iPad app</a>
         </div>
       </div>
     </section>
