@@ -710,7 +710,7 @@
   // Links to the waitlist put the cursor in the email field.
   document.querySelectorAll('a[href="#join-email"]').forEach((a) => a.addEventListener('click', () => setTimeout(() => document.getElementById('join-email').focus({ preventScroll: true }), 400)));
 </script>
-<script>try{if(!/^(localhost|127\.)/.test(location.hostname)){var q=new URLSearchParams(location.search);fetch("https://uxnjglagrrprnsliyaed.supabase.co/functions/v1/site-hit",{method:"POST",keepalive:true,body:JSON.stringify({path:location.pathname,ref:document.referrer,tz:Intl.DateTimeFormat().resolvedOptions().timeZone,utm:{source:q.get("utm_source")||"",medium:q.get("utm_medium")||"",campaign:q.get("utm_campaign")||""}})}).catch(function(){})}}catch(e){}</script>
+<script>try{var m=new URLSearchParams(location.search).get("me");if(m==="1")localStorage.setItem("orvix.me","1");if(m==="0")localStorage.removeItem("orvix.me");if(!localStorage.getItem("orvix.me")&&!/^(localhost|127\.)/.test(location.hostname)){var q=new URLSearchParams(location.search);fetch("https://uxnjglagrrprnsliyaed.supabase.co/functions/v1/site-hit",{method:"POST",keepalive:true,body:JSON.stringify({path:location.pathname,ref:document.referrer,tz:Intl.DateTimeFormat().resolvedOptions().timeZone,utm:{source:q.get("utm_source")||"",medium:q.get("utm_medium")||"",campaign:q.get("utm_campaign")||""}})}).catch(function(){})}}catch(e){}</script>
 
   <div class="intro" id="intro" role="dialog" aria-modal="true" aria-label="Welcome to Orvix Aero: a 40-second tour">
     <div class="intro-box">
